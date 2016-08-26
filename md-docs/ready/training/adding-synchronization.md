@@ -180,7 +180,7 @@ Here, you are using the **Revision** which is one layer below the **Document** A
 
 Build and run.
 
-At this point, there is a conflict on the lists page. The third list has two conflicting revisions, one where the **name** property is **Update 1** and on the other revision it’s **Update 2**. Couchbase Lite picked **Update 2** as the winning revision (also called the **current** revision).
+At this point, there is a conflict on the lists page. If you have have completed the **'Using The Database'** online training you will now see three lists. If you are completing this course as a stand-alone, you will see two lists. The bottom list has two conflicting revisions, one where the **name** property is **Update 1** and on the other revision it’s **Update 2**. Couchbase Lite picked **Update 2** as the winning revision (also called the **current** revision).
 
 <img src="./img/image06.png" class="portrait" />
 
