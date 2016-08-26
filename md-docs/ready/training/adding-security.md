@@ -244,12 +244,16 @@ The **Groceries** list is successfully rejected because the `owner` property is 
 You can assign a role to user using the `/{db}/_user` endpoint on the admin port.
 
 ```bash
-curl -H 'Content-Type: application/json' -vX PUT 'http://localhost:4985/todo/_user/user1' -d '{"admin_roles": ["moderator"]}'
+curl -H 'Content-Type: application/json' \
+      -vX PUT 'http://localhost:4985/todo/_user/user1' \
+      -d '{"admin_roles": ["moderator"]}'
 
 200 OK
 ```
 
-With user1 as the moderator, run the `/{db}/_bulk_docs` command again and this time both lists are persisted.
+With user1 as a moderator, run the curl command on the `/{db}/_bulk_docs` endpoint again and this time both lists are persisted.
+
+Well done! You've successfully added write permission rules to allow users with the **moderator** role to create lists for other users. In the next section, you will add validation rules for list documents.
 
 ### Validating Changes
 
