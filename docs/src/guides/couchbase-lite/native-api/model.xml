@@ -121,7 +121,7 @@
                     <code-set>
                         <code-block language="objective-c"><![CDATA[
                             @interface Star : CBLModel
-                            @property (copy) NSArray* observations;  // items are NSDates
+                            @property (copy) NSArray* observationDates;  // items are NSDates
                             @end
                             //
                             @implementation Star
@@ -135,7 +135,7 @@
                         <code-block language="swift"><![CDATA[
                             @objc(Star)
                             class Star: CBLModel {
-                                @NSManaged var observations: NSArray // items are NSDates
+                                @NSManaged var observationDates: NSArray // items are NSDates
 
                                 class func observationsItemClass() -> AnyClass {
                                     return NSDate.self
