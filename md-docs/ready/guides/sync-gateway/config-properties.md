@@ -32,10 +32,10 @@ The following sample configuration file starts a server with the default setting
 
 ```javascript
 {
-  "interface": ":4984",        // Begin server configuration
+  "interface": ":4984",
   "adminInterface": ":4985",
   "log": ["REST"],
-  "databases": {               // Begin database configuration
+  "databases": {
     "sync_gateway": {
     "server": "http://localhost:8091",
     "bucket": "sync_gateway",
@@ -51,7 +51,7 @@ Configuration properties for server configuration are root-level configuration p
 
 ```javascript
 {
-	"interface":":4984",        // Begin server configuration
+	"interface":":4984",
 	"adminInterface":":4985",
 	"log":["REST"]
 }
@@ -114,10 +114,9 @@ The `databases` configuration property specifies one or more mappings of databas
 
 ```javascript
 {
-  "databases": {               // Begin database configuration
-    "database1": {             // Name of this database
-       "server": "http://localhost:8091",     // Configuration properties that specify
-                                             // the configuration of this database
+  "databases": {
+    "database1": {
+       "server": "http://localhost:8091",
        "bucket": "bucket",
        "sync": `function(doc) {channel(doc.channels);}`
     }
