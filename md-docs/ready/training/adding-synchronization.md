@@ -128,7 +128,9 @@ A conflict usually occurs when two writers are offline and save a different revi
 - Two database instances update the name of an existing list.
 - Two database instances update an existing task. One updates the task’s **name** while the other updates the **complete** property.
 
-To resolve conflicts you must first write the code to detect them. You will use the **allDocs** query with a few options.
+To resolve conflicts you must first write the code to detect them. You will use the **allDocs** query with a few options. 
+
+The **allDocs** query allows you to query an index of all the documents in the local database. The options that you will use define a query that will only return documents for which there are conflicting revisions. A **LiveQuery** automatically refreshes every time the database changes.
 
 <block class="ios" />
 
@@ -178,7 +180,7 @@ Here, you are using the **Revision** which is one layer below the **Document** A
 
 Build and run.
 
-At this point, there is a conflict on the lists page. The third list has two conflicting revisions, one where the **name** property is **Update 1** and on the other revision it’s **Update 2**. Couchbase Lite picked **Update 2** as the winning revision (also called the **current** revision).
+At this point, there is a conflict on the lists page. If you have have completed the **'Using The Database'** online training you will now see three lists. If you are completing this course as a stand-alone, you will see two lists. The bottom list has two conflicting revisions, one where the **name** property is **Update 1** and on the other revision it’s **Update 2**. Couchbase Lite picked **Update 2** as the winning revision (also called the **current** revision).
 
 <img src="./img/image06.png" class="portrait" />
 
@@ -190,7 +192,7 @@ Delete that list and notice that **Update 1** is now displayed. Since you delete
 
  This can be surprising at first but it’s the strength of using a distributed database that defers the conflict resolution logic to the application. It’s your responsibility as the developer to ensure conflicts are resolved! Even if you decide to let Couchbase Lite pick the winner you must remove extraneous conflicting revisions to prevent the behaviour observed above.
  
- - Locate the `resolveConflicts` method in  **AppDelegate.swift**.
+ - Locate the `resolveConflicts(revisions revs: [CBLRevision])` method in  **AppDelegate.swift**.
  - Add the following to resolve the conflict.
  
 ```swift
@@ -243,7 +245,7 @@ Delete the task. The revision that set the **complete** property to **true** bec
 
 <img src="./img/image23.png" class="portrait" />
 
-- Locate `resolveConflicts` in **AppDelegate.swift**, the method you updated previously for task-list documents.
+- Locate `resolveConflicts(revisions revs: [CBLRevision])` in **AppDelegate.swift**, the method you updated previously for task-list documents.
 - Replace the method body with the following.
 
 ```swift
