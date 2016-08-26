@@ -1,7 +1,7 @@
 ---
 id: config-properties
 title: Config properties
-permalink: ready/guides/sync-gateway/configuring-sync-gateway/config-properties/index.html
+permalink: ready/guides/sync-gateway/config-properties/index.html
 ---
 
 You can use a configuration file to configure Sync Gateway. Configuration determines the runtime behavior of Sync Gateway, including server configuration and the database or set of databases with which a Sync Gateway instance can interact. All configuration properties have default values.

@@ -152,6 +152,26 @@ $ sudo launchctl unload /Library/LaunchDaemons/com.couchbase.mobile.sync_gateway
 
 The config file and logs are located in `/Users/sync_gateway`.
 
+## Connecting Sync Gateway to Couchbase Server
+
+After you have installed Sync Gateway, you can optionally connect it to a Couchbase Server instance. By default, Sync Gateway uses a built-in, in-memory server called "Walrus" that can withstand most prototyping use cases, extending support to at most one or two users.
+
+To connect Sync Gateway to Couchbase Server:
+
+- Open the Couchbase Server Admin Console and log on using your administrator credentials.
+- In the toolbar, click **Data Buckets**.
+- On the Data Buckets page, click **Create New Data Bucket** and create a bucket named `sync_gateway` in the default pool.
+
+See the latest Sync Gateway Release Notes for version compatibility information, available on the [Downloads](http://www.couchbase.com/nosql-databases/downloads#Couchbase_Mobile) page.
+
+> **Note:** Note: You can use any name you want for your bucket, but `sync_gateway` is the default name that Sync Gateway uses if you do not specify a bucket name when you start Sync Gateway. If you use a different name for your bucket, you need to specify the name in the configuration file or via the command-line option `-bucket`.
+
+### Accessing and modifying Sync Gateway's bucket
+
+Sync Gateway is similar to an application server in that it considers itself the owner of its bucket, and stores data in the bucket using its own schema. Even though the documents in the bucket are normal JSON documents, Sync Gateway adds and maintains its own metadata to them to track their sync status and revision history.
+
+> **Note:** Do not add, modify or remove data in the bucket using Couchbase APIs or the admin UI, or you will confuse Sync Gateway. To modify documents, we recommend you use the Sync Gateway's REST API. If you need to operate on the bucket using Couchbase Server APIs, use the Bucket Shadowing feature to create a separate bucket you can modify, which the Sync Gateway will "shadow" with its own bucket.
+
 ## Instance from AWS marketplace
 
 1. Browse to the [Sync Gateway AMI](https://aws.amazon.com/marketplace/pp/B013XDO1B4) in the AWS Marketplace.
