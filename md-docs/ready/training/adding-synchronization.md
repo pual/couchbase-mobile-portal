@@ -128,7 +128,9 @@ A conflict usually occurs when two writers are offline and save a different revi
 - Two database instances update the name of an existing list.
 - Two database instances update an existing task. One updates the task’s **name** while the other updates the **complete** property.
 
-To resolve conflicts you must first write the code to detect them. You will use the **allDocs** query with a few options.
+To resolve conflicts you must first write the code to detect them. You will use the **allDocs** query with a few options. 
+
+The **allDocs** query allows you to query an index of all the documents in the local database. The options that you will use define a query that will only return documents for which there are conflicting revisions. A **LiveQuery** automatically refreshes every time the database changes.
 
 <block class="ios" />
 
