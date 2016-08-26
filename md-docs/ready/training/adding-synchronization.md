@@ -192,7 +192,7 @@ Delete that list and notice that **Update 1** is now displayed. Since you delete
 
  This can be surprising at first but it’s the strength of using a distributed database that defers the conflict resolution logic to the application. It’s your responsibility as the developer to ensure conflicts are resolved! Even if you decide to let Couchbase Lite pick the winner you must remove extraneous conflicting revisions to prevent the behaviour observed above.
  
- - Locate the `resolveConflicts` method in  **AppDelegate.swift**.
+ - Locate the `resolveConflicts(revisions revs: [CBLRevision])` method in  **AppDelegate.swift**.
  - Add the following to resolve the conflict.
  
 ```swift
@@ -245,7 +245,7 @@ Delete the task. The revision that set the **complete** property to **true** bec
 
 <img src="./img/image23.png" class="portrait" />
 
-- Locate `resolveConflicts` in **AppDelegate.swift**, the method you updated previously for task-list documents.
+- Locate `resolveConflicts(revisions revs: [CBLRevision])` in **AppDelegate.swift**, the method you updated previously for task-list documents.
 - Replace the method body with the following.
 
 ```swift
