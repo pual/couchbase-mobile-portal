@@ -97,13 +97,28 @@ sectionid: docs
     video {
       width: 100%;
     }
+    
+    /* Hide header links */
+    h1:hover .hash-link, h2:hover .hash-link, h3:hover .hash-link, h4:hover .hash-link, h5:hover .hash-link, h6:hover .hash-link {
+      visibility: visible !important;
+    }
+    .hash-link {
+      color: #aaa !important;
+      display: inline-block !important;
+      visibility: hidden !important;
+      padding-left: 5px !important;
+      text-decoration: none !important;
+    }
+    .hash-link > svg {
+      transform: rotate(-30deg) !important;
+    }
   </style>
   <a class="edit-page-link" href="https://github.com/couchbaselabs/couchbase-mobile-portal/tree/master/md-docs/{{ page.path }}" target="_blank">Edit on GitHub</a>
   <div class="content wrap documentationContent">
     <div class="inner-content">
       <!-- Platform tabs -->
       <!-- TODO: Make visible when ready to show multi-platform training -->
-      <div class="toggler" style="visibility: hidden;">
+      <div class="toggler" style="display: none;">
         <style>
           .toggler a {
             display: inline-block;
@@ -166,16 +181,11 @@ sectionid: docs
 
         // If we are coming to the page with a hash in it (i.e. from a search, for example), try to get
         // us as close as possible to the correct platform and dev os using the hashtag and block walk up.
-        var foundHash = false;
         if (window.location.hash !== '' && window.location.hash !== 'content') { // content is default
           var platform = window.location.hash.slice(1);
-          console.log(platform);
-          display('platform', platform);
-          foundHash = true;
-        }
-        // Do the default if there is no matching hash
-        if (!foundHash) {
-          display('platform', 'ios');
+          if (['ios-training', 'rn-training'].indexOf(platform) > -1) {
+            display('platform', platform);
+          }
         }
       </script>
       <!-- Segment.io analytics -->
