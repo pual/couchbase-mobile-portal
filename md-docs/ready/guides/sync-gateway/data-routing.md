@@ -1,7 +1,7 @@
 ---
 id: data-routing
 title: Data routing
-permalink: ready/guides/sync-gateway/data-routing/index.html
+permalink: ready/guides/sync-gateway/channels/index.html
 ---
 
 Sync Gateway uses channels to make it easy to share a database between a large number of users and control access to the database. Channels are the intermediaries between documents and users. Every document in the database belongs to a set of channels, and every user is allowed to access a set of channels. You use channels to:
