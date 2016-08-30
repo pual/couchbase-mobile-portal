@@ -181,11 +181,16 @@ sectionid: docs
 
         // If we are coming to the page with a hash in it (i.e. from a search, for example), try to get
         // us as close as possible to the correct platform and dev os using the hashtag and block walk up.
+        var foundHash = false;
         if (window.location.hash !== '' && window.location.hash !== 'content') { // content is default
           var platform = window.location.hash.slice(1);
           if (['ios-training', 'rn-training'].indexOf(platform) > -1) {
             display('platform', platform);
+            foundHash = true;
           }
+        }
+        if (!foundHash) {
+          display('platform', 'ios');
         }
       </script>
       <!-- Segment.io analytics -->
