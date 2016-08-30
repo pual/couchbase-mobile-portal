@@ -4,9 +4,7 @@ title: Adding Synchronization
 permalink: ready/training/adding-synchronization/index.html
 ---
 
-Now that you have all the data saved locally, you might want to save that data to the cloud to have it accessible on other devices or you might want to share it with other users. To do this, we’re going to add Sync Gateway to our app’s back end. It will run on your machine locally for development purposes.
-
-You can [read more about Sync Gateway](http://developer.couchbase.com/documentation/mobile/1.2/get-started/sync-gateway-overview/index.html) functionality and features in our documentation. There’s a lot you can do with it!
+In this lesson you’ll be introduced to Sync Gateway, our secure web gateway. You’ll learn how to use Couchbase Lite’s synchronization APIs, set up Sync Gateway for synchronization with the cloud and other devices, and resolve data conflicts within your application.
 
 Start this lesson by downloading the starter project below.
 
@@ -26,7 +24,7 @@ Start this lesson by downloading the starter project below.
 
 <block class="ios rn" />
 
-## Installation
+## Install Sync Gateway
 
 Now that your application runs smoothly on the device you are ready to introduce Sync Gateway.
 
@@ -66,7 +64,7 @@ Sync Gateway is listening on two ports:
 
 With Sync Gateway up and running you can now add synchronization in the application code.
 
-## Synchronization
+## Add synchronization
 
 Typically, an application needs to send data to the server and receive it. In Couchbase Mobile, this is handled by replications which run on the device. A replication requires a Couchbase Lite database and a Sync Gateway URL, and synchronizes data between the two. They can be of two types:
 
@@ -109,7 +107,7 @@ Build and run. Open [http://localhost:4985/_admin/db/todo](http://localhost:4985
 
 ![](./img/image19.png)
 
-## Managing Conflicts
+## Resolve Conflicts
 
 Due to the unpredictability of mobile connections it's inevitable that more than one device will update the same document simultaneously. Couchbase Lite provides features to resolve these conflicts. The resolution rules are written by the developer to keep full control over which edit (also called a revision) should be picked.
 

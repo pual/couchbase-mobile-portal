@@ -4,6 +4,8 @@ title: Using the Database
 permalink: ready/training/using-the-database/index.html
 ---
 
+In this lesson you’ll be introduced to Couchbase Lite, our embedded NoSQL database. You’ll learn how to create a new embedded database and optionally use databases pre-packaged in your application. Then, you’ll learn how to create, read, update, delete, and query data using Couchbase Lite. 
+
 To save us time coding the user interface for the application, download the starter project below.
 
 <block class="ios" />
@@ -30,9 +32,24 @@ This is the **download** button for the react native plugin
 
 Build & run. The user interface is functional and you can navigate through the app but nothing gets persisted.
 
-Since Couchbase Lite runs on the device, you can bundle a pre-built database in your application. For example, if your app needs to sync a lot of data initially, but that data is fairly static and won't change much, it can be a lot more efficient to bundle a database in your application and install it on the first launch. Of course, this is optional and in most cases, apps start with an empty Couchbase Lite database where data is added by the user or through synchronization with Sync Gateway. There is no limit to how many databases can be created or opened on the device. You can think of a database as a namespace for documents and several databases can be used in the same app (one database per user of the app is a common pattern). A database is stored in the application directory and is only accessible from this application.
+The entrypoint in the Couchbase Lite SDK is the `Manager` class. You can use it to create a new database called **todo**.
 
-In this tutorial, you will use a prebuilt database that contains a grocery list. Download the canned database from the link below and follow the instructions.
+```swift
+let manager = CBLManager.sharedInstance()
+var error: NSError?
+let database = manager.databaseNamed("todo", error: &error)
+if self.database == nil {
+    self.handleError(error)
+}
+```
+
+There is no limit to how many databases can be created or opened on the device. You can think of a database as a namespace for documents and several databases can be used in the same app (one database per user of the app is a common pattern). A database is stored in the application directory and is only accessible from this application.
+
+However, in this lesson, you will use a **pre-built** database that already contains a grocery list. You can bundle a pre-built database in your application if your app needs to sync a lot of static data initially. This lesson only covers how to bundle a **pre-built** database; refer to the Database guide to learn how to create **pre-built** databases.
+
+> **Note:** This is optional and in most cases, apps start with an empty Couchbase Lite database using the `databaseNamed` method where data is added by the user or through synchronization with Sync Gateway.
+
+Download the **pre-built** database from the link below and follow the instructions.
 
 [Download the pre-built database](https://cl.ly/453l3M1O151a/prebuilt-db.zip)
 
@@ -93,7 +110,7 @@ do {
 
 With the database in place you are now ready to query the data that's being stored.
 
-## Querying Data
+## Query Documents
 
 The way to query data in Couchbase Lite is by registering a **View** and then running a **Query** on it with **QueryOptions**. The first thing to know about Couchbase Views is that they have nothing to do with the user interface views.
 
@@ -173,7 +190,7 @@ The code to display the tasks is already added to the starter project. You can t
 
 [//]: # "TODO: Add some cartoon."
 
-## Writing Data
+## Create a Document
 
 Notice that the navigation bar already has a button that prompts the user to enter a name for a new list but the value isn't persisted (it doesn't appear on the list after pressing 'OK'). In this section you will learn how to create a new document and save it to the database.
 
@@ -208,6 +225,8 @@ Build and run. Save a new list to the database and the **Live Query** will pick 
 
 <img src="img/image05.png" class="portrait" />
 
+## Update a Document
+
 Swipe to the left on a row to reveal the **Edit** and **Delete** buttons.
 
 <img src="img/image04.png" class="portrait" />
@@ -238,6 +257,8 @@ Build and run. You should now be able to change the name of a list.
 <block class="ios" />
 
 <img src="img/image13.png" class="portrait" />
+
+## Delete a Document
 
 Finally, you will add the code to delete a document.
 

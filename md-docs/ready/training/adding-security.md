@@ -4,12 +4,7 @@ title: Adding Security
 permalink: ready/training/adding-security/index.html
 ---
 
-In the previous lessons, you built the user interface and enabled replication with Sync Gateway. Adding security to your application is generally the last segment in the development cycle with Couchbase Mobile. Indeed, it's easier to access a database that is unencrypted and to troubleshoot synchronization when all devices have access to the same data. In this section, you'll implement the following:
-
-- User Authentication with Sync Gateway
-- Access Control in the Sync Function
-- Database Encryption
-- Offline Login
+In this lesson you’ll learn how to add security to your Couchbase Mobile application. You’ll implement authentication and define access control, data validation, and access grant policies.
 
 Download the project for this lesson. The project already contains all the code that will be covered below.
 
@@ -37,7 +32,7 @@ Run rnpm to link with react-native-couchbase-lite
 
 <block class="ios rn" />
 
-## User Authentication
+## Implement User Authentication
 
 This section focuses on how to authorize users to be able to access Sync Gateway. Users are created with a name/password on Sync Gateway which can then be used on the Couchbase Lite replicator to authenticate as a given user.
 
@@ -151,7 +146,7 @@ You can verify if the pull replication retrieves the document present on Sync Ga
 [//]: # "TODO: Link to video."
 <video src="https://d3vv6lp55qjaqc.cloudfront.net/items/1s1G3C1i2a0G2P3o0G0m/movie1.mp4" controls="true"></video>
 
-## Access Controls
+## Define Access Control Policies
 
 In order to give different users access to different documents, you must write a sync function. The sync function lives in the configuration file of Sync Gateway. It’s a JavaScript function and every time a new document, revision or deletion is added to a database, the sync function is called and given a chance to examine the document.
 
@@ -379,7 +374,7 @@ If a document makes it through step 1 and 2 it will be written to Sync Gateway. 
 
 In the next section you will learn how to encrypt the local database on the device to provide additional security.
 
-## Database Encryption
+## Add Database Encryption
 
 The Couchbase Lite API allows you to encrypt the database on the device. By providing an encryption key, all the data stored in the database will be secure. To decrypt it in the future, the same key must be used.
 
@@ -411,7 +406,7 @@ if newKey != nil {
 
 Build and run. Browse to the database file and you find that it's now encrypted.
 
-## Offline Login
+## Enable Offline Login
 
 What about the scenario where a user attempts to login while being offline? Since data may already be in the database, it would be nice to allow the app to use it. From the previous section, you’ve learned that the database can be safely accessed with an encryption key so the user can attempt to enter credentials as if they were online (the **name** and **password** of the Sync Gateway user). To achieve offline login, you are mapping the user’s **name** to be the **database name** and the user’s **password** to be the **encryption key**.
 
