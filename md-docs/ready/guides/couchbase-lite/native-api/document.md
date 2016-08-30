@@ -451,10 +451,7 @@ doc.ExpireAfter(TimeSpan.FromSeconds(5));
 
 Expiration timing is not highly precise. The times are stored with one-second granularity, and the timer that triggers expiration may be delayed slightly by the operating system or by other activity on the database thread. Expiration won't happen while the app is not running; this means it may be triggered soon after the app is activated or launched, to catch up with expiration times that have already passed.
 
-**Note:** As with the existing explicit **purge** mechanism, this applies only to the local database; it has nothing 
-to do
- with 
-replication. This expiration time is not propagated when the document is replicated. The purge of the document does not cause it to be deleted on any other database. If the document is later updated on a remote database that the local database pulls from, the new revision will be pulled and the document will reappear.
+> **Note:** As with the existing explicit **purge** mechanism, this applies only to the local database; it has nothing to do with replication. This expiration time is not propagated when the document is replicated. The purge of the document does not cause it to be deleted on any other database. If the document is later updated on a remote database that the local database pulls from, the new revision will be pulled and the document will reappear.
 
 ## Document change notifications
 
