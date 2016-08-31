@@ -71,11 +71,11 @@ If Couchbase Lite doesn't specify any channels to replicate, it gets all the cha
 
 To replicate channels to Couchbase Lite, you configure the replication to use a filter named `sync_gateway/bychannel` with a filter parameter named `channels`. The value of the `channels` parameter is a comma-separated list of channels to fetch. The replication from Sync Gateway now pulls only documents tagged with those channels.
 
-A document can be removed from a channel without being deleted. For example, this can happen when a new revision is not added to one or more channels that the previous revision was in. Subscribers (downstream databases pulling from this database) should know about this change, but it's not exactly the same as a deletion.
+### Removing a replicated document
 
-Sync Gateway's `_changes` feed includes one more revision of a document after it stops matching a channel. It adds a `removed` property to the entry where this happens.
+A document can be removed from a channel without being deleted. For example, this can happen when a new revision is not added to one or more channels that the previous revision was in. 
 
-The effect on Couchbase Lite is that after a replication it sees the next revision of the document (the one that causes it to no longer match the channel). It won't get any further revisions until the next one that makes the document match again.
+Subscribers (downstream databases pulling from this database) automatically handle the change. Sync Gateway's `_changes` feed includes one more revision of a document after it stops matching a channel. Couchbase Lite creates a special tombstone revision, adding `_removed:true` property to the entry when this happens.
 
 This algorithm ensures that any views running in Couchbase Lite do not include an obsolete revision. The app code should use views to filter the results rather than just assuming that all documents in its local database are relevant.
 
