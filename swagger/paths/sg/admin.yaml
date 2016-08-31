@@ -277,7 +277,7 @@
   put:
     tags:
       - role
-    summary: Role
+    summary: Creates or updates a role
     description: This request creates or updates a role in the specified database.
     parameters:
       - $ref: '#/parameters/role'
@@ -289,7 +289,7 @@
   delete:
     tags:
       - role
-    summary: Role
+    summary: Deletes the role
     description: This request deletes the role with the specified name in the specified database.
     responses:
       200:
@@ -300,7 +300,7 @@
   post:
     tags:
       - session
-    summary: Session
+    summary: Creates a new session
     description: |
       This request creates a new session in the specified database.
     parameters:
@@ -338,7 +338,7 @@
   get:
     tags:
       - session
-    summary: Session
+    summary: Retrieves information about a session
     description: |
       This request retrieves information about a session.
     responses:
@@ -361,7 +361,7 @@
   delete:
     tags:
       - session
-    summary: Session
+    summary: Deletes a single session
     description: |
       This request deletes a single session.
     responses:
@@ -374,7 +374,7 @@
   delete:
     tags:
       - session
-    summary: Delete user session
+    summary: Deletes all user sessions
     description: This request delete the session for the specified user.
     responses:
       200:
@@ -387,7 +387,7 @@
   delete:
     tags:
       - session
-    summary: Delete specific user session
+    summary: Deletes a specific user session
     description: This request delete the specified session for the specified user.
     responses:
       200:
@@ -398,7 +398,7 @@
   get:
     tags:
       - user
-    summary: User
+    summary: Retrieves all users
     description: This request returns all the users in the specified database.
     responses:
       200:
@@ -411,7 +411,7 @@
   post:
     tags:
       - user
-    summary: User
+    summary: Creates a new user
     description: This request creates a new user in the specified database.
     parameters:
       - $ref: '#/parameters/user'
@@ -427,7 +427,7 @@
   get:
     tags:
       - user
-    summary: User
+    summary: Retrieves a specific user
     description: This request returns information about the specified user.
     responses:
       200:
@@ -437,7 +437,7 @@
   put:
     tags:
       - user
-    summary: User
+    summary: Creates or updates a user
     description: This request creates or updates a user in the specified database.
     parameters:
       - $ref: '#/parameters/user'
@@ -449,7 +449,7 @@
   delete:
     tags:
       - user
-    summary: User
+    summary: Deletes a user
     description: This request deletes the user with the specified name in the specified database.
     responses:
       200:
