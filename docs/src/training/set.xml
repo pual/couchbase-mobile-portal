@@ -8,6 +8,7 @@
   <introduction>
   </introduction>
   <items>
+    <xi:include href="create-database.xml" />
     <xi:include href="using-database.xml" />
     <xi:include href="adding-sync.xml" />
     <xi:include href="adding-security.xml" />

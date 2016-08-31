@@ -4,111 +4,9 @@ title: Using the Database
 permalink: ready/training/using-the-database/index.html
 ---
 
-In this lesson you’ll be introduced to Couchbase Lite, our embedded NoSQL database. You’ll learn how to create a new embedded database and optionally use databases pre-packaged in your application. Then, you’ll learn how to create, read, update, delete, and query data using Couchbase Lite. 
+In this lesson you’ll learn how to create, read, update, delete, and query data using Couchbase Lite.
 
-To save us time coding the user interface for the application, download the starter project below.
 
-<block class="ios" />
-
-<div class="buttons-unit downloads">
-  <a href="https://cl.ly/0v0g1B0O1O0Z/part1_start.zip" class="button" id="starter-project">
-    Download starter project
-  </a>
-</div>
-
-<block class="rn" />
-
-This is the **download** button for the react native plugin
-
-<block class="ios" />
-
-[Download Couchbase Lite for iOS](http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile). Unzip the file and drag **CouchbaseLite.framework** to the **Frameworks** folder in Finder. It's important to do this in Finder as opposed to Xcode.
-
-![](img/drag-framework-finder.png)
-
-<block class="rn" />
-
-<block class="ios rn" />
-
-Build & run. The user interface is functional and you can navigate through the app but nothing gets persisted.
-
-The entrypoint in the Couchbase Lite SDK is the `Manager` class. You can use it to create a new database called **todo**.
-
-```swift
-let manager = CBLManager.sharedInstance()
-var error: NSError?
-let database = manager.databaseNamed("todo", error: &error)
-if self.database == nil {
-    self.handleError(error)
-}
-```
-
-There is no limit to how many databases can be created or opened on the device. You can think of a database as a namespace for documents and several databases can be used in the same app (one database per user of the app is a common pattern). A database is stored in the application directory and is only accessible from this application.
-
-However, in this lesson, you will use a **pre-built** database that already contains a grocery list. You can bundle a pre-built database in your application if your app needs to sync a lot of static data initially. This lesson only covers how to bundle a **pre-built** database; refer to the Database guide to learn how to create **pre-built** databases.
-
-> **Note:** This is optional and in most cases, apps start with an empty Couchbase Lite database using the `databaseNamed` method where data is added by the user or through synchronization with Sync Gateway.
-
-Download the **pre-built** database from the link below and follow the instructions.
-
-[Download the pre-built database](https://cl.ly/453l3M1O151a/prebuilt-db.zip)
-
-<block class="ios" />
-
-- Unzip the file.
-- Drag **todo.cblite2** to the Copy Bundle Resources on the Build Phases tab in Xcode.
-
-![](./img/image22.png)
-
-Be sure to check the **Copy items if needed** and **Create folder references** options from the dropdown panel.
-
-![](./img/skitch.png)
-
-<block class="ios rn" />
-
-Next, you will write some code to initialize Couchbase Lite and import the prebuilt database in the application.
-
-<block class="ios" />
-
-- Open `AppDelegate.swift` and locate the `applicationDidFinishLaunchingWithOptions` method.
-- This method is called by the OS when the application starts but it’s missing the code to use the pre-built database.
-- Complete it with the following under the `// missing code` comment.
-
-```swift
-let manager = CBLManager.sharedInstance()
-do {
-    try database = manager.existingDatabaseNamed("todo")
-} catch let error as NSError {
-    NSLog("Error %@", error)
-}
-if database == nil {
-    let cannedDBPath = NSBundle.mainBundle().pathForResource("todo", ofType: "cblite2")
-    do {
-        try CBLManager.sharedInstance().replaceDatabaseNamed("todo", withDatabaseDir: cannedDBPath!)
-    } catch let error as NSError {
-        NSLog("Cannot replace the database %@", error)
-    }
-}
-```
-
-This code copies the database from the application bundle to the Couchbase Lite files directory.
-
-Next, you will create an instance of the Manager class to perform operations on the database. Add the following just below the previous code segment in the `applicationDidFinishLaunchingWithOptions` method.
-
-```swift
-do {
-    try database = CBLManager.sharedInstance().databaseNamed("todo")
-} catch let error as NSError {
-    NSLog("Cannot open the database: %@", error)
-    return false
-}
-```
-
-<block class="rn" />
-
-<block class="ios rn" />
-
-With the database in place you are now ready to query the data that's being stored.
 
 ## Query Documents
 
@@ -411,11 +309,12 @@ Build and run. You should now see the uncompleted task count for each list.
 
 <block class="ios" />
 
-<img src="./img/image08.png" class="portrait" />
+<img src="img/image08.png" class="portrait" />
 
 <block class="ios rn" />
 
-Well done! You've successfully learned how to use a prebuilt Couchbase Lite database, define views to query the documents to be displayed in a list and perform write, update and delete operations. You can download the final project as a downloadable zip below. Feel free to share your feedback, findings or ask any questions in the forums.
+Well done! You've successfully learned how to use a prebuilt Couchbase Lite database, define views to query the documents to be displayed in a list and perform write, update and delete operations. You can download the final project as a downloadable zip below. Feel free to share your feedback,
+ findings or ask any questions on the forums.
 
 <div class="buttons-unit downloads">
   <a href="https://cl.ly/360N3o2K0o1i/part1_final.zip" class="button">

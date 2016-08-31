@@ -6,7 +6,7 @@ permalink: ready/training/adding-security/index.html
 
 In this lesson you’ll learn how to add security to your Couchbase Mobile application. You’ll implement authentication and define access control, data validation, and access grant policies.
 
-Download the project for this lesson. The project already contains all the code that will be covered below.
+Start this lesson by downloading the starter project below.
 
 <block class="ios" />
 
