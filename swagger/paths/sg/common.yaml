@@ -27,6 +27,7 @@
   post:
     tags:
       - server
+    summary: Starts or cancels a database replication operation
     description: |
       This request starts or cancels a database replication operation.
       

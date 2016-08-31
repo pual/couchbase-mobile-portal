@@ -11,6 +11,7 @@
   get:
     tags:
       - server
+    summary: List of running tasks
     description: This request retrieves a list of all tasks running on the server.
     responses:
       200:
@@ -36,6 +37,7 @@
   post:
     tags:
       - server
+    summary: Starts or cancels a database replication operation
     description: |
       This request starts or cancels a database replication operation.
       

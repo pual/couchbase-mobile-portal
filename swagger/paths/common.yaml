@@ -4,7 +4,7 @@
   get:
     tags:
       - database
-    summary: Database
+    summary: Database info
     description: |
       This request retrieves information about the database.
     responses:
@@ -64,6 +64,7 @@
   delete:
     tags:
       - database
+    summary: Delete database
     description: Delete database
     responses:
       200:
