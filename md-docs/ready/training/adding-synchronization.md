@@ -11,7 +11,7 @@ Start this lesson by downloading the starter project below.
 <block class="ios" />
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/3G1o0j35471i/part2_start.zip" class="button">
+  <a href="https://cl.ly/3G1o0j35471i/part2_start.zip" class="button" id="project">
     Download starter project
   </a>
 </div>

@@ -11,7 +11,7 @@ To save us time coding the user interface for the application, download the star
 <block class="ios" />
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/0v0g1B0O1O0Z/part1_start.zip" class="button" id="starter-project">
+  <a href="https://cl.ly/0v0g1B0O1O0Z/part1_start.zip" class="button" id="project">
     Download starter project
   </a>
 </div>
