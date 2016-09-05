@@ -6,21 +6,29 @@ permalink: ready/training/adding-synchronization/index.html
 
 In this lesson you’ll be introduced to Sync Gateway, our secure web gateway. You’ll learn how to use Couchbase Lite’s synchronization APIs, set up Sync Gateway for synchronization with the cloud and other devices, and resolve data conflicts within your application.
 
+[//]: # "COMMON ACROSS LESSONS"
+
 Start this lesson by downloading the starter project below.
 
 <block class="ios" />
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/3G1o0j35471i/part2_start.zip" class="button">
-    Download starter project
+  <a href="https://cl.ly/0v0g1B0O1O0Z/part1_start.zip" class="button" id="starter-project">
+    Download the Xcode project
   </a>
 </div>
+
+## Installation
 
 [Download Couchbase Lite for iOS](http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile). Unzip the file and drag **CouchbaseLite.framework** to the **Frameworks** folder in Finder. It's important to do this in Finder as opposed to Xcode.
 
 ![](img/drag-framework-finder.png)
 
 <block class="rn" />
+
+This is the **download** button for the react native plugin
+
+[//]: # "COMMON ACROSS LESSONS"
 
 <block class="ios rn" />
 
@@ -78,12 +86,7 @@ There are a few terminologies that designate the role of each database involved 
 - **Local:** The database that resides where the replication is running.
 - **Remote:** The database to which the replication is sending data.
 
-Now you will add the code to start replications with the Sync Gateway instance.
-
-<block class="ios" />
-
-- Locate the `startReplication` method in **AppDelegate.swift**, this method is called in **applicationDidFinishLaunchingWithOptions**.
-- Add the following below the **guard** statement.
+In this task, you’ll learn how to start replications. Here’s how it’s done:
 
 ```swift
 pusher = database.createPushReplication(kSyncGatewayUrl)
@@ -101,11 +104,22 @@ puller.start()
 Here you are starting a push and pull replication to have bi-directional sync with the remote Sync Gateway.
 `kSyncGatewayUrl` is a constant in **AppDelegate.swift** and represents the URL to the Sync Gateway database (http://localhost:4984/todo/). If the application is running on a phone, you must replace **localhost** by the internal IP of the machine running Sync Gateway and ensure that the phone and laptop are connected to the same network. You can change this value to any valid URL pointing to a Sync Gateway database on the cloud, for example.
 
+### Try it out
+
+<block class="ios" />
+
+- Build and run.
+- Open [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo) in the browser and notice all the documents are pushed to Sync Gateway!
+
+	![](img/image19.png)
+
+#### Where's the code?
+
+- Locate the `startReplication` method in **AppDelegate.swift**, this method is called in **applicationDidFinishLaunchingWithOptions**.
+
+> **Note:** If you look at the code in the sample project you will see additional code setting an authenticator object. That is covered in the Security lesson.
+
 <block class="ios rn" />
-
-Build and run. Open [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo) in the browser and notice all the documents are pushed to Sync Gateway!
-
-![](./img/image19.png)
 
 ## Resolve Conflicts
 
@@ -128,12 +142,7 @@ A conflict usually occurs when two writers are offline and save a different revi
 
 To resolve conflicts you must first write the code to detect them. You will use the **allDocs** query with a few options. 
 
-The **allDocs** query allows you to query an index of all the documents in the local database. The options that you will use define a query that will only return documents for which there are conflicting revisions. A **LiveQuery** automatically refreshes every time the database changes.
-
-<block class="ios" />
-
-- Locate the `startConflictLiveQuery` method in **AppDelegate.swift**, this method is called in `applicationDidFinishLaunchingWithOptions`.
-- Complete it with the following.
+The **allDocs** query allows you to query an index of all the documents in the local database. The options that you will use define a query that will only return documents for which there are conflicting revisions. A **LiveQuery** automatically refreshes every time the database changes. Here's how it's done:
 
 ```swift
 conflictsLiveQuery = database.createAllDocumentsQuery().asLiveQuery()
@@ -142,7 +151,14 @@ conflictsLiveQuery!.addObserver(self, forKeyPath: "rows", options: .New, context
 conflictsLiveQuery!.start()
 ```
 
-The KVO handler is already present which calls the `resolveConflicts` method.
+<block class="ios" />
+
+#### Where's the code?
+
+- Locate the `startConflictLiveQuery` method in **AppDelegate.swift**, this method is called in `applicationDidFinishLaunchingWithOptions`.
+- The KVO handler is already present which calls the `resolveConflicts` method.
+
+<block class="ios rn" />
 
 Here’s how you will resolve conflicts:
 
@@ -153,10 +169,7 @@ Here’s how you will resolve conflicts:
 
 Even if the conflict isn’t resolved, Couchbase Lite has to return something. It chooses one of the two conflicting revisions as the "winner". The choice is deterministic, which means that every device that is faced with the same conflict will pick the same winner, without having to communicate.
 
-It’s not all that easy to create conflicts in development because you would have to deploy the app to multiple devices or simulators and stop the replications to create the conflict. So before you begin resolving conflicts, you will add some code to easily create a conflict only for development purposes.
-
-- Locate the `createListConflict` in **ListsViewController.swift**, this method is called in `viewDidLoad` but its body is empty at the moment.
-- Complete it with the following.
+It’s not all that easy to create conflicts in development because you would have to deploy the app to multiple devices or simulators and stop the replications to create the conflict. So before you begin resolving conflicts, you will add some code to easily create a conflict only for development purposes. Here's how it's done:
 
 ```swift
 let savedRevision = createTaskList("Test Conflicts List")
@@ -176,7 +189,11 @@ do {
 
 Here, you are using the **Revision** which is one layer below the **Document** API. The **Revision** has a method called **saveAllowingConflicts** which is helpful in this scenario to create two conflicting revisions.
 
-Build and run.
+#### Try it out
+
+<block class="ios" />
+
+- Build and run.
 
 At this point, there is a conflict on the lists page. If you have completed the **'Using The Database'** online training you will now see three lists. If you are completing this course as a stand-alone, you will see two lists. The bottom list has two conflicting revisions, one where the **name** property is **Update 1** and on the other revision it’s **Update 2**. Couchbase Lite picked **Update 2** as the winning revision (also called the **current** revision).
 
@@ -188,34 +205,28 @@ Delete that list and notice that **Update 1** is now displayed. Since you delete
 
 ![](./img/image07.png)
 
- This can be surprising at first but it’s the strength of using a distributed database that defers the conflict resolution logic to the application. It’s your responsibility as the developer to ensure conflicts are resolved! Even if you decide to let Couchbase Lite pick the winner you must remove extraneous conflicting revisions to prevent the behaviour observed above.
- 
- - Locate the `resolveConflicts(revisions revs: [CBLRevision])` method in  **AppDelegate.swift**.
- - Add the following to resolve the conflict.
- 
-```swift
-let defaultWinning = revs[0]
-let type = (defaultWinning["type"] as? String) ?? ""
-switch type {
-case "task-list":
- let props = defaultWinning.userProperties
- let image = defaultWinning.attachmentNamed("image")
- resolveConflicts(revisions: revs, withProps: props, andImage: image)
-default:
- break
-}
-```
+#### Where's the code?
 
-Build and run. 
+- Locate the `createListConflict` in **ListsViewController.swift**, this method is called in `viewDidLoad` but its body is empty at the moment.
+- Complete it with the following.
 
-Perform the same actions and this time deleting the list conflict doesn’t reveal the subsequent conflicting revision anymore.
+<block class="ios rn" />
+
+This can be surprising at first but it’s the strength of using a distributed database that defers the conflict resolution logic to the application. It’s your responsibility as the developer to ensure conflicts are resolved! Even if you decide to let Couchbase Lite pick the winner you must remove extraneous conflicting revisions to prevent the behaviour observed above.
+ 
+### Try it out
+
+<block class="ios" />
+
+- Build and run.
+ 
+#### Where's the code?
+
+- Locate the `resolveConflicts(revisions revs: [CBLRevision])` method in  **AppDelegate.swift**.
 
 ### Three way merge
 
 For task documents, you will follow the same steps as previously except this time the conflict resolution will merge the differences between the conflicting revisions into a new revision.
-
-- Locate the `createTaskConflict` method in **TasksViewController.swift**, this method is called in **viewDidLoad** but its body is empty at the moment.
-- Complete it with the following.
 
 ```swift
 let savedRevision = createTask("Test Conflicts Task")
@@ -262,11 +273,16 @@ default:
 }
 ```
 
-Build and run. 
+#### Try it out
 
-Open any list and this time the task has both changes (the text is updated and marked as completed).
+- Build and run. 
+- Open any list and this time the task has both changes (the text is updated and marked as completed).
 
 ![](img/image03.png)
+
+#### Where's the code?
+
+- Locate the `createTaskConflict` method in **TasksViewController.swift**, this method is called in **viewDidLoad**.
 
 Well done! You’ve built an application that works fully offline and  enables synchronization with the server when the network is available. Like in any distributed system, you also learned to detect and resolve conflicts.
 

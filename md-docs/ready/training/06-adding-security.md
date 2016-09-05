@@ -6,31 +6,29 @@ permalink: ready/training/adding-security/index.html
 
 In this lesson you’ll learn how to add security to your Couchbase Mobile application. You’ll implement authentication and define access control, data validation, and access grant policies.
 
+[//]: # "COMMON ACROSS LESSONS"
+
 Start this lesson by downloading the starter project below.
 
 <block class="ios" />
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/2w3r071o3e22/part3.zip" class="button" id="project">
-    Download project
+  <a href="https://cl.ly/0v0g1B0O1O0Z/part1_start.zip" class="button" id="starter-project">
+    Download the Xcode project
   </a>
 </div>
 
-[Download Couchbase Lite for iOS](http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile). Unzip the file and drag **CouchbaseLite.framework** and **libsqlcipher.a** to the **Frameworks** folder in Finder. It's important to do this in Finder as opposed to Xcode. In this lesson you're using **libsqlcipher.a** as well because it will be used in a later section regarding database encryption.
+## Installation
 
-![](./img/drag-framework-finder.png)
+[Download Couchbase Lite for iOS](http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile). Unzip the file and drag **CouchbaseLite.framework** to the **Frameworks** folder in Finder. It's important to do this in Finder as opposed to Xcode.
+
+![](img/drag-framework-finder.png)
 
 <block class="rn" />
 
-<div class="buttons-unit downloads">
-  <a href="http://cl.ly/3s2T3G2d1p2u/part3_start.zip" class="button" id="project">
-    Download project
-  </a>
-</div>
+This is the **download** button for the react native plugin
 
-Run rnpm to link with react-native-couchbase-lite
-
-<block class="ios rn" />
+[//]: # "COMMON ACROSS LESSONS"
 
 ## Implement User Authentication
 
