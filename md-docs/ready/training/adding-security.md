@@ -12,13 +12,23 @@ Download the project for this lesson. The project already contains all the code 
 
 <div class="buttons-unit downloads">
   <a href="https://cl.ly/2w3r071o3e22/part3.zip" class="button" id="project">
-    Download project
+    Download the Xcode starter project
   </a>
 </div>
 
-[Download Couchbase Lite for iOS](http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile). Unzip the file and drag **CouchbaseLite.framework** and **libsqlcipher.a** to the **Frameworks** folder in Finder. It's important to do this in Finder as opposed to Xcode. In this lesson you're using **libsqlcipher.a** as well because it will be used in a later section regarding database encryption.
+<div class="buttons-unit downloads">
+  <a href="http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile" class="button red">
+    Download Couchbase Lite for iOS
+  </a>
+</div>
 
-![](./img/drag-framework-finder.png)
+<img src="img/image41.png" class="center-image" />
+
+Unzip the file and drag **CouchbaseLite.framework** and **libsqlcipher.a** to the **Frameworks** folder in Finder. It's important to do this in Finder as opposed to Xcode. In this lesson you're using **libsqlcipher.a** as well because it will be used in a later section regarding database encryption.
+
+![](img/drag-framework-finder.png)
+
+Open **Todo.xcodeproj** in Xcode.
 
 <block class="rn" />
 

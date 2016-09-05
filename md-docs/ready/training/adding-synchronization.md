@@ -11,14 +11,24 @@ Start this lesson by downloading the starter project below.
 <block class="ios" />
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/3G1o0j35471i/part2_start.zip" class="button" id="project">
-    Download starter project
+  <a href="https://cl.ly/3Z0p3M2E3M0u/part2_start.zip" class="button" id="project">
+    Download the Xcode starter project
   </a>
 </div>
 
-[Download Couchbase Lite for iOS](http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile). Unzip the file and drag **CouchbaseLite.framework** to the **Frameworks** folder in Finder. It's important to do this in Finder as opposed to Xcode.
+<div class="buttons-unit downloads">
+  <a href="http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile" class="button red">
+    Download Couchbase Lite for iOS
+  </a>
+</div>
+
+<img src="img/image41.png" class="center-image" />
+
+Unzip the file and drag **CouchbaseLite.framework** to the **Frameworks** folder in Finder. It's important to do this in Finder as opposed to Xcode.
 
 ![](img/drag-framework-finder.png)
+
+Open **Todo.xcodeproj** in Xcode.
 
 <block class="rn" />
 
@@ -273,7 +283,7 @@ Well done! You’ve built an application that works fully offline and  enables s
 Get the full source code for this project as a downloadable zip below. Feel free to share your feedback and findings, or ask any questions in the forums.
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/1Y260B23473Q/part2_final.zip" class="button">
+  <a href="https://cl.ly/3j2J3F2D0y1r/part2_final.zip" class="button">
     Download final project
   </a>
 </div>
