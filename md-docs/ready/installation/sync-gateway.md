@@ -175,11 +175,11 @@ Sync Gateway is similar to an application server in that it considers itself the
 ## Instance from AWS marketplace
 
 1. Browse to the [Sync Gateway AMI](https://aws.amazon.com/marketplace/pp/B013XDNYRG) in the AWS Marketplace.
-1. Click Continue.
-1. Make sure you choose a key that you have locally.
-1. Paste the [user-data.sh](https://raw.githubusercontent.com/couchbase/build/master/scripts/jenkins/mobile/ami/user-data.sh) script contents into the text area in Advanced Details
-1. If you want to run a custom Sync Gateway configuration, you should customize the variables in the Customization section of the user-data.sh script you just pasted.  You can set the Sync Gateway config to any public URL and will need to update the Couchbase Server bucket name to match what's in your config.
-1. Edit your Security Group to expose port 4984 to Anywhere
+2. Click Continue.
+3. Make sure you choose a key that you have locally.
+4. Paste the [user-data.sh](https://raw.githubusercontent.com/couchbase/build/master/scripts/jenkins/mobile/ami/user-data.sh) script contents into the text area in Advanced Details
+5. If you want to run a custom Sync Gateway configuration, you should customize the variables in the Customization section of the user-data.sh script you just pasted.  You can set the Sync Gateway config to any public URL and will need to update the Couchbase Server bucket name to match what's in your config.
+6. Edit your Security Group to expose port 4984 to Anywhere
 
 ### Verify via curl
 
