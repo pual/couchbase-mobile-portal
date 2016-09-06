@@ -279,7 +279,7 @@ Add the following in the application level `build.gradle` file.
 ```gradle
 dependencies {
     compile 'com.couchbase.lite:couchbase-lite-android:+'
-    compile 'com.couchbase.lite:couchbase-lite-java-forestdb:+'
+    compile 'com.couchbase.lite:couchbase-lite-android-forestdb:+'
 }
 ```
 
