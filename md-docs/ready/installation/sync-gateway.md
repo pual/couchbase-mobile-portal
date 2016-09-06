@@ -174,35 +174,12 @@ Sync Gateway is similar to an application server in that it considers itself the
 
 ## Instance from AWS marketplace
 
-1. Browse to the [Sync Gateway AMI](https://aws.amazon.com/marketplace/pp/B013XDO1B4) in the AWS Marketplace.
-2. Click Continue.
-3. Change all ports to "MY IP" except for port 4984.
-4. Make sure you choose a key that you have locally.
-
-### SSH in and start Sync Gateway
-
-1. Go to the AWS console, find the EC2 instance, and find the instance's public ip address. It should look like `ec2-54-161-201-224.compute-1.amazonaws.com`. The rest of the instructions will refer to this as `public_ip`.
-2. From the command line, run `ssh ec2-user@public_ip` (this should let you in without prompting you for a password. If not, you chose a key when you launched that you don’t have locally).
-3. Start the Sync Gateway with this command.
-
-    ```bash
-    /opt/couchbase-sync-gateway/bin/sync_gateway -interface=0.0.0.0:4984 -url=http://localhost:8091 -bucket=sync_gateway -dbname=sync_gateway
-    ```
-
-4. You should see output like this:
-
-    ```
-    2015-11-03T19:37:05.384Z ==== Couchbase Sync Gateway/1.1.0(28;86f028c) ====
-    2015-11-03T19:37:05.384Z Opening db /sync_gateway as bucket "sync_gateway", pool "default", server <http://localhost:8091>
-    2015-11-03T19:37:05.384Z Opening Couchbase database sync_gateway on <http://localhost:8091>
-    2015/11/03 19:37:05  Trying with selected node 0
-    2015/11/03 19:37:05  Trying with selected node 0
-    2015-11-03T19:37:05.536Z Using default sync function 'channel(doc.channels)' for database "sync_gateway"
-    2015-11-03T19:37:05.536Z     Reset guest user to config
-    2015-11-03T19:37:05.536Z Starting profile server on
-    2015-11-03T19:37:05.536Z Starting admin server on 127.0.0.1:4985
-    2015-11-03T19:37:05.550Z Starting server on localhost:4984 ...
-    ```
+1. Browse to the [Sync Gateway AMI](https://aws.amazon.com/marketplace/pp/B013XDNYRG) in the AWS Marketplace.
+1. Click Continue.
+1. Make sure you choose a key that you have locally.
+1. Paste the [user-data.sh](https://raw.githubusercontent.com/couchbase/build/master/scripts/jenkins/mobile/ami/user-data.sh) script contents into the text area in Advanced Details
+1. If you want to run a custom Sync Gateway configuration, you should customize the variables in the Customization section of the user-data.sh script you just pasted.  You can set the Sync Gateway config to any public URL and will need to update the Couchbase Server bucket name to match what's in your config.
+1. Edit your Security Group to expose port 4984 to Anywhere
 
 ### Verify via curl
 
