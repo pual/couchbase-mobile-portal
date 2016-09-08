@@ -90,7 +90,7 @@ Map the Listener's port running on the Android emulator to the same port on your
 adb forward tcp:5984 tcp:5984
 ```
 
-Open [https://localhost:5984](https://localhost:5984), the browser will an unstrustred certificate warning. That's expected since you created a self signed certificate and a peer-to-peer context, certificates are generally self-signed because there's no authority to check it against.
+Open [https://localhost:5984](https://localhost:5984), the browser will display an unstrusted certificate warning. That's expected since you created a self signed certificate and in a peer-to-peer context, a certificate is generally self-signed because there's no authority to check it against.
 
 ![](img/browser.png)
 
@@ -98,7 +98,7 @@ Open [https://localhost:5984](https://localhost:5984), the browser will an unstr
 
 ### Android
 
-By default, the replication running with https will stop if the certificate is self-signed because it's considered unstrusted. Use the following to override this behaviour and start a replication.
+By default, the replication running with https will stop if the certificate is self-signed because it's considered unstrusted. Use the following to override the default setting.
 
 ```java
 Database database = null;
