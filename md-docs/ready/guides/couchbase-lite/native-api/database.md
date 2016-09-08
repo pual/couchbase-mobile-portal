@@ -199,6 +199,8 @@ dependencies {
 - Install the Nuget package called `Couchbase.Lite.Storage.SQLCipher`
 - Alternatively, if you are manually adding the DLLs to the Visual Studio project, you should include `sqlcipher.dll` and `Couchbase.Lite.Storage.SQLCipher.dll`
 
+Then call `Couchbase.Lite.Storage.SQLCipher.Plugin.Register()` in the application.
+
 #### Enabling encryption
 
 At this point, Couchbase Lite won't work any differently. Databases are still unencrypted by default. To enable encryption, you must register an encryption key when opening the database with the openDatabase method.
@@ -285,7 +287,9 @@ dependencies {
 
 #### Windows
 
-Install the Nuget package called Couchbase Lite ForestDB Storage.
+Install the Nuget package called `Couchbase.Lite.Storage.ForestDB`.
+
+Then call `Couchbase.Lite.Storage.ForestDB.Plugin.Register()` in the application.
 
 ### Choosing a storage engine
 
