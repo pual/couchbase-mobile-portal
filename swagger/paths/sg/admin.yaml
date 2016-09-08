@@ -50,7 +50,20 @@
     tags:
       - database
     summary: Create database
-    description: This request creates a database.
+    description: >
+      This request creates a database.
+      
+      You can optionally pass the database config as the JSON body. For example:
+      
+        {
+          "server":"http://localhost:8091",
+          "bucket": "todo_app",
+          "users": {
+            "john": {"password": "pass", "admin_channels": ["*"]}
+          }
+        }
+      
+      Note that if you pass the entire config file it won't work, it must be the database portion only (the database name is specified in the URL path). If the parameters passed are invalid it will create a walrus-backed database with all values set to default.
     responses:
       201:
         description: The database was created successfully.
