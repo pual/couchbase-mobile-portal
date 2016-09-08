@@ -127,3 +127,88 @@ Subsequent client requests to the gateway will now include the session in a cook
 ## Session Expiration
 
 By default, a session created on Sync Gateway lasts 24 hours. If you create sessions by sending a POST request to `/db/_session`, you can set a custom value that overrides the system default. However, if you are using Persona for authentication, the only way to customize the session length is by modifying the `kDefaultSessionTTL` constant in the `rest_session.go` file.
+
+## Authentication for Web Apps
+
+A common use case is to sync with HTML 5 apps that interact directly with the Sync Gateway REST API or use PouchDB to initiate replications. The web app is usually served on a different origin (domain) than the Sync Gateway domain so you will first need to enable CORS in the config file.
+
+By default, browsers won't send the credentials (cookies) in a CORS request but there is an option called `withCredentials` to enable it (see the [Mozilla documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Requests_with_credentials)).
+
+The following configuration enables CORS and creates a user (`john/pass`).
+
+```javascript
+{
+  "log": ["HTTP+"],
+  "CORS": {
+    "Origin": ["http://localhost:9000"],
+    "LoginOrigin": ["http://localhost:9000"],
+    "Headers": ["Content-Type"],
+    "MaxAge": 17280000
+  },
+  "databases": {
+    "todo": {
+      "server": "walrus:",
+      "users": {
+        "john": {"password": "pass", "admin_channels": ["*"]}
+      }
+    }
+  }
+}
+```
+
+For authentication to work, you must set the **Origin** and **LoginOrigin** to the origin of the web app (the hostname of the web server). You can read more about CORS support on the [Sync Gateway configuration guide](/documentation/mobile/current/develop/guides/sync-gateway/config-properties/index.html#cors-configuration). Then, you can send a POST /{db}/_session request passing the name and password of the user to authenticate.
+
+Below is an example using the Swagger client as the JavaScript library to consume the Sync Gateway REST API.
+
+```javascript
+var client = new SwaggerClient({
+  url: 'http://developer.couchbase.com/mobile/swagger/sync-gateway-public/spec.json',
+  usePromise: true,
+  enableCookies: true
+})
+  .then(function (client) {
+    client.session.post_db_session({db: 'todo', name: 'john', password: 'pass'})
+      .then(function (res) {
+        console.log(res);
+        if (res.status == 200) {
+          return client.query.get_db_all_docs({db: 'todo', include_docs: true});
+        }
+      })
+      .then(function (res) {
+        console.log(res.obj);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  });
+```
+
+The same can be done in vanilla JavaScript with the XMLHttpRequest API of course.
+
+```javascript
+var SYNC_GATEWAY_URL = 'http://localhost:4984/todo';
+var login = new XMLHttpRequest();
+login.open('POST', SYNC_GATEWAY_URL + '/_session', true);
+login.setRequestHeader('Content-Type', 'application/json');
+login.onreadystatechange = function() {
+  if (login.readyState == 4 && login.status == 200) {
+    
+    var allDocs = new XMLHttpRequest();
+    allDocs.open('GET', SYNC_GATEWAY_URL + '/_all_docs', true);
+    allDocs.setRequestHeader('Content-Type', 'application/json');
+    
+    allDocs.onreadystatechange = function() {
+      if (allDocs.readyState == 4 && allDocs.status == 200) {
+        console.log(allDocs.response);
+      }
+    };
+    
+    allDocs.withCredentials = true;
+    allDocs.send();
+    
+  }
+};
+login.send(JSON.stringify({"name": "john", "password": "pass"}));
+```
+
+Note that you must set the `withCredentials` option on all requests to Sync Gateway that require authentication.
