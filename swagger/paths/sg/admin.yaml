@@ -43,6 +43,27 @@
     responses:
       200:
         description: yoo
+/{db}/:
+  parameters:
+    - $ref: '#/parameters/db'
+  put:
+    tags:
+      - database
+    summary: Create database
+    description: This request creates a database.
+    responses:
+      201:
+        description: The database was created successfully.
+  delete:
+    tags:
+      - database
+    summary: Delete database
+    description: Delete database
+    responses:
+      200:
+        description: Success
+        schema:
+          $ref: '#/definitions/Success'
 /{db}/_compact:
   parameters:
     - $ref: '#/parameters/db'
