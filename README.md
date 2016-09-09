@@ -1,6 +1,99 @@
 Couchbase Mobile Developer Portal
 =================================
 
+## Contributing to Docs
+
+To update documentation, find the page that you wish to change on [developer.couchbase.com](http://developer.couchbase.com/documentation/mobile/1.3/develop/index.html) and click the **Edit on GitHub** button to open the backing markdown file.
+
+![](https://cl.ly/1x2W162f3G1g/Pasted_Image_09_09_2016__20_22.png)
+
+> Note: If the page you want to edit doesn't have the **Edit on GitHub** button it means that it hasn't been migrated to this contribution process yet. In this case, you can file a [new issue](https://github.com/couchbaselabs/couchbase-mobile-portal/issues/new).
+
+From there you can click the **Edit** button to write changes on GitHub. Make sure to check the Style Guide in the next section to get familiar with the writing rules.
+
+![](https://cl.ly/0k261k2r1N3o/Pasted_Image_09_09_2016__20_26.png)
+
+Once you are done with edits scroll to the bottom of the page and select the create new branch option.
+
+![](https://cl.ly/3z3225371P3p/Pasted_Image_09_09_2016__20_30.png)
+
+Then click the **Propose file change** button which will open a PR with the changes. Someone with push access to the master branch will then review the changes and merge the PR.
+
+## Style Guide
+
+### Headers
+
+The only rule for headers is that a top level header should be an `h2` (##).
+
+### Images
+
+- Create an **img** folder in the same directory as the markdown file.
+- Save images to the **img** and reference them in markdown like so: `![](img/image01.png)`.
+
+### Notes
+
+We use the markdown quote syntax to render notes.
+
+```
+> Note: some text
+```
+
+![](https://cl.ly/460L1w061U0g/Pasted_Image_09_09_2016__21_16.png)
+
+### Tables
+
+We follow the markdown syntax for tables. Here's an example.
+
+```
+|Column 1|Column 2|Column 3|
+|:-------|:-------|:-------|
+|Value 1|Value 2|Value 3|
+```
+
+### Ordered lists
+
+```
+1. First
+2. Second
+3. Third
+```
+
+### Unordered lists
+
+```
+- Text
+- Text
+- Text
+```
+
+### Code tabs
+
+For code tabs we're using a slight _hack_ to make it work in markdown. The following will render the image below.
+
+
+    <div class="tabs" />
+
+    ```objective-c+
+    code
+    ```
+
+    ```swift+
+    code
+    ```
+
+    ```java+
+    code
+    ```
+
+    ```c+
+    code
+    ```
+
+![](https://cl.ly/2s111n2z1k2m/Pasted_Image_09_09_2016__22_04.png)
+
+
+## Other Notes (optional)
+
 Clone the git repository
 ------------------------
 
@@ -13,12 +106,6 @@ git submodule init && git submodule update
 ```
 
 To contribute to Guides, API references or REST APIs, read the following. You don't need to build the site locally. Just find the content that needs editing and submit a pull request.
-
-## Guides
-
-Part of the documentation is currently written in markdown. The documentation that has already been converted to markdown is located in `md-docs/ready`.
-
-The documentation not yet in markdown is written in XML in `docs/src/guides`.
 
 ### Code tabs
 
@@ -39,15 +126,15 @@ C#           -> ```c+
 
 GitHub will render 4 code blocks one after the other but don't worry, the tabs will be displayed as expected on the site.
 
-## REST API
+### REST API
 
 REST APIs are documented using Swagger. Read more in the [readme of the swagger folder](https://github.com/couchbaselabs/couchbase-mobile-portal/tree/master/swagger).
 
-## API References
+### API References
 
 API references are documented in [https://github.com/couchbaselabs/couchbase-lite-api](https://github.com/couchbaselabs/couchbase-lite-api).
 
-## Ingestion hacks
+### Ingestion hacks
 
 - [Code tabs in markdown](https://github.com/couchbaselabs/couchbase-mobile-portal/issues/398)
 - [Table styles](https://github.com/couchbaselabs/couchbase-mobile-portal/issues/400)
@@ -55,7 +142,7 @@ API references are documented in [https://github.com/couchbaselabs/couchbase-lit
 - [Styling blockquotes](https://github.com/couchbaselabs/couchbase-mobile-portal/issues/420)
 - [Highlight Objective-C with C](https://github.com/couchbaselabs/couchbase-mobile-portal/commit/76f2625ed54b9440be1344ca2a13580669c5c962)
 
-## Release notes
+### Release notes
 
 Release notes are generated using the [GitHubReleaseNotes](https://github.com/couchbaselabs/GitHubReleaseNotes) tool.
 
