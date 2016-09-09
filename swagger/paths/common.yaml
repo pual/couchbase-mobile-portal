@@ -102,4 +102,4 @@
             docs:
               type: array
               items:
-                - $ref: '#/definitions/Success'
+                $ref: '#/definitions/Success'
