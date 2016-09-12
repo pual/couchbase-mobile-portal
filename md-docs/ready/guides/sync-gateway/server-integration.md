@@ -14,6 +14,15 @@ The integration approaches are:
 - **Webhook event handlers:** Sync Gateway can detect document updates and post the updated documents to one or more external URLs. The first article in this guide describes this approach.
 - **Changes worker pattern:** The changes worker pattern treats documents as state machines and uses a changes feed to obtain information about when documents change. This integration permits applications to implement business logic that reacts to changes in documents. The second article in this guide describes this approach.
 
+Here's a table that compares each API in different scenarios:
+
+|Scenario|Changes feed (pull)|Webhooks (push)|
+|:-------|:------------------|:--------------|
+|Sequence/Ordered|Yes|No|
+|User Access Control|Fine Grain|Limited|
+|Scalable|Yes|No|
+|Data Stream replay on Failure|Yes|No|
+
 ## Using Webhooks
 
 Sync Gateway provides a webhook feature that allows Sync Gateway to detect document changes and to post changed documents to URLs that you specify. In more detail, the steps for a single webhook event handler are:
