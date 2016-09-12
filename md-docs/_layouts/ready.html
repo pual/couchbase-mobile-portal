@@ -156,6 +156,13 @@ sectionid: docs
         <a href="javascript:void(0);" class="button-android" onclick="display('platform', 'android')">Android</a>
         <a href="javascript:void(0);" class="button-net" onclick="display('platform', 'net')">.NET</a>
       </div>
+      <!-- SDK buttons -->
+      <div id="swagger-libs" style="display: none;">
+        <span>Sync Gateway REST API Libs:</span>
+        <a href="javascript:void(0);" onclick="getSDK('java')">Java</a>
+        <a href="javascript:void(0);" onclick="getSDK('csharp')">C#</a>
+        <a href="javascript:void(0);" onclick="getSDK('go')">Go</a>
+      </div>
       <!-- Markdown content -->
       {{ content }}
       <!-- Logic to make all links open in a new tab -->
@@ -222,6 +229,48 @@ sectionid: docs
           category: 'Training',
           label: 'Swift'
         });
+      </script>
+      <!-- SDK buttons (shown only if show_true=true in the SDK) -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch.min.js"></script>
+      <script>
+        
+        if (getParameterByName("show_swagger_libs")) {
+          var swagger_libs_el = document.getElementById('swagger-libs');
+          swagger_libs_el.style.display = 'block';
+        }
+        
+        function getSDK(lang) {
+          fetch('http://developer.couchbase.com/mobile/swagger/sync-gateway-public/spec.json')
+                  .then(function (res) {
+                    return res.json();
+                  })
+                  .then(function (res) {
+                    var options = {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({spec: res})
+                    };
+                    return fetch('http://generator.swagger.io/api/gen/clients/' + lang, options)
+                  })
+                  .then(function (res) {
+                    return res.json();
+                  })
+                  .then(function (res) {
+                    window.location = res.link;
+                  });
+        }
+
+        function getParameterByName(name, url) {
+          if (!url) url = window.location.href;
+          name = name.replace(/[\[\]]/g, "\\$&");
+          var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                  results = regex.exec(url);
+          if (!results) return null;
+          if (!results[2]) return '';
+          return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
       </script>
     </div>
   </div>
