@@ -35,7 +35,7 @@ The only rule for headers is that a top level header should be an `h2` (##).
 We use the markdown quote syntax to render notes.
 
 ```
-> Note: some text
+> **Note:** some text
 ```
 
 ![](https://cl.ly/460L1w061U0g/Pasted_Image_09_09_2016__21_16.png)
