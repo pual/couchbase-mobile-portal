@@ -28,6 +28,9 @@ if [[ ${1} = "build" ]]; then
 	${COMMAND}
 	echo "Building Jekyll..."
 	jekyll build --source "${JEKYLL_SOURCE}" --destination "${JEKYLL_DESTINATION}"
+	
+	find ../../tmp/ready/ -name "*.mov" -type f -delete
+	
 	cp -rf ${OPENID} "${SOURCE_FOLDER}"
 	cp -rf ${INSTALLATION} "${SOURCE_FOLDER}"
 	cp -rf ${DEVELOP} "${SOURCE_FOLDER}/develop"
@@ -35,7 +38,6 @@ if [[ ${1} = "build" ]]; then
 	rm -rf ../../tmp/ready/training/using-the-database/img/
 	rm -rf ../../tmp/ready/training/adding-synchronization/img/
 	rm -rf ../../tmp/ready/training/adding-security/img/
-	find ../../tmp/ready/training/img/ -name "*.mov" -type f -delete
 	
 	cp -rf ${TRAINING} "${SOURCE_FOLDER}/develop"
 	
