@@ -10,5 +10,6 @@
     <xi:include href="configuration-options.xml"/>
     <xi:include href="advanced-topics.xml"/>
     <xi:include href="how-to-google.xml"/>
+    <xi:include href="how-to-azure.xml"/>
   </items>
 </set>
