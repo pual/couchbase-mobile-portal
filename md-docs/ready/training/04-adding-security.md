@@ -6,13 +6,15 @@ permalink: ready/training/adding-security/index.html
 
 In this lesson you’ll learn how to add security to your Couchbase Mobile application. You’ll implement authentication and define access control, data validation, and access grant policies.
 
-Download the project for this lesson. The project already contains all the code that will be covered below.
+[//]: # "COMMON ACROSS LESSONS"
+
+Download the project and Couchbase Lite SDK below.
 
 <block class="ios" />
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/2w3r071o3e22/part3.zip" class="button" id="project">
-    Download the Xcode starter project
+  <a href="https://cl.ly/2B3I3x1k1s0e/xcode-project.zip" class="button" id="project">
+    <img src="img/download-xcode.png">
   </a>
 </div>
 
@@ -24,21 +26,19 @@ Download the project for this lesson. The project already contains all the code 
 
 <img src="img/image41.png" class="center-image" />
 
-Unzip the file and drag **CouchbaseLite.framework** and **libsqlcipher.a** to the **Frameworks** folder in Finder. It's important to do this in Finder as opposed to Xcode. In this lesson you're using **libsqlcipher.a** as well because it will be used in a later section regarding database encryption.
+Unzip the file and drag **CouchbaseLite.framework** to the **Frameworks** folder of the project in Finder. It's important to do this in Finder as opposed to Xcode.
 
 ![](img/drag-framework-finder.png)
 
-Open **Todo.xcodeproj** in Xcode.
+Open **Todo.xcodeproj** in Xcode. Then build & run the project.
 
-<block class="rn" />
+<img src="img/image42.png" class="center-image" />
 
-<div class="buttons-unit downloads">
-  <a href="http://cl.ly/3s2T3G2d1p2u/part3_start.zip" class="button" id="project">
-    Download project
-  </a>
-</div>
+Throughout this lesson, you will navigate in different files of the Xcode project. We recommend to use the method navigator to scroll to a method.
 
-Run rnpm to link with react-native-couchbase-lite
+<img src="https://cl.ly/0G263m3m1a0w/image44.gif" />
+
+[//]: # "COMMON ACROSS LESSONS"
 
 <block class="ios rn" />
 
@@ -94,56 +94,48 @@ With Sync Gateway users defined you can now enable authentication on the Couchba
 
 Open the project in Xcode.
 
-- Locate the `startReplication` method in **AppDelegate.swift**.
+- Locate the `startReplication(withUsername:andPassword:)` method in **AppDelegate.swift**.
 - The following enables authentication on the replication.
 
 ```swift
-var authenticator: CBLAuthenticatorProtocol?
-if kLoginFlowEnabled {
-    authenticator = CBLAuthenticator.basicAuthenticatorWithName(username, password: password!)
-}
-syncError = nil
+// TRAINING: Start push/pull replications
 pusher = database.createPushReplication(kSyncGatewayUrl)
 pusher.continuous = true
-pusher.authenticator = authenticator
-NSNotificationCenter.defaultCenter().addObserver(self, selector: "replicationProgress:",
-    name: kCBLReplicationChangeNotification, object: pusher)
+NotificationCenter.default.addObserver(self, selector: #selector(replicationProgress(notification:)),
+    name: NSNotification.Name.cblReplicationChange, object: pusher)
+
 puller = database.createPullReplication(kSyncGatewayUrl)
 puller.continuous = true
-puller.authenticator = authenticator
-NSNotificationCenter.defaultCenter().addObserver(self, selector: "replicationProgress:",
-    name: kCBLReplicationChangeNotification, object: puller)
+NotificationCenter.default.addObserver(self, selector: #selector(replicationProgress(notification:)),
+                                        name: NSNotification.Name.cblReplicationChange, object: puller)
+
+if kLoginFlowEnabled {
+    let authenticator = CBLAuthenticator.basicAuthenticator(withName: username, password: password!)
+    pusher.authenticator = authenticator
+    puller.authenticator = authenticator
+}
+
 pusher.start()
 puller.start()
 ```
 
+<block class="ios rn" />
+
 The `CBLAuthenticator` class has static methods for each authentication method supported by Couchbase Lite. Here, you're passing the name/password to the `basicAuthenticatorWithName` method. The object returned by this method can be set on the replication's `authenticator` property.
 
-Build and run. The application will prompt you to enter a username and password. If you provide credentials for a user that doesn't exist a popup is displayed with the error message.
+#### Try it out
 
-[//]: # "TODO: Link to gif."
-<img src="http://i.giphy.com/l0MYBknBqfEBAczIc.gif" class="portrait" />
+<block class="ios" />
 
-<block class="rn" />
+- Set `kLoginFlowEnabled` to true in **AppDelegate.swift**.
 
-- Locate the `componentDidMount` method in **main.js**.
-- Add the following
+  ```swift
+  let kLoginFlowEnabled = true
+  ```
 
-```javascript
-var body = {
-  source: 'todo',
-  target: 'http://user1:pass@localhost:4984/todo'
-};
-client.server.post_replicate({body: body})
-  .then(res => {
-    console.log(res);
-  })
-  .catch(err => {
-    console.log(err);
-  });
-```
-
-Use the same credentials defined in the config file previously (user1/pass).
+- Build and run.
+- The application will prompt you to enter a username and password. If you provide credentials for a user that doesn't exist a popup is displayed with the error message.
+    <img src="http://i.giphy.com/l0MYBknBqfEBAczIc.gif" class="portrait" />
 
 <block class="ios rn" />
 
@@ -390,11 +382,21 @@ The Couchbase Lite API allows you to encrypt the database on the device. By prov
 
 > **Note:** There are two storage types available in Couchbase Lite, _ForestDB_ and _SQLite_. This tutorial only covers _SQLite_ but you can refer to the documentation to find the instructions to include _ForestDB_ in your project.
 
-The project already includes the required components to enable encryption. You can refer to the documentation to include them in your application. Previously, the database was created unencrypted so you must delete the application to start from a fresh state. You can also convert an unencrypted database to be encrypted using the **changeEncryptionKey** method, but we won’t cover it here.
+You must first include the correct dependencies before enabling encryption. 
 
-<img src="./img/image17.png" class="portrait" />
+<block class="ios" />
 
-- Locate the `openDatabase` method in **AppDelegate.swift**, this method is called from `startSession` which is in turn getting called in `processLogin` after the user has logged in.
+- Drag **Extras/libsqlcipher.a** from the Couchbase Lite SDK folder to the Frameworks folder in the Xcode project.
+  ![](img/image50.png)
+
+- In the **Build Phases** tab, remove **libsqlite3.tbd** from the **Link Binary With Libraries** section and add **libsqlcipher.a**.
+  ![](https://cl.ly/1K2Q1k3V473l/image49.gif)
+
+Previously, the database was created unencrypted so you must delete the application to start from a fresh state. You can also convert an unencrypted database to be encrypted using the **changeEncryptionKey** method, but we won’t cover it here.
+
+<img src="img/image17.png" class="portrait" />
+
+- Locate the `openDatabase(username:withKey:newKey)` method in **AppDelegate.swift**, this method is called from `startSession` which is in turn getting called in `processLogin` after the user has logged in.
 - The Database's `openDatabaseName` is used to create an encrypted database.
 
 ```swift
@@ -414,7 +416,16 @@ if newKey != nil {
 }
 ```
 
-Build and run. Browse to the database file and you find that it's now encrypted.
+### Try it out
+
+- Set `kEncryptionEnabled` to true in **AppDelegate.swift**.
+
+  ```swift
+  let kEncryptionEnabled = true
+  ```
+
+- Build and run.
+- Browse to the database file and you'll find that it's now encrypted.
 
 ## Enable Offline Login
 
@@ -424,11 +435,11 @@ If the user enters an incorrect password (that is not the valid encryption key),
 
 To make it even more challenging, consider the scenario where a user’s password has been modified on Sync Gateway. Since the encryption key is the old password it will not be accessible, so when the user’s password changes on Sync Gateway the local encryption key and server password will be out of sync. To detect that, you’re going to use the replication change event and check for the status code. If it’s a 401, you will logout the user and display the login screen. However, the data stored in the database will have changes that were not pushed to Sync Gateway yet. You can offer users the ability to update the encryption key only if they remember their old password (because it’s the only way to open and read data from the database encrypted with the old password). If they don’t remember it, the changes made while they were offline will be lost. The marble diagram below shows every scenario and outcome.
 
-<img src="./img/image24.png" class="center-image" />
+<img src="img/image24.png" class="center-image" />
 
 In **AppDelegate.swift**, scroll to the `processLogin` method. Notice that if an error with status 401 is thrown it calls `handleEncryptionError` which displays a popup with an input text and two options.
 
-<img src="./img/image27.png" class="portrait" />
+<img src="img/image27.png" class="portrait" />
 
 When the user clicks **Delete** it will remove the database and create a new one with no data in it. If the user remembers the old password and clicks **Migrate** it will call the `processLogin` method again passing it the old and new encryption keys. The following code at the end of the `openDatabase` method is changing that encryption key to the user's new password.
 
@@ -494,6 +505,8 @@ Click **Migrate**. Notice that the list added after the password changed is ther
 
 Key rotation is defined as the process of decrypting data with an old key and re-keying the data with a new one. The benefits of key rotation are all centered on security; for example, if the password to sensitive data is being shared between many users, you may decide to use key rotation to add an extra layer of security. By regularly changing the password you will mitigate the scenario where the encryption key can be compromised unknowingly. Rotating your keys offers more protection and better security for your sensitive business data, but it is not a requirement and it should be considered on a per-application basis.
 
-Well done! You’ve built your first application with the security features provided in Couchbase Lite, including how to add fine grained access control through the sync function and how to use database encryption to protect the data with the possibility to login while being offline.
+<block class="ios rn" />
 
-Feel free to share your feedback, findings or ask any questions in the forums.
+## Conclusion
+
+Well done! You've completed this lesson on adding authentication, writing a sync function and adding database encryption. Feel free to share your feedback, findings or ask any questions on the forums.
