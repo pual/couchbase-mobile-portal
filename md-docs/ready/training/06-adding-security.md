@@ -1,73 +1,53 @@
 ---
 id: adding-security
 title: Adding Security
-permalink: ready/training/adding-security/index.html
+permalink: ready/training/develop/adding-security/index.html
 ---
 
 In this lesson you’ll learn how to add security to your Couchbase Mobile application. You’ll implement authentication and define access control, data validation, and access grant policies.
 
+[//]: # "COMMON ACROSS LESSONS"
+
 #### Requirements
 
-- Xcode 7 (Swift 2)
+- Xcode 8 (Swift 3)
 
-Download the project for this lesson. The project already contains all the code that will be covered below.
+#### Getting Started
+
+Download the project below.
 
 <block class="ios" />
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/2w3r071o3e22/part3.zip" class="button" id="project">
-    Download the Xcode starter project
+  <a href="https://cl.ly/2A2D3q3R2d1g/xcode-project.zip" class="button" id="project">
+    <img src="img/download-xcode.png">
   </a>
 </div>
 
-<div class="buttons-unit downloads">
-  <a href="http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile" class="button red">
-    Download Couchbase Lite for iOS
-  </a>
-</div>
+Unzip the file and install the dependencies using Cocoapods.
 
-<img src="img/image41.png" class="center-image" />
+```bash
+$ cd xcode-project
+$ pod install
+```
 
-Unzip the file and drag **CouchbaseLite.framework** and **libsqlcipher.a** to the **Frameworks** folder in Finder. It's important to do this in Finder as opposed to Xcode. In this lesson you're using **libsqlcipher.a** as well because it will be used in a later section regarding database encryption.
+Open **Todo.xcodeproj** in Xcode. Then build & run the project.
 
-![](img/drag-framework-finder.png)
+<img src="img/image42.png" class="center-image" />
 
-Open **Todo.xcodeproj** in Xcode.
+Throughout this lesson, you will navigate in different files of the Xcode project. We recommend to use the method navigator to scroll to a method.
 
-<block class="rn" />
+<img src="https://cl.ly/0G263m3m1a0w/image44.gif" class="center-image" />
 
-<div class="buttons-unit downloads">
-  <a href="http://cl.ly/3s2T3G2d1p2u/part3_start.zip" class="button" id="project">
-    Download project
-  </a>
-</div>
-
-Run rnpm to link with react-native-couchbase-lite
+[//]: # "COMMON ACROSS LESSONS"
 
 <block class="ios rn" />
 
 ## Implement User Authentication
 
-This section focuses on how to authorize users to be able to access Sync Gateway. Users are created with a name/password on Sync Gateway which can then be used on the Couchbase Lite replicator to authenticate as a given user.
+### Install Sync Gateway
 
-To authenticate as a user, you first need to create one. You can create a Sync Gateway user on the `/{db}/_user` endpoint of the Admin REST API. Follow the instructions below to get Sync Gateway up and running:
-
-1. [Download Sync Gateway](http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile)
-2. Unzip the file and locate the executable at **~/Downloads/couchbase-sync-gateway/bin/sync_gateway**
-3. Start it from the command-line by specifying a database name: `$ /path/to/sync_gateway --dbname=todo`
-
-You can create a user on the Admin REST API by specifying a name/password:
-
-```bash
-curl -vX PUT 'http://localhost:4985/todo/_user/user1' \
-      -H 'Content-Type: application/json' -d '{"name": "user1","password": "pass"}'
-```
-
-The user is then displayed on the Admin UI at [http://localhost:4985/_admin/db/todo/users](http://localhost:4985/_admin/db/todo/users). The Admin REST API is available on port **4985** by default and is only accessible on `localhost` for security reasons.
-
-Sending an HTTP request is a quick method to create a user during development but obviously it doesn’t scale. The recommended approach is to have an App Server sitting alongside Sync Gateway that performs that operation (the rest api client guide explains how to do it).
-
-Another method of creating the user is by hardcoding the name/password in the configuration file. This method has the advantage that you don't need to re-create the user every time Sync Gateway is restarted in walrus mode, the in-memory storage type. Stop the running instance and start it with the following configuration file called **sync-gateway-config.json**:
+Users are created with a name/password on Sync Gateway which can then be used on the Couchbase Lite replicator to authenticate as a given user. You can create users by hardcoding the user's name/password in the configuration file. Create a new file called **sync-gateway-config.json** with the following.
 
 ```javascript
 {
@@ -84,81 +64,69 @@ Another method of creating the user is by hardcoding the name/password in the co
 }
 ```
 
-```bash
-$ ~/Downloads/couchbase-sync-gateway/bin/sync_gateway sync-gateway-config.json
-```
+#### Try it out
 
-Start Sync Gateway. Two users are already created at [http://localhost:4985/_admin/db/todo/users](http://localhost:4985/_admin/db/todo/users).
+1. [Download Sync Gateway](http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile)
+2. Unzip the file and locate the executable at **~/Downloads/couchbase-sync-gateway/bin/sync_gateway**.
+3. Start it from the command-line with the config file.
 
-> **Tip:** To persist a walrus database to disk you can append the path to the directory to save it to, a `.` means the current directory (i.e `"server": "walrus:."`).
+    ```bash
+    $ /path/to/sync_gateway sync-gateway-config.json
+    ```
 
-With Sync Gateway users defined you can now enable authentication on the Couchbase Lite replicator.
+4. Two users are now visible at [http://localhost:4985/_admin/db/todo/users](http://localhost:4985/_admin/db/todo/users).
 
-<block class="ios" />
+### User Authentication
 
-Open the project in Xcode.
-
-- Locate the `startReplication` method in **AppDelegate.swift**.
-- The following enables authentication on the replication.
+With Sync Gateway users defined you can now enable authentication on the Couchbase Lite replicator. The code below creates two replications with authentication.
 
 ```swift
-var authenticator: CBLAuthenticatorProtocol?
-if kLoginFlowEnabled {
-    authenticator = CBLAuthenticator.basicAuthenticatorWithName(username, password: password!)
-}
-syncError = nil
+// This code can be found in AppDelegate.swift
+// in the startReplication(withUsername:andPassword:) method
 pusher = database.createPushReplication(kSyncGatewayUrl)
 pusher.continuous = true
-pusher.authenticator = authenticator
-NSNotificationCenter.defaultCenter().addObserver(self, selector: "replicationProgress:",
-    name: kCBLReplicationChangeNotification, object: pusher)
+NotificationCenter.default.addObserver(self, selector: #selector(replicationProgress(notification:)),
+    name: NSNotification.Name.cblReplicationChange, object: pusher)
+
 puller = database.createPullReplication(kSyncGatewayUrl)
 puller.continuous = true
-puller.authenticator = authenticator
-NSNotificationCenter.defaultCenter().addObserver(self, selector: "replicationProgress:",
-    name: kCBLReplicationChangeNotification, object: puller)
+NotificationCenter.default.addObserver(self, selector: #selector(replicationProgress(notification:)),
+                                        name: NSNotification.Name.cblReplicationChange, object: puller)
+
+if kLoginFlowEnabled {
+    let authenticator = CBLAuthenticator.basicAuthenticator(withName: username, password: password!)
+    pusher.authenticator = authenticator
+    puller.authenticator = authenticator
+}
+
 pusher.start()
 puller.start()
 ```
 
+<block class="ios rn" />
+
 The `CBLAuthenticator` class has static methods for each authentication method supported by Couchbase Lite. Here, you're passing the name/password to the `basicAuthenticatorWithName` method. The object returned by this method can be set on the replication's `authenticator` property.
 
-Build and run. The application will prompt you to enter a username and password. If you provide credentials for a user that doesn't exist a popup is displayed with the error message.
+#### Try it out
 
-[//]: # "TODO: Link to gif."
-<img src="http://i.giphy.com/l0MYBknBqfEBAczIc.gif" class="portrait" />
+<block class="ios" />
 
-<block class="rn" />
+1. Set `kLoginFlowEnabled` to `true` in **AppDelegate.swift**.
 
-- Locate the `componentDidMount` method in **main.js**.
-- Add the following
+    ```swift
+    let kLoginFlowEnabled = true
+    ```
 
-```javascript
-var body = {
-  source: 'todo',
-  target: 'http://user1:pass@localhost:4984/todo'
-};
-client.server.post_replicate({body: body})
-  .then(res => {
-    console.log(res);
-  })
-  .catch(err => {
-    console.log(err);
-  });
-```
-
-Use the same credentials defined in the config file previously (user1/pass).
+2. Build and run.
 
 <block class="ios rn" />
 
-Now login with the credentials saved in the config file previously (**user1/pass**) and create a new list. Open the Sync Gateway Admin UI at [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo), the list document is successfully replicated to Sync Gateway as an authenticated user.
+3. Now login with the credentials saved in the config file previously (**user1/pass**) and create a new list. Open the Sync Gateway Admin UI at [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo), the list document is successfully replicated to Sync Gateway as an authenticated user.
 
-![](img/image35.png)
+    ![](img/image35.png)
 
-You can verify if the pull replication retrieves the document present on Sync Gateway. On macOS, use the [SimPholders](https://simpholders.com/) utility app to quickly find the data directory of the application and delete the database called **user1**. Then restart the app and you'll notice that the "Today" list isn't displayed. That is, the list document wasn't replicated from Sync Gateway to Couchbase Lite. Indeed, the document is not routed to a channel that the user has access to. **Channel** and **access** are new terms so don't worry, we'll cover what they mean in the next section.
-
-[//]: # "TODO: Link to video."
-<video src="https://d3vv6lp55qjaqc.cloudfront.net/items/1s1G3C1i2a0G2P3o0G0m/movie1.mp4" controls="true"></video>
+> **Note:** You can remove the local database and check if the pull replication retrieves the documents now present on Sync Gateway. On macOS, use the [SimPholders](https://simpholders.com/) utility app to quickly find the data directory of the application and delete the database called **user1**. Then restart the app and you'll notice that the "Today" list isn't displayed. That is, the list document wasn't replicated from Sync Gateway to Couchbase Lite. Indeed, the document is not routed to a channel that the user has access to. **Channel** and **access** are new terms so don't worry, we'll cover what they mean in the next section.
+<video src="https://d3vv6lp55qjaqc.cloudfront.net/items/1s1G3C1i2a0G2P3o0G0m/movie1.mp4" controls="true" poster="https://cl.ly/1W2T3w463S0f/image72.png"></video>
 
 ## Define Access Control Policies
 
@@ -166,7 +134,7 @@ In order to give different users access to different documents, you must write a
 
 In the sync function, you can use different API methods to route documents to channels, grant users access to channels and even assign roles to users. Open the data modeling lesson in a new tab, it will be useful throughout this section.
 
-Sync Functions can be relatively long so it's recommended to write a small piece of code and test that it does what you expect before moving on to the next clause. To achieve this, you will use the Admin UI to make changes to the Sync Function, the `/{db}/_bulk_docs` endpoint to add documents and then check the result in the Admin UI.
+Sync Functions can be relatively long so it's recommended to write a small piece of code and test that it does what you expect before moving on to the next clause. To achieve this, you will use the Admin UI to make changes to the Sync Function and the `/{db}/_bulk_docs` endpoint to add documents and then check the result in the Admin UI.
 
 ![](img/image39.png)
 
@@ -177,7 +145,12 @@ With walrus enabled in the **todos** database, every time you change the Sync Fu
 
 ### Data Validation
 
-First, you will enforce a validation rule that requires documents to have a `type` property. In addition, this property is immutable. In the Admin UI, update the sync function with the following.
+The Sync Function takes two arguments:
+
+- **doc:** The current revision being processed.
+- **oldDoc:** The parent revisions if it's an update operation and `null` if it's a create operation.
+
+The first operation to perform in the Sync Function is schema validation. If a document doesn't honour the expected document schema the **throw** function can be used to reject the operation. The following code rejects the operation if the document doesn't have a `type` property.
 
 ```javascript
 function(doc, oldDoc){
@@ -189,36 +162,39 @@ function(doc, oldDoc){
 }
 ```
 
-Then click on the **Deploy To Server** button. It will restart Sync Gateway with the updated sync function.
+#### Try it out
 
-![](https://cl.ly/3n2L071q051g/image37.gif)
+1. Copy the code above in the Sync Function input box of the Admin UI.
+2. Then click on the **Deploy To Server** button. It will restart Sync Gateway with the updated sync function.
 
-> **Caution:** It won't update the config file on your filesystem, make sure to copy/paste from the Admin UI to the config once you are happy with your changes.
+    <img src="https://cl.ly/3n2L071q051g/image37.gif" class="center-image" />
 
-Use the following curl command to add two documents. One has the `type` property and the second doesn't. Notice that the user credentials (user1/pass) are passed in the URL.
+    > **Note:** It won't update the config file on your filesystem, make sure to copy/paste from the Admin UI to the config once you are happy with your changes.
 
-```bash
-curl -vX POST 'http://user1:pass@localhost:4984/todo/_bulk_docs' \
-      -H 'Content-Type: application/json' \
-      -d '{"docs": [{"type": "task-list", "name": "Groceries"}, {"names": "Today"}]}'
+3. Use the following curl command to add two documents. One has the `type` property and the second doesn't. Notice that the user credentials (user1/pass) are passed in the URL.
 
-[
-  {"id":"e498cad0380e30a86ed5572140c94831","rev":"1-e4ac377fc9bd3345ddf5892b509c4d79"},
-  {"error":"forbidden","reason":"type property missing","status":403}
-]
-```
+    ```bash
+    curl -vX POST 'http://user1:pass@localhost:4984/todo/_bulk_docs' \
+          -H 'Content-Type: application/json' \
+          -d '{"docs": [{"type": "task-list", "name": "Groceries"}, {"names": "Today"}]}'
 
-Success! The response contains the _type property missing_ error message for the document that doesn't have the `type` property.
+    [
+      {"id":"e498cad0380e30a86ed5572140c94831","rev":"1-e4ac377fc9bd3345ddf5892b509c4d79"},
+      {"error":"forbidden","reason":"type property missing","status":403}
+    ]
+    ```
+
+    As expected, the response contains the _type property missing_ error message for the document that doesn't have the `type` property.
 
 ### Write Permissions
 
-The sync function should handle every document **type** present in your application. Based on the document type and user logged in, it must enforce write permissions. If the user sending this document doesn't have the required privileges then the sync function should reject that operation. The sync function API provides a few methods to check the user's identity and role(s).
+The sync function should handle every document **type** present in your application. Based on the document type and user logged in, it must ensure the user has write permissions for the given operation. If the user sending this document doesn't have the required privileges then the sync function should reject that operation. The folloing methods are used in the Sync Function to check the user's identity and role(s).
 
 - **requireUser([]string names)**: authorizes a document update by rejecting it unless it's made by a specific user or users.
 - **requireRole([]string roles)**: authorizes a document update by rejecting it unless the user making it has a specific role or roles.
 - **requireAccess([]string channels)**: authorizes a document update by rejecting it unless the user making it has access to at least one of the given channels.
 
-Append the following in the sync function body on the Admin UI.
+The following code first ensures that the `doc.owner` is indeed the user performing this operation. If that's not the case, the `} catch (e) {` block is called and another check is performed that checks if the user has the `moderator` role. If none of those conditions are met then the document is rejected.
 
 ```javascript
 if (doc.type == "task-list") {
@@ -235,42 +211,45 @@ if (doc.type == "task-list") {
 }
 ```
 
-Use the **Deploy To Server** button and add the following task lists.
+#### Try it out
 
-```bash
-curl -vX POST 'http://user1:pass@localhost:4984/todo/_bulk_docs' \
-      -H 'Content-Type: application/json' \
-      -d '{"docs": [{"name": "Today", "type": "task-list", "owner": "user1"}, {"name": "Groceries", "type": "task-list", "owner": "user2"}]}'
-      
-[
-  {"id":"49c9d5cbbc1cfa05d253f4847d02b8a0","rev":"1-477f7c4f36a31ce9e86a5f465b168b8a"},
-  {"error":"forbidden","reason":"missing role","status":403}
-]
-```
+1. Copy the code above in the Sync Function input box of the Admin UI.
+2. Then click on the **Deploy To Server** button. It will restart Sync Gateway with the updated sync function.
+3. Add the following list documents.
 
-The **Groceries** list is successfully rejected because the `owner` property is set to `user2` but the request authenticates as `user1`. Additionally, `user1` doesn't have the `moderator` role so it can't create a list for other users.
+    ```bash
+    curl -vX POST 'http://user1:pass@localhost:4984/todo/_bulk_docs' \
+          -H 'Content-Type: application/json' \
+          -d '{"docs": [{"name": "Today", "type": "task-list", "owner": "user1"}, {"name": "Groceries", "type": "task-list", "owner": "user2"}]}'
+          
+    [
+      {"id":"49c9d5cbbc1cfa05d253f4847d02b8a0","rev":"1-477f7c4f36a31ce9e86a5f465b168b8a"},
+      {"error":"forbidden","reason":"missing role","status":403}
+    ]
+    ```
 
-You can assign a role to user using the `/{db}/_user` endpoint on the admin port.
+    The **Groceries** list is successfully rejected because the `owner` property is set to `user2` but the request authenticates as `user1`. Additionally, `user1` doesn't have the `moderator` role so it can't create a list for other users.
 
-```bash
-curl -H 'Content-Type: application/json' \
-      -vX PUT 'http://localhost:4985/todo/_user/user1' \
-      -d '{"admin_roles": ["moderator"]}'
+4. You can assign a role to a user using the `/{db}/_user` endpoint on the admin port.
 
-200 OK
-```
+    ```bash
+    curl -H 'Content-Type: application/json' \
+          -vX PUT 'http://localhost:4985/todo/_user/user1' \
+          -d '{"admin_roles": ["moderator"]}'
 
-With user1 as a moderator, run the curl command on the `/{db}/_bulk_docs` endpoint again and this time both lists are persisted.
+    200 OK
+    ```
 
-Well done! You've successfully added write permission rules to allow users with the **moderator** role to create lists for other users. In the next section, you will add validation rules for list documents.
+    With user1 as a moderator, run the curl command on the `/{db}/_bulk_docs` endpoint again and this time both lists are persisted.
 
 ### Validating Changes
 
-In this section you will add some validation logic. A document that doesn’t follow the schema specified in your application could have an impact on other clients when they receive it. That’s why you must check for the existence of the properties required in your application. Secondly, some document keys may follow a specific format (prefix.uuid) that will be used throughout your system so making sure that it follows the desired format is good practice. Lastly, you may decide that some properties should be immutable and cannot change during an update operation.
+In this section you will add some validation logic for list documents. There are 3 types of validation:
 
-For that reason, two arguments are passed to the sync function (the current revision, **doc**, and its parent, **oldDoc**); that way you can enforce immutability where required.
+- **Schema validation:** A document that doesn’t follow the schema specified in your application could have an impact on other clients when they receive it. That’s why you must check for the existence of the properties required in your application.
+- **Key validation:** Some document keys may follow a specific format (prefix.uuid) that will be used throughout your system so making sure that it follows the desired format is good practice.
+- **Read-only validation:** You may decide that some properties should be immutable and cannot change during an update operation.
 
-Validation rules can be repetitive to write in the sync function so you will define 3 utility methods. Add the following before the last curly brace.
 
 ```javascript
 function validateNotEmpty(key, value) {
@@ -303,6 +282,8 @@ There are 3 types of validation performed here:
 
 With those utility functions you can now write the validation logic for documents of type "task-list". Append the following inside the "task-list" if statement on the Admin UI.
 
+The following code ensures that the document passed in the Sync Function meets the schema requirements.
+
 ```javascript
 /* Validate */
 if (!doc._deleted) {
@@ -315,6 +296,8 @@ if (!doc._deleted) {
   validateReadOnly("owner", doc, oldDoc);
 }
 ```
+
+Validation rules can be repetitive to write in the sync function so you will define 3 utility methods. Add the following before the last curly brace.
 
 This validation is very similar to the one you added in the first step for document types. You can go ahead and click **Deploy To Server**.
 
@@ -388,17 +371,17 @@ If a document makes it through step 1 and 2 it will be written to Sync Gateway. 
 
 In the next section you will learn how to encrypt the local database on the device to provide additional security.
 
-## Add Database Encryption
+## Database Encryption
 
 The Couchbase Lite API allows you to encrypt the database on the device. By providing an encryption key, all the data stored in the database will be secure. To decrypt it in the future, the same key must be used.
 
 > **Note:** There are two storage types available in Couchbase Lite, _ForestDB_ and _SQLite_. This tutorial only covers _SQLite_ but you can refer to the documentation to find the instructions to include _ForestDB_ in your project.
 
-The project already includes the required components to enable encryption. You can refer to the documentation to include them in your application. Previously, the database was created unencrypted so you must delete the application to start from a fresh state. You can also convert an unencrypted database to be encrypted using the **changeEncryptionKey** method, but we won’t cover it here.
+You must first include the correct dependencies before enabling encryption. 
 
-<img src="./img/image17.png" class="portrait" />
+<block class="ios" />
 
-- Locate the `openDatabase` method in **AppDelegate.swift**, this method is called from `startSession` which is in turn getting called in `processLogin` after the user has logged in.
+- Locate the `openDatabase(username:withKey:newKey)` method in **AppDelegate.swift**, this method is called from `startSession` which is in turn getting called in `processLogin` after the user has logged in.
 - The Database's `openDatabaseName` is used to create an encrypted database.
 
 ```swift
@@ -418,9 +401,27 @@ if newKey != nil {
 }
 ```
 
-Build and run. Browse to the database file and you find that it's now encrypted.
+### Try it out
 
-## Enable Offline Login
+- Drag **Extras/libsqlcipher.a** from the Couchbase Lite SDK folder to the Frameworks folder in the Xcode project.
+  ![](img/image50.png)
+
+- In the **Build Phases** tab, remove **libsqlite3.tbd** from the **Link Binary With Libraries** section and add **libsqlcipher.a**.
+  ![](https://cl.ly/1K2Q1k3V473l/image49.gif)
+
+- Set `kEncryptionEnabled` to true in **AppDelegate.swift**.
+
+  ```swift
+  let kEncryptionEnabled = true
+  ```
+
+- Delete the application if you ran it previously without encryption.
+    <img src="img/image17.png" class="portrait" />
+
+- Build and run.
+- Browse to the database file and you'll find that it's now encrypted.
+
+## Offline Login
 
 What about the scenario where a user attempts to login while being offline? Since data may already be in the database, it would be nice to allow the app to use it. From the previous section, you’ve learned that the database can be safely accessed with an encryption key so the user can attempt to enter credentials as if they were online (the **name** and **password** of the Sync Gateway user). To achieve offline login, you are mapping the user’s **name** to be the **database name** and the user’s **password** to be the **encryption key**.
 
@@ -428,11 +429,11 @@ If the user enters an incorrect password (that is not the valid encryption key),
 
 To make it even more challenging, consider the scenario where a user’s password has been modified on Sync Gateway. Since the encryption key is the old password it will not be accessible, so when the user’s password changes on Sync Gateway the local encryption key and server password will be out of sync. To detect that, you’re going to use the replication change event and check for the status code. If it’s a 401, you will logout the user and display the login screen. However, the data stored in the database will have changes that were not pushed to Sync Gateway yet. You can offer users the ability to update the encryption key only if they remember their old password (because it’s the only way to open and read data from the database encrypted with the old password). If they don’t remember it, the changes made while they were offline will be lost. The marble diagram below shows every scenario and outcome.
 
-<img src="./img/image24.png" class="center-image" />
+<img src="img/image24.png" class="center-image" />
 
 In **AppDelegate.swift**, scroll to the `processLogin` method. Notice that if an error with status 401 is thrown it calls `handleEncryptionError` which displays a popup with an input text and two options.
 
-<img src="./img/image27.png" class="portrait" />
+<img src="img/image27.png" class="portrait" />
 
 When the user clicks **Delete** it will remove the database and create a new one with no data in it. If the user remembers the old password and clicks **Migrate** it will call the `processLogin` method again passing it the old and new encryption keys. The following code at the end of the `openDatabase` method is changing that encryption key to the user's new password.
 
@@ -498,6 +499,8 @@ Click **Migrate**. Notice that the list added after the password changed is ther
 
 Key rotation is defined as the process of decrypting data with an old key and re-keying the data with a new one. The benefits of key rotation are all centered on security; for example, if the password to sensitive data is being shared between many users, you may decide to use key rotation to add an extra layer of security. By regularly changing the password you will mitigate the scenario where the encryption key can be compromised unknowingly. Rotating your keys offers more protection and better security for your sensitive business data, but it is not a requirement and it should be considered on a per-application basis.
 
-Well done! You’ve built your first application with the security features provided in Couchbase Lite, including how to add fine grained access control through the sync function and how to use database encryption to protect the data with the possibility to login while being offline.
+<block class="ios rn" />
 
-Feel free to share your feedback, findings or ask any questions in the forums.
+## Conclusion
+
+Well done! You've completed this lesson on adding authentication, writing a sync function and adding database encryption. Feel free to share your feedback, findings or ask any questions on the forums.
