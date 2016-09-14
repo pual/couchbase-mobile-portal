@@ -10,6 +10,87 @@
         </paragraph>
     </introduction>
     <articles>
+      <article id="1.3.1">
+        <title>1.3.1 Wednesday, September 14, 2016</title>
+        <description>1.3.1 Release Notes for Sync Gateway</description>
+        <introduction>
+          <paragraph>As part of this release we had <external-ref href="https://github.com/couchbase/sync_gateway/compare/1.3...1.3.1">30 commits</external-ref> which resulted in <external-ref href="https://github.com/couchbase/sync_gateway/issues?milestone=20&amp;state=closed">8 issues</external-ref> being closed.</paragraph>
+          <section id="131-Enhancements">
+            <title>Enhancements</title>
+            <body>
+              <unordered-list>
+                <list-item><external-ref href="https://github.com/couchbase/sync_gateway/issues/1745"><strong>#1745</strong></external-ref> Add retry when trying to connect to a server node in "warmup" state</list-item>
+                <list-item><external-ref href="https://github.com/couchbase/sync_gateway/issues/2005"><strong>#2005</strong></external-ref> Tombstones don't grant access, don't propagate to users granted access by the doc</list-item>
+                <list-item><external-ref href="https://github.com/couchbase/sync_gateway/issues/2013"><strong>#2013</strong></external-ref> Azure returns unsigned ID token in response to refresh request</list-item>
+                <list-item><external-ref href="https://github.com/couchbase/sync_gateway/issues/2038"><strong>#2038</strong></external-ref> Uptake expvar refactoring for perf usage into 1.3.1</list-item>
+                <list-item><external-ref href="https://github.com/couchbase/sync_gateway/issues/2046"><strong>#2046</strong></external-ref> Service install script enhancement for Ubuntu 16.04</list-item>
+              </unordered-list>
+            </body>
+          </section>
+          <section id="131-Bugs">
+            <title>Bugs</title>
+            <body>
+              <unordered-list>
+                <list-item><external-ref href="https://github.com/couchbase/sync_gateway/issues/973"><strong>#973</strong></external-ref> Can't initiate websocket connection</list-item>
+                <list-item><external-ref href="https://github.com/couchbase/sync_gateway/issues/1554"><strong>#1554</strong></external-ref> Panic: send on closed channel when closing database</list-item>
+                <list-item><external-ref href="https://github.com/couchbase/sync_gateway/issues/1999"><strong>#1999</strong></external-ref> Sync Gateway terminating changes requests</list-item>
+              </unordered-list>
+            </body>
+          </section>
+          <section id="131-download">
+            <title>Download</title>
+            <body>
+              <paragraph>You can download this release from
+                <external-ref href="http://www.couchbase.com/nosql-databases/downloads#Couchbase_Mobile">Couchbase.com</external-ref>
+              </paragraph>
+            </body>
+          </section>
+          <section id="131-requirements">
+            <title>System Requirements</title>
+            <body>
+              <paragraph>Sync Gateway 1.3.1 is compatible with the following editions of Couchbase Server:</paragraph>
+              <table>
+                <header>
+                  <row>
+                    <entry>Sync Gateway</entry>
+                    <entry>Couchbase Server</entry>
+                  </row>
+                </header>
+                <body>
+                  <row>
+                    <entry>1.3.1</entry>
+                    <entry>2.2.x</entry>
+                  </row>
+                  <row>
+                    <entry>1.3.1</entry>
+                    <entry>2.2.x</entry>
+                  </row>
+                  <row>
+                    <entry>1.3.1</entry>
+                    <entry>2.5.x</entry>
+                  </row>
+                  <row>
+                    <entry>1.3.1</entry>
+                    <entry>3.1</entry>
+                  </row>
+                  <row>
+                    <entry>1.3.1</entry>
+                    <entry>4.0</entry>
+                  </row>
+                  <row>
+                    <entry>1.3.1</entry>
+                    <entry>4.1</entry>
+                  </row>
+                  <row>
+                    <entry>1.3.1</entry>
+                    <entry>4.5</entry>
+                  </row>
+                </body>
+              </table>
+            </body>
+          </section>
+        </introduction>
+      </article>
       <article id="1.3">
         <title>1.3 Thursday, August 3, 2016</title>
         <description>1.3 Release Notes for Sync Gateway</description>

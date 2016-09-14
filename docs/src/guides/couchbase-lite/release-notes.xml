@@ -15,6 +15,52 @@
             <description>Here you can find release notes for Couchbase Lite for iOS.</description>
             <introduction/>
             <topics>
+              <topic id="1.3.1">
+                <title>1.3.1 Wednesday, September 14, 2016</title>
+                <body>
+                  <paragraph>As part of this release we had <external-ref href="https://github.com/couchbase/couchbase-lite-ios/compare/1.3...1.3.1">47 commits</external-ref> which resulted in <external-ref href="https://github.com/couchbase/couchbase-lite-ios/issues?milestone=19&amp;state=closed">7 issues</external-ref> being closed.</paragraph>
+                  <section id="131-Performance Improvements">
+                    <title>Performance Improvements</title>
+                    <body>
+                      <unordered-list>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-ios/issues/1379"><strong>#1379</strong></external-ref> ForestDB update<em>seq on view query less than db's update</em>seq</list-item>
+                      </unordered-list>
+                    </body>
+                  </section>
+                  <section id="131-Enhancements">
+                    <title>Enhancements</title>
+                    <body>
+                      <unordered-list>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-ios/issues/1400"><strong>#1400</strong></external-ref> Support for <em>oidc</em>refresh response without ID token</list-item>
+                      </unordered-list>
+                    </body>
+                  </section>
+                  <section id="131-Bugs">
+                    <title>Bugs</title>
+                    <body>
+                      <unordered-list>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-ios/issues/1369"><strong>#1369</strong></external-ref> PSWebSocket crash iOS 10</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-ios/issues/1379"><strong>#1379</strong></external-ref> ForestDB update<em>seq on view query less than db's update</em>seq</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-ios/issues/1387"><strong>#1387</strong></external-ref> tvOS Unit Test Build has a lot of warnings</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-ios/issues/1392"><strong>#1392</strong></external-ref> When OIDC Refresh token failed, there is no replication change notification sent.</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-ios/issues/1403"><strong>#1403</strong></external-ref> CBLSocketChangeTracker endless loop of JSON Parsing Errors</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-ios/issues/1406"><strong>#1406</strong></external-ref> Encryption is a no-op with the system libsqlite3 on macOS 12 </list-item>
+                      </unordered-list>
+                    </body>
+                  </section>
+                  <section id="131-Download">
+                    <title>Download</title>
+                    <body>
+                      <paragraph>
+                        You can download this release from
+                        <external-ref href="http://www.couchbase.com/nosql-databases/downloads#Couchbase_Mobile">Couchbase.com</external-ref>
+                      </paragraph>
+                      <paragraph>If you are using Cocopods, just add this line to your Podfile:</paragraph>
+                      <paragraph><code>pod 'couchbase-lite-ios', '~> 1.3.1'</code></paragraph>
+                    </body>
+                  </section>
+                </body>
+              </topic>
               <topic id="1.3">
                 <title>1.3 Thursday, August 3, 2016</title>
                 <body>
@@ -1148,6 +1194,68 @@
             <description>Here you can find release notes for Couchbase Lite for Android.</description>
             <introduction/>
             <topics>
+              <topic id="1.3.1">
+                <title>1.3.1 Wednesday, September 14, 2016</title>
+                <body>
+                  <paragraph>As part of this release we had <external-ref href="https://github.com/couchbase/couchbase-lite-java-core/compare/1.3.0...1.3.1">39 commits</external-ref> which resulted in <external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues?milestone=11&amp;state=closed">9 issues</external-ref> being closed.</paragraph>
+                  <section id="131-Enhancements">
+                    <title>Enhancements</title>
+                    <body>
+                      <unordered-list>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues/1376"><strong>#1376</strong></external-ref> Implement <code>timeout</code> parameter for <code>_changes</code> REST API</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues/1387"><strong>#1387</strong></external-ref> Support for <em>oidc</em>refresh response without ID token</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-android/issues/946"><strong>#946</strong></external-ref> very slow replication (build 1.3.0-33)</list-item>
+                      </unordered-list>
+                    </body>
+                  </section>
+                  <section id="131-Bugs">
+                    <title>Bugs</title>
+                    <body>
+                      <unordered-list>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues/1296"><strong>#1296</strong></external-ref> Cordova - After putting Android app in background mode for a few hours, CB lite is unresponsive</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues/1372"><strong>#1372</strong></external-ref> Router unable to route request to do<em>GET</em>DesignDocument (ForestDB)</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues/1375"><strong>#1375</strong></external-ref> Reduce intermittently returns wrong results for 1.3.0-45</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues/1379"><strong>#1379</strong></external-ref> MultipartDocumentReader: Attachment length cannot be parsed as Integer</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues/1386"><strong>#1386</strong></external-ref> POST _replicate not create replicators when altering props beside type, target/source</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues/1394"><strong>#1394</strong></external-ref> ViewsTest.testDeleteView() test failure</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues/1399"><strong>#1399</strong></external-ref> Longpoll _changes on Listener does not respect timeout property</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-android/issues/939"><strong>#939</strong></external-ref> Lots of 'replicator.RemoteRequest' warnings (v1.3.0-23)</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-android/issues/946"><strong>#946</strong></external-ref> very slow replication (build 1.3.0-33)</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-android/issues/947"><strong>#947</strong></external-ref> Pull replication completing after the first fifty docs are pulled</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-android/issues/950"><strong>#950</strong></external-ref> Views seem to stop working: 1.3.0-45</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-android/issues/951"><strong>#951</strong></external-ref> _changes, longpoll, timeout with 1.3.0-45</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-android/issues/952"><strong>#952</strong></external-ref> ForestDB: db.getExistingView(viewName) returns null for views created in previous app launch</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-android/issues/955"><strong>#955</strong></external-ref> Replication default limit of 50 rows with CBL 1.3.0 ???</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-android/issues/959"><strong>#959</strong></external-ref> With the REST API, POST <em>bulk</em>docs does not return generated document IDs (v1.3.0)</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-android/issues/978"><strong>#978</strong></external-ref> Cloudant could not handle POST /_changes request, and it returns 401, 403, or 405</list-item>
+                      </unordered-list>
+                    </body>
+                  </section>
+                  <section id="131-Download">
+                    <title>Download</title>
+                    <body>
+                      <paragraph>
+                        You can download this release from
+                        <external-ref href="http://www.couchbase.com/nosql-databases/downloads#Couchbase_Mobile">Couchbase.com</external-ref>
+                      </paragraph>
+                      <paragraph>
+                        Android Studio users should add the following line to the top-level dependency section to your app's <code>build.gradle</code> file:
+                      </paragraph>
+                      <code>compile 'com.couchbase.lite:couchbase-lite-android:1.3.1'</code>
+                      <paragraph>Please refer to
+                        <external-ref href="https://github.com/couchbase/couchbase-lite-android#adding-couchbase-lite-to-your-gradle-project">Adding Couchbase Lite to your Gradle project</external-ref> for detailed information.</paragraph>
+                    </body>
+                  </section>
+                  <section id="131-Requirements">
+                    <title>System Requirements</title>
+                    <body>
+                      <unordered-list>
+                        <list-item>Android 2.3 Gingerbread (API level 9) and above.</list-item>
+                      </unordered-list>
+                    </body>
+                  </section>
+                </body>
+              </topic>
               <topic id="1.3.0">
                 <title>1.3 Thursday, August 3, 2016</title>
                 <body>
@@ -2128,6 +2236,52 @@
             <description>Here you can find release notes for Couchbase Lite for Java.</description>
             <introduction/>
             <topics>
+              <topic id="1.3.1">
+                <title>1.3.1 14 September 2016</title>
+                <body>
+                  <paragraph>As part of this release we had <external-ref href="https://github.com/couchbase/couchbase-lite-java-core/compare/1.3.0...1.3.1">39 commits</external-ref> which resulted in <external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues?milestone=11&amp;state=closed">9 issues</external-ref> being closed.</paragraph>
+                  <section id="131-Enhancements">
+                    <title>Enhancements</title>
+                    <body>
+                      <unordered-list>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues/1376"><strong>#1376</strong></external-ref> Implement <code>timeout</code> parameter for <code>_changes</code> REST API</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues/1387"><strong>#1387</strong></external-ref> Support for <em>oidc</em>refresh response without ID token</list-item>
+                      </unordered-list>
+                    </body>
+                  </section>
+                  <section id="131-Bugs">
+                    <title>Bugs</title>
+                    <body>
+                      <unordered-list>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues/1296"><strong>#1296</strong></external-ref> Cordova - After putting Android app in background mode for a few hours, CB lite is unresponsive</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues/1372"><strong>#1372</strong></external-ref> Router unable to route request to do<em>GET</em>DesignDocument (ForestDB)</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues/1375"><strong>#1375</strong></external-ref> Reduce intermittently returns wrong results for 1.3.0-45</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues/1379"><strong>#1379</strong></external-ref> MultipartDocumentReader: Attachment length cannot be parsed as Integer</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues/1386"><strong>#1386</strong></external-ref> POST _replicate not create replicators when altering props beside type, target/source</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues/1394"><strong>#1394</strong></external-ref> ViewsTest.testDeleteView() test failure</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java-core/issues/1399"><strong>#1399</strong></external-ref> Longpoll _changes on Listener does not respect timeout property</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-java/issues/93"><strong>#93</strong></external-ref> CBL Java 1.3.0 does not work with JDK 1.7</list-item>
+                      </unordered-list>
+                    </body>
+                  </section>
+                  <section id="131-download">
+                    <title>Download</title>
+                    <body>
+                      <paragraph>
+                        You can download 1.3.1 from <external-ref href="http://www.couchbase.com/nosql-databases/downloads#Couchbase_Mobile">Couchbase.com</external-ref>
+                      </paragraph>
+                    </body>
+                  </section>
+                  <section id="131-requirements">
+                    <title>System Requirements</title>
+                    <body>
+                      <unordered-list>
+                        <list-item>JDK 1.7+</list-item>
+                      </unordered-list>
+                    </body>
+                  </section>
+                </body>
+              </topic>
               <topic id="1.3.0">
                 <title>1.3 Thursday, August 3, 2016</title>
                 <body>
@@ -3026,6 +3180,96 @@
             <description>Here you can find release notes for Couchbase Lite for .NET.</description>
             <introduction/>
             <topics>
+              <topic id="1.3.1">
+                <title>1.3.1 Wednesday, September 14, 2016</title>
+                <body>
+                  <paragraph>As part of this release we had <external-ref href="https://github.com/couchbase/couchbase-lite-net/compare/1.3...1.3.1">48 commits</external-ref> which resulted in <external-ref href="https://github.com/couchbase/couchbase-lite-net/issues?milestone=16&amp;state=closed">4 issues</external-ref> being closed.</paragraph>
+                  <paragraph>This is a maintenance release which includes hotfixes applied against 1.3.0.</paragraph>
+                  <section id="131-Bugs">
+                    <title>Bugs</title>
+                    <body>
+                      <unordered-list>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-net/issues/693"><strong>#693</strong></external-ref> TestJSViews failing with ForestDB</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-net/issues/716"><strong>#716</strong></external-ref> v1.3 Unauthorized http state not reported on replicators LastError property</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-net/issues/717"><strong>#717</strong></external-ref> Unexpected replications returned from active tasks</list-item>
+                        <list-item><external-ref href="https://github.com/couchbase/couchbase-lite-net/issues/723"><strong>#723</strong></external-ref> POST _replicate fails which when "source" or "target" is a dictionary</list-item>
+                      </unordered-list>
+                    </body>
+                  </section>
+                  <section id="131-Download">
+                    <title>Download</title>
+                    <body>
+                      <paragraph>You can download this release from nuget.org:</paragraph>
+                      <unordered-list>
+                        <list-item>
+                          <strong>
+                            <external-ref href="https://www.nuget.org/packages/Couchbase.Lite/1.3.1">Couchbase
+                              .Lite</external-ref>
+                          </strong>
+                        </list-item>
+                        <list-item>
+                          (optional)
+                          <strong>
+                            <external-ref href="https://www.nuget.org/packages/Couchbase.Lite.Listener/1.3.1">
+                              Couchbase.Lite.Listener</external-ref>
+                          </strong>
+                        </list-item>
+                        <list-item>
+                          (optional)
+                          <strong>
+                            <external-ref href="https://www.nuget.org/packages/Couchbase.Lite.Listener.Bonjour/1.3.1">
+                              Couchbase.Lite.Listener.Bonjour</external-ref>
+                          </strong>
+                        </list-item>
+                        <list-item>
+                          (optional)
+                          <strong>
+                            <external-ref 
+                                    href="https://www.nuget.org/packages/Couchbase.Lite.Storage.ForestDB/1.3.1">Couchbase Lite ForestDB Storage</external-ref>
+                          </strong>
+                        </list-item>
+                        <list-item>
+                          (optional)
+                          <strong>
+                            <external-ref 
+                                    href="https://www.nuget.org/packages/Couchbase.Lite.Storage.SQLCipher/1.3.1">Couchbase Lite SQLCipher Storage</external-ref>
+                          </strong>
+                        </list-item>
+                      </unordered-list>
+                    </body>
+                  </section>
+                  <section id="131-Requirements">
+                    <title>System Requirements</title>
+                    <body>
+                      <h2>Requirements</h2>
+                      <paragraph>Couchbase Lite for .NET 1.3.1 is compatible with the following .NET runtimes and 
+                        operation systems:</paragraph>
+                      <table>
+                        <header>
+                          <row>
+                            <entry>.NET Runtime</entry>
+                            <entry>OS</entry>
+                          </row>
+                        </header>
+                        <body>
+                          <row>
+                            <entry>Xamarin</entry>
+                            <entry>iOS, Android</entry>
+                          </row>
+                          <row>
+                            <entry>Mono (.NET 3.5+)</entry>
+                            <entry>OS/X, Linux</entry>
+                          </row>
+                          <row>
+                            <entry>Microsoft .NET 3.5+</entry>
+                            <entry>Windows Desktop</entry>
+                          </row>
+                        </body>
+                      </table>
+                    </body>
+                  </section>
+                </body>
+              </topic>
               <topic id="1.3">
                 <title>1.3 Thursday, August 3, 2016</title>
                 <body>
