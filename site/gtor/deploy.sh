@@ -29,9 +29,10 @@ if [[ ${1} = "build" ]]; then
 	echo "Building Jekyll..."
 	jekyll build --source "${JEKYLL_SOURCE}" --destination "${JEKYLL_DESTINATION}"
 	
-	find ../../tmp/ready/ -name "*.mov" -type f -delete
-	find ../../tmp/ready/ -name "*.mp4" -type f -delete
-	find ../../tmp/ready/ -name "*.screenflow" -type f -delete
+	find ../../tmp/ready -name "*.mov" -type f -delete
+	find ../../tmp/ready -name "*.mp4" -type f -delete
+	find ../../tmp/ready -name "*.sketch" -type f -delete
+	find ../../tmp/ready -name "*.screenflow" -type f -delete
 	
 	cp -rf ${OPENID} "${SOURCE_FOLDER}"
 	cp -rf ${INSTALLATION} "${SOURCE_FOLDER}"
