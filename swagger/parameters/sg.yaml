@@ -1,6 +1,6 @@
 bulkdocs:
   in: body
-  name: body
+  name: BulkDocsBody
   description: The request body
   schema:
     properties:
@@ -25,7 +25,7 @@ name:
   required: true
 replication:
   in: body
-  name: body
+  name: ReplicationBody
   description: The request message body is a JSON document that contains the following objects.
   schema:
     type: object

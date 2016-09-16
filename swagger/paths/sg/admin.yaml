@@ -390,7 +390,7 @@
       This request creates a new session in the specified database.
     parameters:
       - in: body
-        name: body
+        name: SessionBody
         description: The message body is a JSON document that contains the following objects.
         schema:
           type: object

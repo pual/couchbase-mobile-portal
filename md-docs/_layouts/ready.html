@@ -158,11 +158,23 @@ sectionid: docs
       </div>
       <!-- SDK buttons -->
       <div id="swagger-libs" style="display: none;">
-        <span>Sync Gateway REST API Libs:</span>
-        <a href="javascript:void(0);" onclick="getSDK('java')">Java</a>
-        <a href="javascript:void(0);" onclick="getSDK('csharp')">C#</a>
-        <a href="javascript:void(0);" onclick="getSDK('go')">Go</a>
-        <a href="javascript:void(0);" onclick="getSDK('python')">Python</a>
+        <span>Sync Gateway Public REST API:</span>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('java')">Java</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('csharp')">C#</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('go')">Go</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('python')">Python</a>
+        <br>
+        <span>Sync Gateway Admin REST API:</span>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('java')">Java</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('csharp')">C#</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('go')">Go</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('python')">Python</a>
+        <br>
+        <span>Couchbase Lite REST API:</span>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('java')">Java</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('csharp')">C#</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('swift')">Swift</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('python')">Python</a>
       </div>
       <!-- Markdown content -->
       {{ content }}
@@ -235,7 +247,7 @@ sectionid: docs
       <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch.min.js"></script>
       <script>
         
-        if (getParameterByName("show_swagger_libs")) {
+        if (getParameterByName("show_swagger_libs") || getParameterByName("swagger")) {
           var swagger_libs_el = document.getElementById('swagger-libs');
           swagger_libs_el.style.display = 'block';
         }

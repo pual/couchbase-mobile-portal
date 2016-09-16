@@ -34,6 +34,17 @@ body:
   description: The request body
   schema:
     type: object
+bulkget:
+  in: body
+  name: BulkGetBody
+  description: List of documents being requested. Each array element is an object that must contain an id property giving the document ID. It may contain a rev property if a specific revision is desired. It may contain an atts_since property (as in a single-document GET) to limit which attachments are sent.
+  schema:
+    type: object
+    properties:
+      docs:
+        type: array
+        items:
+          type: string
 channels:
   in: query
   name: channels

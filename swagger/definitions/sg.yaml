@@ -1,3 +1,35 @@
+Changes:
+  type: object
+  properties:
+    last_seq:
+      type: integer
+      description: Last change sequence number
+    results:
+      type: array
+      description: List of changes to the database. See the following table for a list of fields in this object.
+      items:
+        $ref: '#/definitions/ChangesFeedRow'
+Database:
+  type: object
+  properties:
+    db_name:
+      type: string
+      description: Name of the database
+    db_uuid:
+      type: integer
+      description: Database identifier
+    disk_format_version:
+      type: integer
+      description: Database schema version
+    disk_size:
+      type: integer
+      description: Total amount of data stored on the disk (in bytes)
+    instance_start_time:
+      type: string
+      description: Date and time the database was opened (in microseconds since 1 January 1970)
+    update_seq:
+      type: string
+      description: Number of updates to the database
 Document:
   type: object
   properties:
@@ -13,3 +45,63 @@ Document:
         Expiry time after which the document will be purged. The expiration time is set and managed on the Couchbase Server document (TTL is not supported for databases in walrus mode). The value can be specified in two ways; in ISO-8601 format, for example the 6th of July 2016 at 17:00 in the BST timezone would be 2016-07-06T17:00:00+01:00; it can also be specified as a numeric Couchbase Server expiry value. Couchbase Server expiries are specified as Unix time, and if the desired TTL is below 30 days then it can also represent an interval in seconds from the current time (for example, a value of 5 will remove the document 5 seconds after it is written to Couchbase Server). The document expiration time is returned in the response of GET /{db}/{doc} when show_exp=true is included in the querystring.
         
         As with the existing explicit purge mechanism, this applies only to the local database; it has nothing to do with replication. This expiration time is not propagated when the document is replicated. The purge of the document does not cause it to be deleted on any other database.
+QueryResult:
+  type: object
+  properties:
+    offset:
+      type: string
+      description: Starting index of the returned rows.
+    row:
+      type: array
+      items:
+        $ref: '#/definitions/QueryRow'
+    total_rows:
+      type: integer
+      description: Number of documents in the database. This number is not the number of rows returned.
+Replication:
+  type: object
+  properties:
+    ok:
+      type: boolean
+      description: Indicates whether the replication operation was successful
+    session_id:
+      type: string
+      description: Session identifier
+Server:
+  type: object
+  properties:
+    couchdb:
+      type: string
+      description: Contains the string 'Welcome' (this is required for compatibility with CouchDB)
+    vendor/name:
+      type: string
+      description: The server type ('Couchbase Sync Gateway)
+    vendor/version:
+      type: string
+      description: The server version
+    version:
+      type: string
+      description: Sync Gateway version number
+Session:
+  type: object
+  properties:
+    authentication_handlers:
+      type: array
+      description: List of authentication methods.
+      items:
+        type: string
+    ok:
+      type: boolean
+      description: Always true if the operation was successful.
+    userCtx:
+      $ref: '#/definitions/UserContext'
+UserContext:
+  type: object
+  description: Context for this user.
+  properties:
+    channels:
+      type: object
+      description: Key-value pairs with a channel name as the key and the sequence number that granted the user access to the channel as value. `!` is the public channel and every user has access to it.
+    name:
+      type: string
+      description: The user's name.

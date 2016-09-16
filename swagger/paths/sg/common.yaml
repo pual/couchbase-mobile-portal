@@ -9,20 +9,7 @@
       200:
         description: Meta-information about the server.
         schema:
-          type: object
-          properties:
-            couchdb:
-              type: string
-              description: Contains the string 'Welcome' (this is required for compatibility with CouchDB)
-            vendor/name:
-              type: string
-              description: The server type ('Couchbase Sync Gateway)
-            vendor/version:
-              type: string
-              description: The server version
-            version:
-              type: string
-              description: Sync Gateway version number
+          $ref: '#/definitions/Server'
 /_replicate:
   post:
     tags:
@@ -38,14 +25,7 @@
       200:
         description: 200 OK
         schema:
-          type: object
-          properties:
-            ok:
-              type: boolean
-              description: Indicates whether the replication operation was successful
-            session_id:
-              type: string
-              description: Session identifier
+          $ref: '#/definitions/Replication'
 /{db}/_local/{local_doc}:
   parameters:
     - $ref: '#/parameters/db'
@@ -111,16 +91,7 @@
       200:
         description: Request completed successfully
         schema:
-          type: object
-          properties:
-            last_seq:
-              type: integer
-              description: Last change sequence number
-            results:
-              type: array
-              description: List of changes to the database. See the following table for a list of fields in this object.
-              items:
-                $ref: '#/definitions/ChangesFeedRow'
+          $ref: '#/definitions/Changes'
 /{db}/{doc}:
   parameters:
     - $ref: '#/parameters/db'
@@ -148,7 +119,7 @@
     operationId: put
     parameters:
       - in: body
-        name: body
+        name: Document
         description: Request body
         schema:
           $ref: '#/definitions/Document'
@@ -257,18 +228,7 @@
       200:
         description: Query results
         schema:
-          type: object
-          properties:
-            offset:
-              type: string
-              description: Starting index of the returned rows.
-            row:
-              type: array
-              items:
-                $ref: '#/definitions/QueryRow'
-            total_rows:
-              type: integer
-              description: Number of documents in the database. This number is not the number of rows returned.
+          $ref: '#/definitions/QueryResult'
   post:
     tags:
       - query
@@ -307,24 +267,9 @@
       - $ref: '#/parameters/endkey'
     responses:
       200:
-        description: Request completed successfully
+        description: Query results
         schema:
-          type: object
-          properties:
-            offset:
-              type: string
-              description: Starting index of the returned rows.
-            rows:
-              type: array
-              description: Array of row objects.
-              items:
-                $ref: '#/definitions/QueryRow'
-            total_rows:
-              type: integer
-              description: Number of documents in the database. This number is not the number of rows returned.
-            update_seq:
-              type: integer
-              description: Sequence identifier of the underlying database that the view reflects.
+          $ref: '#/definitions/QueryResult'
   post:
     tags:
       - query
@@ -339,24 +284,9 @@
       - $ref: '#/parameters/revs'
     responses:
       200:
-        description: Request completed successfully
+        description: Query results
         schema:
-          type: object
-          properties:
-            offset:
-              type: string
-              description: Starting index of the returned rows.
-            rows:
-              type: array
-              description: Array of row objects.
-              items:
-                $ref: '#/definitions/QueryRow'
-            total_rows:
-              type: integer
-              description: Number of documents in the database. This number is not the number of rows returned.
-            update_seq:
-              type: integer
-              description: Sequence identifier of the underlying database that the view reflects.
+          $ref: '#/definitions/QueryResult'
 /{db}/_oidc:
   parameters:
     - $ref: '#/parameters/db'
