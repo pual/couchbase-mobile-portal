@@ -224,7 +224,7 @@
               type: array
               description: List of changes to the database. See the following table for a list of fields in this object.
               items:
-                - $ref: '#/definitions/ChangesFeedRow'
+                $ref: '#/definitions/ChangesFeedRow'
 /{db}/{doc}:
   parameters:
     - $ref: '#/parameters/db'
