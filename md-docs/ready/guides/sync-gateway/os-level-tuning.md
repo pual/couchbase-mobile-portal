@@ -48,6 +48,17 @@ $ ulimit -n
 
 The value of both commands above should be `250000`.
 
+The maximum number of open files descriptors should also be configured in the Sync Gateway configuration file. Refer to the [server section](/documentation/mobile/current/develop/guides/sync-gateway/config-properties/index.html#server-configuration) of the configuration guide and to the example below.
+
+```javascript
+{
+  "maxFileDescriptors": 250000,
+  "databases": {
+    "todo": { ... }
+  }
+}
+```
+
 ### References
 
 - [Increasing ulimit and file descriptors limit on Linux](https://glassonionblog.wordpress.com/2013/01/27/increase-ulimit-and-file-descriptors-limit/)
