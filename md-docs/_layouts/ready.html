@@ -159,22 +159,20 @@ sectionid: docs
       <!-- SDK buttons -->
       <div id="swagger-libs" style="display: none;">
         <span>Sync Gateway Public REST API:</span>
-        <a href="javascript:void(0);" class="button" onclick="getSDK('java')">Java</a>
-        <a href="javascript:void(0);" class="button" onclick="getSDK('csharp')">C#</a>
-        <a href="javascript:void(0);" class="button" onclick="getSDK('go')">Go</a>
-        <a href="javascript:void(0);" class="button" onclick="getSDK('python')">Python</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('java', 'public')">Java</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('csharp', 'public')">C#</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('go', 'public')">Go</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('python', 'public')">Python</a>
         <br>
         <span>Sync Gateway Admin REST API:</span>
-        <a href="javascript:void(0);" class="button" onclick="getSDK('java')">Java</a>
-        <a href="javascript:void(0);" class="button" onclick="getSDK('csharp')">C#</a>
-        <a href="javascript:void(0);" class="button" onclick="getSDK('go')">Go</a>
-        <a href="javascript:void(0);" class="button" onclick="getSDK('python')">Python</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('go', 'admin')">Go</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('python', 'admin')">Python</a>
         <br>
         <span>Couchbase Lite REST API:</span>
-        <a href="javascript:void(0);" class="button" onclick="getSDK('java')">Java</a>
-        <a href="javascript:void(0);" class="button" onclick="getSDK('csharp')">C#</a>
-        <a href="javascript:void(0);" class="button" onclick="getSDK('swift')">Swift</a>
-        <a href="javascript:void(0);" class="button" onclick="getSDK('python')">Python</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('java', 'lite')">Java</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('csharp', 'lite')">C#</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('swift', 'lite')">Swift</a>
+        <a href="javascript:void(0);" class="button" onclick="getSDK('python', 'lite')">Python</a>
       </div>
       <!-- Markdown content -->
       {{ content }}
@@ -252,8 +250,20 @@ sectionid: docs
           swagger_libs_el.style.display = 'block';
         }
         
-        function getSDK(lang) {
-          fetch('http://developer.couchbase.com/mobile/swagger/sync-gateway-public/spec.json')
+        function getSDK(lang, spec) {
+          var url = null;
+          switch(spec) {
+            case 'public':
+              url = 'http://developer.couchbase.com/mobile/swagger/sync-gateway-public/spec.json';
+              break;
+            case 'admin':
+              url = 'http://developer.couchbase.com/mobile/swagger/sync-gateway-admin/spec.json';
+              break;
+            case 'lite':
+              url = 'http://developer.couchbase.com/mobile/swagger/couchbase-lite/spec.json'
+              break;
+          }
+          fetch(url)
                   .then(function (res) {
                     return res.json();
                   })
