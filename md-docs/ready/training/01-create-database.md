@@ -28,7 +28,7 @@ Download the project and Couchbase Lite SDK below.
 
 Unzip the file and drag **CouchbaseLite.framework** to the **Frameworks** folder of the project in Finder. It's important to do this in Finder as opposed to Xcode.
 
-![](img/drag-framework-finder.png)
+<img src="img/drag-framework-finder.png" class="center-image" />
 
 Open **Todo.xcodeproj** in Xcode. Then build & run the project.
 
@@ -36,7 +36,7 @@ Open **Todo.xcodeproj** in Xcode. Then build & run the project.
 
 Throughout this lesson, you will navigate in different files of the Xcode project. We recommend to use the method navigator to scroll to a method.
 
-<img src="https://cl.ly/0G263m3m1a0w/image44.gif" />
+<img src="https://cl.ly/0G263m3m1a0w/image44.gif" class="center-image" />
 
 [//]: # "COMMON ACROSS LESSONS"
 
@@ -87,9 +87,7 @@ In the next section, you will learn how to bundle a pre-built Couchbase Lite dat
 
 ## Using the pre-built database
 
-In most cases, apps start with an empty Couchbase Lite database where data is added by the user as you have done above or through synchronization with Sync Gateway.
-
-However, you can also bundle a pre-built database in your application if your app needs to sync a lot of static data initially. It can be a lot more efficient to bundle a database in your application and install it on the first launch. Even if some of the content changes on the server after you create the app, the app's first pull replication will bring the database up to date. Here, you will use a pre-built database that contains a list of groceries. Download it from the link below and follow the instructions.
+You can also bundle a pre-built database in your application if your app needs to sync a lot of static data initially. It can be a lot more efficient to bundle a database in your application and install it on the first launch. Even if some of the content changes on the server after you create the app, the app's first pull replication will bring the database up to date. Here, you will use a pre-built database that contains a list of groceries. Download it from the link below and follow the instructions.
 
 [Download the pre-built database](https://cl.ly/453l3M1O151a/prebuilt-db.zip)
 
@@ -97,9 +95,9 @@ However, you can also bundle a pre-built database in your application if your ap
 
 - Unzip the file.
 - Open the prebuilt-db folder and drag **todo.cblite2** to the Copy Bundle Resources on the Build Phases tab in Xcode.
-    ![](img/image22.png)
+    <img src="img/image22.png" class="center-image" />
 - Be sure to check the **Copy items if needed** and **Create folder references** options from the dropdown panel.
-    ![](img/skitch.png)
+    <img src="img/skitch.png" class="center-image" />
 - Open **AppDelegate.swift** and set `kUsePrebuiltDb` to `true`.
 
     ```swift
