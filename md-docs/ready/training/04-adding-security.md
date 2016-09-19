@@ -28,7 +28,7 @@ Download the project and Couchbase Lite SDK below.
 
 Unzip the file and drag **CouchbaseLite.framework** to the **Frameworks** folder of the project in Finder. It's important to do this in Finder as opposed to Xcode.
 
-![](img/drag-framework-finder.png)
+<img src="img/drag-framework-finder.png" class="center-image" />
 
 Open **Todo.xcodeproj** in Xcode. Then build & run the project.
 
@@ -36,7 +36,7 @@ Open **Todo.xcodeproj** in Xcode. Then build & run the project.
 
 Throughout this lesson, you will navigate in different files of the Xcode project. We recommend to use the method navigator to scroll to a method.
 
-<img src="https://cl.ly/0G263m3m1a0w/image44.gif" />
+<img src="https://cl.ly/0G263m3m1a0w/image44.gif" class="center-image" />
 
 [//]: # "COMMON ACROSS LESSONS"
 
@@ -63,7 +63,11 @@ The user is then displayed on the Admin UI at [http://localhost:4985/_admin/db/t
 
 Sending an HTTP request is a quick method to create a user during development but obviously it doesn’t scale. The recommended approach is to have an App Server sitting alongside Sync Gateway that performs that operation (the rest api client guide explains how to do it).
 
-Another method of creating the user is by hardcoding the name/password in the configuration file. This method has the advantage that you don't need to re-create the user every time Sync Gateway is restarted in walrus mode, the in-memory storage type. Stop the running instance and start it with the following configuration file called **sync-gateway-config.json**:
+Another method of creating the user is by hardcoding the name/password in the configuration file. This method has the advantage that you don't need to re-create the user every time Sync Gateway is restarted in walrus mode, the in-memory storage type.
+
+### Try it out
+
+Stop the running instance and start it with the following configuration file called **sync-gateway-config.json**:
 
 ```javascript
 {
@@ -80,11 +84,13 @@ Another method of creating the user is by hardcoding the name/password in the co
 }
 ```
 
+Start Sync Gateway.
+
 ```bash
 $ ~/Downloads/couchbase-sync-gateway/bin/sync_gateway sync-gateway-config.json
 ```
 
-Start Sync Gateway. Two users are already created at [http://localhost:4985/_admin/db/todo/users](http://localhost:4985/_admin/db/todo/users).
+Two users are already created at [http://localhost:4985/_admin/db/todo/users](http://localhost:4985/_admin/db/todo/users).
 
 > **Tip:** To persist a walrus database to disk you can append the path to the directory to save it to, a `.` means the current directory (i.e `"server": "walrus:."`).
 
@@ -127,7 +133,7 @@ The `CBLAuthenticator` class has static methods for each authentication method s
 
 <block class="ios" />
 
-- Set `kLoginFlowEnabled` to true in **AppDelegate.swift**.
+- Set `kLoginFlowEnabled` to `true` in **AppDelegate.swift**.
 
   ```swift
   let kLoginFlowEnabled = true
@@ -386,16 +392,6 @@ You must first include the correct dependencies before enabling encryption.
 
 <block class="ios" />
 
-- Drag **Extras/libsqlcipher.a** from the Couchbase Lite SDK folder to the Frameworks folder in the Xcode project.
-  ![](img/image50.png)
-
-- In the **Build Phases** tab, remove **libsqlite3.tbd** from the **Link Binary With Libraries** section and add **libsqlcipher.a**.
-  ![](https://cl.ly/1K2Q1k3V473l/image49.gif)
-
-Previously, the database was created unencrypted so you must delete the application to start from a fresh state. You can also convert an unencrypted database to be encrypted using the **changeEncryptionKey** method, but we won’t cover it here.
-
-<img src="img/image17.png" class="portrait" />
-
 - Locate the `openDatabase(username:withKey:newKey)` method in **AppDelegate.swift**, this method is called from `startSession` which is in turn getting called in `processLogin` after the user has logged in.
 - The Database's `openDatabaseName` is used to create an encrypted database.
 
@@ -418,11 +414,20 @@ if newKey != nil {
 
 ### Try it out
 
+- Drag **Extras/libsqlcipher.a** from the Couchbase Lite SDK folder to the Frameworks folder in the Xcode project.
+  ![](img/image50.png)
+
+- In the **Build Phases** tab, remove **libsqlite3.tbd** from the **Link Binary With Libraries** section and add **libsqlcipher.a**.
+  ![](https://cl.ly/1K2Q1k3V473l/image49.gif)
+
 - Set `kEncryptionEnabled` to true in **AppDelegate.swift**.
 
   ```swift
   let kEncryptionEnabled = true
   ```
+
+- Delete the application if you ran it previously without encryption.
+    <img src="img/image17.png" class="portrait" />
 
 - Build and run.
 - Browse to the database file and you'll find that it's now encrypted.

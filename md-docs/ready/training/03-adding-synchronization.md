@@ -28,7 +28,7 @@ Download the project and Couchbase Lite SDK below.
 
 Unzip the file and drag **CouchbaseLite.framework** to the **Frameworks** folder of the project in Finder. It's important to do this in Finder as opposed to Xcode.
 
-![](img/drag-framework-finder.png)
+<img src="img/drag-framework-finder.png" class="center-image" />
 
 Open **Todo.xcodeproj** in Xcode. Then build & run the project.
 
@@ -36,7 +36,7 @@ Open **Todo.xcodeproj** in Xcode. Then build & run the project.
 
 Throughout this lesson, you will navigate in different files of the Xcode project. We recommend to use the method navigator to scroll to a method.
 
-<img src="https://cl.ly/0G263m3m1a0w/image44.gif" />
+<img src="https://cl.ly/0G263m3m1a0w/image44.gif" class="center-image" />
 
 [//]: # "COMMON ACROSS LESSONS"
 
@@ -360,7 +360,7 @@ For task documents, you will follow the same steps as previously except this tim
 - Delete the task. The revision that modified the **task** value to 'Update 1' becomes the **current revision**.
     <img src="./img/image26.png" class="portrait" />
 
-The conflict resolution will be slightly different in this case.
+Similarly to the previous section, you will learn how to resolve conflicts, this time for "task-list" documents. In this case, the resolution code will **merge the updates** (i.e n-way merge) of the conflicting revisions before promoting it as the current revisions.
 
 - Open **AppDelegate.swift** and locate the `resolveConflicts` method.
 
@@ -389,7 +389,7 @@ while let row = rows?.nextRow() {
 
 Notice that for 'task' documents, the `nWayMergeConflicts` method is used to merge the diffs of conflicting revisions before calling the `resolveConflicts(revisions:withProps:andImage)`.
 
-### Try it out
+#### Try it out
 
 - Enable conflict resolution.
 
@@ -398,9 +398,8 @@ Notice that for 'task' documents, the `nWayMergeConflicts` method is used to mer
     ```
 
 - Build and run. 
-- Create a task conflict using the shake command and this time the row contains the updated text **and** is marked as completed.
-
-![](img/image03.png)
+- Create a task conflict using the shake gesture (or **^⌘Z**) and this time the row contains the updated text **and** is marked as completed.
+    ![](img/image03.png)
 
 <block class="ios rn" />
 

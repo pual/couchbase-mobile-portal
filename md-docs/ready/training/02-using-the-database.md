@@ -28,7 +28,7 @@ Download the project and Couchbase Lite SDK below.
 
 Unzip the file and drag **CouchbaseLite.framework** to the **Frameworks** folder of the project in Finder. It's important to do this in Finder as opposed to Xcode.
 
-![](img/drag-framework-finder.png)
+<img src="img/drag-framework-finder.png" class="center-image" />
 
 Open **Todo.xcodeproj** in Xcode. Then build & run the project.
 
@@ -36,7 +36,7 @@ Open **Todo.xcodeproj** in Xcode. Then build & run the project.
 
 Throughout this lesson, you will navigate in different files of the Xcode project. We recommend to use the method navigator to scroll to a method.
 
-<img src="https://cl.ly/0G263m3m1a0w/image44.gif" />
+<img src="https://cl.ly/0G263m3m1a0w/image44.gif" class="center-image" />
 
 [//]: # "COMMON ACROSS LESSONS"
 
@@ -137,7 +137,7 @@ The update method takes a callback function or block (the details vary by langua
 Deleting a document actually creates a new revision (informally called a "tombstone"). This ensures that the deletion will replicate to the server, and then to other endpoints that pull from that database, just like any other document revision.
 
 - Open **ListsViewController.swift** and locate the `deleteTaskList` method.
-- It is called when the user clicks the **Delete** action and remove the corresponding document in the database.
+- It is called when the user clicks the **Delete** action and removes the corresponding document in the database.
 
 ```swift
 // TRAINING: Delete a list
@@ -163,11 +163,11 @@ do {
 
 The way to query data in Couchbase Lite is by registering a View and then running a Query on it with **QueryOptions**. The first thing to know about Couchbase Views is that they have nothing to do with UI views.
 
-A [View](/documentation/mobile/current/develop/guides/couchbase-lite/native-api/view/index.html) in Couchbase is a persistent index of documents in a database, which you then query to find data. The main component of a View is its map function. It takes a document’s JSON as input, and emits (outputs) any number of key/value pairs to be indexed. First, you will define the view to index the documents of type **task-list**. The diagram below shows the result of that map function.
+A [View](/documentation/mobile/current/develop/guides/couchbase-lite/native-api/view/index.html) in Couchbase is a persistent index of documents in a database, which you then query to find data. The main component of a View is its map function. It takes a document’s JSON as input, and emits (outputs) any number of key/value pairs to be indexed. First, you will define the view to index the documents of type **task-list**. The diagram below shows the result of the code you will review shortly.
 
 ![](img/img.001.png)
 
-So you can remember that a view index is a list of key/value pairs, sorted by key. In your application, the view’s logic is written in the native language of the platform you’re developing on.
+So you can remember that a view index is a list of key/value pairs, sorted by key. The view’s logic is written in the native language of the platform you’re developing on.
 
 <block class="ios" />
 
