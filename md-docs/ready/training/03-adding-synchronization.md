@@ -13,7 +13,7 @@ Download the project and Couchbase Lite SDK below.
 <block class="ios" />
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/2B3I3x1k1s0e/xcode-project.zip" class="button" id="project">
+  <a href="https://cl.ly/1x2m2u0Q3w2J/xcode-project.zip" class="button" id="project">
     <img src="img/download-xcode.png">
   </a>
 </div>
@@ -405,4 +405,4 @@ Notice that for 'task' documents, the `nWayMergeConflicts` method is used to mer
 
 ## Conclusion
 
-Well done! You've completed this lesson on enabling synchronization, detecting and resolving conflicts. Feel free to share your feedback, findings or ask any questions on the forums.
+Well done! You've completed this lesson on enabling synchronization, detecting and resolving conflicts. In the next section you'll learn how to implement authentication and define access control rules in the Sync Function. Feel free to share your feedback, findings or ask any questions on the forums.

@@ -13,7 +13,7 @@ Download the project and Couchbase Lite SDK below.
 <block class="ios" />
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/2B3I3x1k1s0e/xcode-project.zip" class="button" id="project">
+  <a href="https://cl.ly/1x2m2u0Q3w2J/xcode-project.zip" class="button" id="project">
     <img src="img/download-xcode.png">
   </a>
 </div>
@@ -142,4 +142,4 @@ The prebuilt database is installed using the `replaceDatabaseNamed` method only 
 
 ## Conclusion
 
-Well done! You've completed this lesson on creating a database and using a pre-built database. Feel free to share your feedback, findings or ask any questions on the forums.
+Well done! You've completed this lesson on creating a database. In the next lesson you will learn how to write and query documents from the database. Feel free to share your feedback, findings or ask any questions on the forums.
