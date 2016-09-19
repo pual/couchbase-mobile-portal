@@ -4,7 +4,7 @@ title: Using the Database
 permalink: ready/training/using-the-database/index.html
 ---
 
-In this lesson you’ll be introduced to Couchbase Lite, our embedded NoSQL database. You’ll learn how to create a new embedded database and optionally use databases pre-packaged in your application. Then, you’ll learn how to create, read, update, delete, and query data using Couchbase Lite.
+In this lesson you’ll be introduced to Couchbase Lite, our embedded NoSQL database. You’ll learn how to create, read, update, delete, and query data using Couchbase Lite.
 
 [//]: # "COMMON ACROSS LESSONS"
 
@@ -13,7 +13,7 @@ Download the project and Couchbase Lite SDK below.
 <block class="ios" />
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/2B3I3x1k1s0e/xcode-project.zip" class="button" id="project">
+  <a href="https://cl.ly/1x2m2u0Q3w2J/xcode-project.zip" class="button" id="project">
     <img src="img/download-xcode.png">
   </a>
 </div>
@@ -308,4 +308,4 @@ The code that creates the query then uses the **groupLevel = 1** query option to
 
 ## Conclusion
 
-Well done! You've completed this lesson on using CRUD operations with the database and running aggregation queries. Feel free to share your feedback, findings or ask any questions on the forums.
+Well done! You've completed this lesson on using CRUD operations with the database and running aggregation queries. In the next lesson, you'll learn how to use Couchbase Lite's synchronization APIs with Sync Gateway. Feel free to share your feedback, findings or ask any questions on the forums.
