@@ -405,4 +405,4 @@ Notice that for 'task' documents, the `nWayMergeConflicts` method is used to mer
 
 ## Conclusion
 
-Well done! You've completed this lesson on enabling synchronization, detecting and resolving conflicts. In the next section you'll learn how to implement authentication and define access control rules in the Sync Function. Feel free to share your feedback, findings or ask any questions on the forums.
+Well done! You've completed this lesson on enabling synchronization, detecting and resolving conflicts. In the next lesson you'll learn how to implement authentication and define access control rules in the Sync Function. Feel free to share your feedback, findings or ask any questions on the forums.
