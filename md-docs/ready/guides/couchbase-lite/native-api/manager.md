@@ -137,15 +137,15 @@ catch (DirectoryNotFoundException e)
 
 ## Global logging settings
 
-You can customize the global logging settings for Couchbase Lite via the `Manager` class.
+You can customize the global logging settings for Couchbase Lite via the `Manager` class. Log messages are tagged, allowing them to be logically grouped by activity. You can control whether individual tag groups are logged.
 
-Log messages are tagged, allowing them to be logically grouped by activity. You can control whether individual tag groups are logged. In Java it is also possible to set log levels for each tag group.
-
-In Objective-C tag groups is disabled by default. In Java tag groups are enabled at level WARN by default. The available tags are:
+The available tags are:
 
 <div class="tabs"></div>
 
 ```objective-c+
+In Objective-C tag groups is disabled by default.
+
 BLIP
 BLIPVerbose
 CBLDatabase
@@ -173,6 +173,8 @@ WS
 ```
 
 ```swift+
+In Swift tag groups is disabled by default.
+
 BLIP
 BLIPVerbose
 CBLDatabase
@@ -200,24 +202,57 @@ WS
 ```
 
 ```java+
-BlobStore
-CBLite // default "catch-all" tag
-ChangeTracker
-Database
-Listener
-MultistreamWriter
-Query
-RemoteRequest
-Router
-Sync
-View
+In Java tag groups are enabled at level WARN by default.
+
+Log tags
+
+Log.TAG_BLOB_STORE //BlobStore
+Log.TAG //CBLite
+Log.TAG_CHANGE_TRACKER //ChangeTracker
+Log.TAG_DATABASE //Database
+Log.TAG_LISTENER //Listener
+Log.TAG_MULTI_STREAM_WRITER //MultistreamWriter
+Log.TAG_QUERY //Query
+Log.TAG_REMOTE_REQUEST //RemoteRequest
+Log.TAG_ROUTER //Router
+Log.TAG_SYNC //Sync
+Log.TAG_VIEW //View
+
+Log levels
+
+Log.VERBOSE
+Log.DEBUG
+Log.INFO
+Log.WARN
+Log.ERROR
 ```
 
 ```c+
-No code example is currently available.
+Log tags
+
+Log.Domains.Database
+Log.Domains.Query
+Log.Domains.View
+Log.Domains.Router
+Log.Domains.Sync
+Log.Domains.ChangeTracker
+Log.Domains.Validation
+Log.Domains.Upgrade
+Log.Domains.Listener
+Log.Domains.Discovery
+Log.Domains.TaskScheduling
+Log.Domains.All
+
+Log levels
+
+Log.LogLevel.Verbose
+Log.LogLevel.Debug
+Log.LogLevel.Error
+Log.LogLevel.Warning
+Log.LogLevel.Information
 ```
 
-You would enable the "Sync" tag group by calling the `enableLogging` method on the `Manager` class. In Java you may also set the logging level.
+The following code snippet enables logging for the **Sync** tag.
 
 <div class="tabs"></div>
 
@@ -248,30 +283,8 @@ public class Application extends android.app.Application {
 ```
 
 ```c+
-No code example is currently available.
+Log.Domains.Sync.Level = Log.LogLevel.Verbose
 ```
-
-In Java the Log class provides static constants for the default tag groups:
-
-- Log.TAG_BLOB_STORE //BlobStore
-- Log.TAG //CBLite
-- Log.TAG_CHANGE_TRACKER //ChangeTracker
-- Log.TAG_DATABASE //Database
-- Log.TAG_LISTENER //Listener
-- Log.TAG_MULTI_STREAM_WRITER //MultistreamWriter
-- Log.TAG_QUERY //Query
-- Log.TAG_REMOTE_REQUEST //RemoteRequest
-- Log.TAG_ROUTER //Router
-- Log.TAG_SYNC //Sync
-- Log.TAG_VIEW //View
-
-and static constants for the supported logging levels:
-
-- Log.VERBOSE
-- Log.DEBUG
-- Log.INFO
-- Log.WARN
-- Log.ERROR
 
 ## Concurrency Support
 
