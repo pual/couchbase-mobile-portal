@@ -5,6 +5,9 @@ site/*.zip
 samples/
 node_modules/
 *.sketch
+*.screenflow
+*.mov
+*.mp4
 datasheets/
 hexo-docs/
 ignore/
