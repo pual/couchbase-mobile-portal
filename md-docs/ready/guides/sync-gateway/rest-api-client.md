@@ -15,29 +15,32 @@ The first and second sections will use the same Sync Gateway instance seeded wit
 1. [Download Sync Gateway](http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile)
 2. In a new working directory, open a new file called `sync-gateway-config.json` with the following
 
-  ```javascript
-  {
-    "log": ["HTTP+"],
-    "CORS": {
-      "origin":["http://localhost:8000"],
-      "loginOrigin":["http://localhost:8000"],
-      "headers":["Content-Type"],
-      "maxAge": 1728000
-    },
-    "databases": {
-      "todo": {
-        "server": "walrus:",
-        "users": { "GUEST": {"disabled": false, "admin_channels": ["*"] } }
-      }
-    }
-  }
-  ```
-  Here, you're enabling CORS on `http://localhost:8000`, the hostname of the web server that will serve the web application.
+	```javascript
+	{
+		"log": ["HTTP+"],
+		"CORS": {
+			"origin":["http://localhost:8000"],
+			"loginOrigin":["http://localhost:8000"],
+			"headers":["Content-Type"],
+			"maxAge": 1728000
+		},
+		"databases": {
+			"todo": {
+				"server": "walrus:",
+				"users": { "GUEST": {"disabled": false, "admin_channels": ["*"] } }
+			}
+		}
+	}
+	```
+  
+	Here, you're enabling CORS on `http://localhost:8000`, the hostname of the web server that will serve the web application.
+  
 3. Start Sync Gateway from the command line with the configuration file
 
-  ```bash
-  ~/Downloads/couchbase-sync-gateway/bin/sync_gateway sync-gateway-config.json
-  ```
+	```bash
+	~/Downloads/couchbase-sync-gateway/bin/sync_gateway sync-gateway-config.json
+	```
+
 4. Insert a few documents using the POST `/{db}/_bulk_docs` endpoint
 
   ```bash
@@ -66,6 +69,8 @@ In this section you will use Swagger JS in the browser to insert a few documents
 </html>
 ```
 
+Download [swagger-client.min.js](https://raw.githubusercontent.com/swagger-api/swagger-js/master/browser/swagger-client.min.js) and place it into your working directory.
+
 Next, create a new file called **index.js** to start sending requests to Sync Gateway.
 
 ```javascript
@@ -85,11 +90,14 @@ In this working directory, start a web server with the command `python -m Simple
 
 ![](img/swagger-browser.png)
 
-All the endpoints are grouped by tag. A tag represents a certain functionality of the API (i.e database, query, authentication). The `client.help()` method is a helper function that prints all the tags available. In this case we'd like to query all documents in the database so we'll use the `get_db_all_docs` method on the database tag to perform this operation. The helper function is available on any node of the API, so you can write `client.database.get_db_all_docs.help()` to print the documentation for that endpoint.
+All the endpoints are grouped by tag. A tag represents a certain functionality of the API (i.e database, query, authentication).
+
+The `client.help()` method is a helper function that prints all the tags available. In this case we'd like to query all documents in the database so we'll use the `get_db_all_docs` method on the database tag to perform this operation. The helper function is available on any node of the API, so you can write `client.database.get_db_all_docs.help()` to print the documentation for that endpoint as shown below.
 
 ![](img/swagger-all-docs.png)
 
-Copy the following below the existing code to query all the documents in the database and display them in the list.
+Copy the following below the existing code in **index.js** to query all the documents in the database and display them
+ in the list.
 
 ```javascript
 client.query.get_db_all_docs({db: 'todo', include_docs: true})
@@ -170,6 +178,7 @@ curl -H 'Content-Type: application/json' -X POST 'http://localhost:3000/signup' 
 ```
 
 You can now send this request from your mobile and web clients and display a message according to the response status:
+
 - `201`: The user was successfully created
 - `409`: A user with this name already exists
 
