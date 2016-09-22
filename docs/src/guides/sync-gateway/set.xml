@@ -30,5 +30,6 @@
         <xi:include href="running-replications.xml"/>
         <xi:include href="rest-api-client.xml"/>
         <xi:include href="sgcollect-info.xml"/>
+        <xi:include href="ssl.xml"/>
     </items>
 </set>
