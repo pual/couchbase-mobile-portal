@@ -11,6 +11,8 @@ Sync Gateway supports serving SSL. To enable SSL, you need to add two properties
 
 If both properties are present, the server will respond to SSL (and only SSL) over both the public and admin ports.
 
+[//]: # (If you don't want to go this route, you can of course instead run the gateway behind another HTTP server that has SSL enabled, configured to forward requests to the gateway. Apache and Nginx are commonly used to do this; the details are beyond the scope of this document.)
+
 ## How to create an SSL certificate
 
 Certificates are a complex topic. There are basically two routes you can go: request a certificate from a Certificate Authority (CA), or create your own "self-signed" certificate.
