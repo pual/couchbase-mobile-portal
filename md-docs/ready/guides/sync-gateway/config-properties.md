@@ -173,7 +173,7 @@ For more information about Mozilla Persona authentication, see Mozilla Persona a
 
 ## CORS configuration
 
-Cross Origin Resource Sharing (CORS) is a browser security protocol that allows web pages to interact with resources hosted under domains other than their origin server. Read more about CORS.
+Cross Origin Resource Sharing (CORS) is a browser security protocol that allows web pages to interact with resources hosted under domains other than their origin server.
 
 Sync Gateway has server level configuration for CORS origin(s), headers, and max-age. It is also possible to use a wildcard * as the origin but wildcard matched domains won't send credentials. Don't use a wildcard if you can list the domains. The `Origin` list can include multiple entries. CORS is not enabled on the Sync Gateway admin port.
 
