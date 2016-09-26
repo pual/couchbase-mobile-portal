@@ -165,6 +165,16 @@ LogTags:
     HTTP:
       type: boolean
       description: All requests made to the Sync Gateway REST APIs (Sync and Admin). Note that the log keyword HTTP is always enabled, which means that HTTP requests and error responses are always logged (in a non-verbose manner). HTTP+ provides more verbose HTTP logging.
+PurgeBody:
+  type: object
+  description: Document ID
+  properties:
+   a_doc_id:
+     type: array
+     description: List containing the revision numbers to purge for the given docID. Passing "*" as an item in the array will remove all the revisions for that document.
+     items:
+       type: string
+       description: Revision ID to delete or "*" to delete all the revisions of the document.
 Success:
   type: object
   properties:

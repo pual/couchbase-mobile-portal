@@ -234,7 +234,6 @@
   post:
    tags:
      - document
-   operationId: purge
    summary: Purge document
    description: |
      When an application deletes a document a tombstone revision is created, over time the number of tombstones can become significant. Tombstones allow document deletions to be propagated to other clients via replication. For some applications the replication of a tombstone may not be useful after a period of time. The purge command provides a way to remove the tombstones from a Sync Gateway database, recovering storage space and reducing the amount of data replicated to clients.
@@ -243,15 +242,7 @@
        name: body
        description: The message body is a JSON document that contains the following objects.
        schema:
-         type: object
-         description: Document ID
-         properties:
-           a_doc_id:
-             type: array
-             description: List containing the revisions to purge for the given docID, currently the list must contain the single value "*", meaning all revisions.
-             items:
-               type: string
-               description: Revisions ID to delete
+         $ref: '#/definitions/PurgeBody'
    responses:
      200:
        description: OK – The purge operation was successful
