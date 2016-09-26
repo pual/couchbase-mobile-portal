@@ -86,6 +86,8 @@ window.client = new SwaggerClient({
 
 Here you're initializing the Swagger library with the Sync Gateway public REST API spec and promises enabled. Promises are great because you can chain HTTP operations in a readable style.
 
+> **Note:** Keep in mind that in this example the Swagger client is pointing to the spec hosted on developer.couchbase.com. We often publish changes to those specs for documentation purposes; if it's a breaking change then it will modify the request and parameter names in the Swagger client and break your code. You can refer to the [changelog of the specs](https://github.com/couchbaselabs/couchbase-mobile-portal/blob/master/swagger/CHANGELOG.md) to find the list of methods and parameters that changed. In production, we highly encourage you to download the spec as a `.json` file and pass it to the Swagger client using the `{spec: <spec>}` option.
+
 In this working directory, start a web server with the command `python -m SimpleHTTPServer 8000` and navigate to [http://localhost:8000/index.html](http://localhost:8000/index.html) in a browser. Open the dev tools to access the console and you should see the list of operations available on the `client` object.
 
 ![](img/swagger-browser.png)

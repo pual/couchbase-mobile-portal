@@ -183,6 +183,8 @@ var client = new SwaggerClient({
   });
 ```
 
+> **Note:** Keep in mind that in this example the Swagger client is pointing to the spec hosted on developer.couchbase.com. We often publish changes to those specs for documentation purposes; if it's a breaking change then it will modify the request and parameter names in the Swagger client and break your code. You can refer to the [changelog of the specs](https://github.com/couchbaselabs/couchbase-mobile-portal/blob/master/swagger/CHANGELOG.md) to find the list of methods and parameters that changed. In production, we highly encourage you to download the spec as a `.json` file and pass it to the Swagger client using the `{spec: <spec>}` option.
+
 The same can be done in vanilla JavaScript with the XMLHttpRequest API of course.
 
 ```javascript
