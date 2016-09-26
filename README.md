@@ -81,13 +81,21 @@ For code tabs we're using a slight _hack_ to make it work in markdown. The follo
     code
     ```
 
-    ```java+
-    code
-    ```
-
     ```c+
     code
     ```
+
+		```java+android+
+		same code for java linux and android
+		```
+
+		```java+
+		code
+		```
+
+		```android+
+		code
+		```
 
 ![](https://cl.ly/2s111n2z1k2m/Pasted_Image_09_09_2016__22_04.png)
 

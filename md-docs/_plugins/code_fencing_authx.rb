@@ -17,16 +17,26 @@ module Jekyll
 						if (!lang.nil? && (lang.include? "+"))
 							lang = lang[0..-2]
 							code = code.to_s
-							if (lang == "objective-c")
-								code = code.sub(/<pre>/, "<span class=\"stripe-display objective-c\"><pre><code class=\"language-c\" 
-								data-lang=\"objective-c\">")
+							optional = code.dup
+							if lang == "objective-c"
+								code = code.sub(/<pre>/, "<span class=\"stripe-display objective-c\"><pre><code class=\"language-c\" data-lang=\"objective-c\">")
+							elsif lang == "android"
+								code = code.sub(/<pre>/, "<span class=\"stripe-display android\"><pre><code class=\"language-java\" data-lang=\"java\">")
+							elsif lang == "java+android"
+								code = code.sub(/<pre>/, "<span class=\"stripe-display android\"><pre><code class=\"language-java\" data-lang=\"java\">")
+								optional = optional.sub(/<pre>/, "<span class=\"stripe-display java\"><pre><code class=\"language-java\" data-lang=\"java\">")
+								optional = optional.sub(/<\/pre>/, "</code></pre></span>")
 							else
 								code = code.sub(/<pre>/, "<span class=\"stripe-display #{lang}\"><pre><code class=\"language-#{lang}\" data-lang=\"#{lang}\">")
 							end
 							
 							code = code.sub(/<\/pre>/, "</code></pre></span>")
+							
+							if lang == "java+android"
+								code = code << optional
+							end
+						
 							code
-						elsif ()
 						else
 							code = code.to_s
 							code = code.sub(
