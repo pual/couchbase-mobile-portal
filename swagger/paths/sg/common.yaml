@@ -118,6 +118,19 @@
         description: Request completed successfully
         schema:
           $ref: '#/definitions/Changes'
+  post:
+    tags:
+      - database
+    parameters:
+      - $ref: '#/parameters/changes_body'
+    summary: Changes
+    description: |
+      Same as the GET /_changes request except the parameters are in the JSON body.
+    responses:
+      200:
+        description: Request completed successfully
+        schema:
+          $ref: '#/definitions/Changes'
 /{db}/{doc}:
   parameters:
     - $ref: '#/parameters/db'
