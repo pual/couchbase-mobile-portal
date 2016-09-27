@@ -8,12 +8,16 @@ In this lesson you’ll be introduced to Sync Gateway, our secure web gateway. Y
 
 [//]: # "COMMON ACROSS LESSONS"
 
+#### Requirements
+
+- Xcode 8 (Swift 3)
+
 Download the project and Couchbase Lite SDK below.
 
 <block class="ios" />
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/1x2m2u0Q3w2J/xcode-project.zip" class="button" id="project">
+  <a href="https://cl.ly/2H1c3E3D3l2S/xcode-project.zip" class="button" id="project">
     <img src="img/download-xcode.png">
   </a>
 </div>

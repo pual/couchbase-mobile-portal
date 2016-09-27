@@ -64,6 +64,7 @@
             <xi:include href="../../docs/src/training/using-database.xml"/>
             <xi:include href="../../docs/src/training/adding-sync.xml"/>
             <xi:include href="../../docs/src/training/adding-security.xml"/>
+            <xi:include href="../../docs/src/training/integration.xml"/>
           </items>
         </set>
         <set id="guides">
