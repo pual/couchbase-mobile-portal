@@ -138,7 +138,6 @@
   get:
     tags:
       - document
-    operationId: get
     parameters:
       - $ref: '#/parameters/attachments'
       - $ref: '#/parameters/atts_since'
@@ -155,7 +154,6 @@
   put:
     tags:
       - document
-    operationId: put
     parameters:
       - in: body
         name: Document
@@ -176,7 +174,6 @@
   delete:
     tags:
       - document
-    operationId: delete
     parameters:
       - $ref: '#/parameters/rev'
     summary: Delete document
