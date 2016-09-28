@@ -110,6 +110,10 @@ if (database == null) {
 }
 ```
 
+```android+
+No code example is currently available.
+```
+
 ```c+
 No code example is currently available.
 ```
@@ -143,10 +147,17 @@ if self.database == nil {
 
 ```java+
 try {
-     // Android application
-     Manager manager = new Manager(new AndroidContext(mContext), Manager.DEFAULT_OPTIONS);
-     // Java application
      Manager manager = new Manager(new JavaContext("data"), Manager.DEFAULT_OPTIONS);
+     this.db = manager.getDatabase("my-database");
+ } catch (IOException e) {
+     Log.e(TAG, "Cannot create database", e);
+     return;
+ }
+```
+
+```android+
+try {
+     Manager manager = new Manager(new AndroidContext(mContext), Manager.DEFAULT_OPTIONS);
      this.db = manager.getDatabase("my-database");
  } catch (IOException e) {
      Log.e(TAG, "Cannot create database", e);
@@ -223,7 +234,7 @@ options.create = true
 var database: CBLDatabase = manager.openDatabaseNamed("db", withOptions: options, error: nil)
 ```
 
-```java+
+```java+android+
 String key = "password123456";
 DatabaseOptions options = new DatabaseOptions();
 options.setCreate(true);
@@ -307,7 +318,7 @@ manager.storageType = kCBLForestDBStorage;
 manager.storageType = kCBLForestDBStorage
 ```
 
-```java+
+```java+android+
 manager.setStorageType("ForestDB");
 ```
 
@@ -341,10 +352,16 @@ var db: CBLDatabase = manager.openDatabaseNamed("my-database", withOptions: opti
 ```
 
 ```java+
-// Android application
-Manager manager = new Manager(new AndroidContext(this), null);
-// Java application
 Manager manager = new Manager(new JavaContext("data"), Manager.DEFAULT_OPTIONS);
+
+DatabaseOptions options = new DatabaseOptions();
+options.setCreate(true);
+options.setStorageType("ForestDB");
+Database database = manager.openDatabase("my-database", options);
+```
+
+```android+
+Manager manager = new Manager(new AndroidContext(this), null);
 
 DatabaseOptions options = new DatabaseOptions();
 options.setCreate(true);
@@ -413,7 +430,7 @@ myDB.manager.backgroundTellDatabaseNamed(myDB.name, to: { (bgdb: CBLDatabase!) -
 })
 ```
 
-```java+
+```java+android+
 No code example is currently available.
 ```
 
@@ -454,7 +471,7 @@ NSNotificationCenter.defaultCenter().addObserverForName(kCBLDatabaseChangeNotifi
 }
 ```
 
-```java+
+```java+android+
 try {
      Database db = manager.getExistingDatabase("my-database");
      
@@ -518,7 +535,7 @@ if !self.database.deleteDatabase(&error) {
 self.database = nil
 ```
 
-```java+
+```java+android+
 try {
      myDatabase.delete();
 } catch (IOException e) {

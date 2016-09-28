@@ -71,7 +71,7 @@ pull?.setCookieName(session["cookie_name"]!, withValue: session["session_id"]!, 
 pull?.start()
 ```
 
-```java+
+```java+android+
 Map<String, String> session = new HashMap<String, String>();
 session.put("session_id", "904ac010862f37c8dd99015a33ab5a3565fd8447");
 session.put("expires", "2015-09-23T17:27:17.555065803+01:00");

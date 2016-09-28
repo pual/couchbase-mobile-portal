@@ -45,7 +45,7 @@ phoneView.setMapBlock({ (doc, emit) in
 }, version: "2")
 ```
 
-```java+
+```java+android+
 // Create a view and register its map function:
 View phoneView = database.getView("phones");
 phoneView.setMap(new Mapper() {
@@ -174,7 +174,7 @@ view.setMapBlock({ (doc, emit) -> Void in
 }, version: "1")
 ```
 
-```java+
+```java+android+
 // This example indexes documents that record Facebook-style "likes".
 // When querying, the document we really want to look at is the post being
 // liked, so we redirect the emitted row at that document.
@@ -238,7 +238,7 @@ phoneView.setMapBlock({ (doc, emit) -> Void in
 }, version: "2")
 ```
 
-```java+
+```java+android+
 // Create a view and register its map and reduce functions:
 View phoneView = database.getView("phones");
 phoneView.setMapReduce(new Mapper() {
@@ -293,7 +293,7 @@ for value in numberValues {
 return total
 ```
 
-```java+
+```java+android+
 double total = 0;
 for (Double value : values) {
     total += value.doubleValue();
@@ -363,7 +363,7 @@ phoneView.setMapBlock({ (doc, emit) in
 }, version: "2")
 ```
 
-```java+
+```java+android+
 // Create a view and register its map and reduce functions:
 View phoneView = database.getView("phones");
 phoneView.setMapReduce(new Mapper() {

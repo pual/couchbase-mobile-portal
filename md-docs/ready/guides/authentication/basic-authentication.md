@@ -50,7 +50,7 @@ push.authenticator = auth
 pull.authenticator = auth
 ```
 
-```java+
+```java+android+
 URL url = new URL("https://example.com/mydatabase/");
 Replication push = database.createPushReplication(url);
 Replication pull = database.createPullReplication(url);

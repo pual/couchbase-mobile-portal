@@ -65,7 +65,7 @@ if document.putProperties(properties, error: &error) == nil {
 }
 ```
 
-```java+
+```java+android+
 Map<String, Object> properties = new HashMap<String, Object>();
 properties.put("type", "list");
 properties.put("title", title);
@@ -122,7 +122,7 @@ if document.putProperties(properties, error: &error) == nil {
 }
 ```
 
-```java+
+```java+android+
 Map<String, Object> properties = new HashMap<String, Object>();
 properties.put("title", "Little, Big");
 properties.put("author", "John Crowley");
@@ -180,7 +180,7 @@ let properties = doc.properties;
 let owner = properties["owner"] as? String;
 ```
 
-```java+
+```java+android+
 Document doc = database.getDocument(myDocId);
 // We can directly access properties from the document object:
 doc.getProperty("title");
@@ -229,7 +229,7 @@ if doc.putProperties(properties, error: &error) == nil {
 }
 ```
 
-```java+
+```java+android+
 Document doc = database.getDocument(myDocID);
 Map<String, Object> properties = new HashMap<String, Object>();
 properties.putAll(doc.getProperties());
@@ -282,7 +282,7 @@ if error != nil {
 }
 ```
 
-```java+
+```java+android+
 Document doc = database.getDocument(myDocId);
 doc.update(new Document.DocumentUpdater() {
     @Override
@@ -344,7 +344,7 @@ if !doc.deleteDocument(&error) {
 }
 ```
 
-```java+
+```java+android+
 Document task = (Document) database.getDocument("task1");
 task.delete();
 ```
@@ -386,7 +386,7 @@ if error != nil {
 }
 ```
 
-```java+
+```java+android+
 Document doc = database.getDocument(myDocId);
 doc.update(new Document.DocumentUpdater() {
     @Override
@@ -434,7 +434,7 @@ doc.putProperties(properties, error: nil)
 doc.expirationDate = ttl
 ```
 
-```java+
+```java+android+
 Date tll = new Date(System.currentTimeMillis() + 5000);
 Document doc = database.createDocument();
 Map<String, Object> properties = new HashMap<String, Object>();
@@ -487,7 +487,7 @@ NSNotificationCenter.defaultCenter().addObserverForName(kCBLDocumentChangeNotifi
 }
 ```
 
-```java+
+```java+android+
 Document doc = database.createDocument();
 doc.addChangeListener(new Document.ChangeListener() { 
     @Override 
@@ -624,7 +624,7 @@ if let conflicts = doc.getConflictingRevisions(&error) as? [CBLSavedRevision]{
 }
 ```
 
-```java+
+```java+android+
 final Document doc = database.getDocument(myDocID);
 final List<SavedRevision> conflicts = doc.getConflictingRevisions();
 if (conflicts.size() > 1) {

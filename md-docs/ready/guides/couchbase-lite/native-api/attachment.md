@@ -48,7 +48,7 @@ if att != nil {
 }
 ```
 
-```java+
+```java+android+
 // Load an JPEG attachment from a document into a Drawable:
 Document doc = database.getDocument("Robin");
 Revision rev = doc.getCurrentRevision();
@@ -103,7 +103,7 @@ var error: NSError?
 assert(newRev.save(&error) != nil)
 ```
 
-```java+
+```java+android+
 // Add an image in a callback after invoking the Android Camera activity
 protected void onActivityResult(int requestCode, int resultCode, Intent data){
     InputStream stream = null;
@@ -151,7 +151,7 @@ var error: NSError?
 assert(newRev.save(&error) != nil)
 ```
 
-```java+
+```java+android+
 // Remove an attachment from a document:
 Document doc = database.getDocument("Robin");
 UnsavedRevision newRev = doc.getCurrentRevision().createRevision();

@@ -13,63 +13,31 @@ You create a Manager object by calling a constructor or initializer on the Manag
 <div class="tabs"></div>
 
 ```objective-c+
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    /*
-     * In Objective-C the <code>Manager</code> shared instance and all the objects descending
-     * from it may only be used on the main thread.
-     */                      
-    CBLManager *manager = [CBLManager sharedInstance];
-    if (!manager) {
-        NSLog(@"Cannot create Manager instance");
-        exit(-1);
-    }
-    return YES;
+CBLManager *manager = [CBLManager sharedInstance];
+if (!manager) {
+		NSLog(@"Cannot create Manager instance");
 }
 ```
 
 ```swift+
-func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
-  /*
-   * In Swift the <code>Manager</code> shared instance and all the objects descending
-   * from it may only be used on the main thread.
-   */
-  let manager = CBLManager.sharedInstance()
-  if manager == nil {
-    NSLog("Cannot create Manager Instance")
-    exit(-1)
-  }
+let manager = CBLManager.sharedInstance()
+if manager == nil {
+	NSLog("Cannot create Manager Instance")
 }
 ```
 
 ```java+
-public class Application extends android.app.Application {
-    private Manager manager;
-    private static Context mContext;
-    
-    ...
-    
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        mContext = getApplicationContext();
-        try {
-            /*
-             * In Java the Manager instance and all the objects descending
-             * from it may be used on any thread.
-             */
-            manager = new Manager(new AndroidContext(mContext), Manager.DEFAULT_OPTIONS);
-        } catch (IOException e) {
-            Log.e(TAG, "Cannot create Manager instance", e);
-            return;
-        }
-    }
-}
+JavaContext context = new JavaContext();
+manager = new Manager(context, Manager.DEFAULT_OPTIONS);
+```
+
+```android+
+AndroidContext context = new AndroidContext(getApplicationContext());
+manager = new Manager(new AndroidContext(context), Manager.DEFAULT_OPTIONS);
 ```
 
 ```c+
 var manager = Manager.SharedInstance;
-Debug.Assert(manager != null);
 ```
 
 ## Dude, where's my database file?
@@ -90,49 +58,41 @@ return the desired directory.
 <div class="tabs"></div>
 
 ```objective-c+
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    NSString* dir = WhereIWantCBLStuffToGo();
-    NSError* error;
-    self.manager = [[CBLManager alloc] initWithDirectory: dir
-                                                 options: NULL
-                                                   error: &error];
-    if (!manager) {
-        NSLog(@"Cannot create Manager instance: %@", error);
-        exit(-1);
-    }
-    return YES;
+NSString* dir = WhereIWantCBLStuffToGo();
+NSError* error;
+self.manager = [[CBLManager alloc] initWithDirectory: dir
+																						 options: NULL
+																							 error: &error];
+if (!manager) {
+		NSLog(@"Cannot create Manager instance: %@", error);
 }
 ```
 
 ```swift+
-func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
-  let dir = WhereIWantCBLStuffToGo()
-  var error: NSError?
-  self.manager = CBLManager(directory: dir, options: nil, error: &error)
-  if manager == nil {
-    NSLog("Cannot create Manager instance: %@", (error ?? ""))
-    exit(-1)
-  }
+let dir = WhereIWantCBLStuffToGo()
+var error: NSError?
+self.manager = CBLManager(directory: dir, options: nil, error: &error)
+if manager == nil {
+	NSLog("Cannot create Manager instance: %@", (error ?? ""))
 }
 ```
 
 ```java+
-No code example is currently available.
+// Not Manager constructor to specify the directory.
+// Instead you should subclass JavaContext and override
+// the getFilesDir method.
+```
+
+```android+
+// Not Manager constructor to specify the directory.
+// Instead you should subclass AndroidContext and override
+// the getFilesDir method.
 ```
 
 ```c+
 var options = new ManagerOptions();
 options.ReadOnly = true;
-Manager manager;
-try 
-{
-    manager = new Manager(Directory.CreateDirectory(dbPath), options);
-} 
-catch (DirectoryNotFoundException e) 
-{
-    Log.E(Tag, "Cannot create Manager instance", e);
-}
+Manager manager = new Manager(Directory.CreateDirectory(dbPath), options);
 ```
 
 ## Global logging settings
@@ -201,7 +161,7 @@ ViewVerbose
 WS
 ```
 
-```java+
+```java+android+
 In Java tag groups are enabled at level WARN by default.
 
 Log tags
@@ -257,29 +217,15 @@ The following code snippet enables logging for the **Sync** tag.
 <div class="tabs"></div>
 
 ```objective-c+
-- (BOOL)application: (UIApplication *)application didFinishLaunchingWithOptions: (NSDictionary *)launchOptions {
 CBLManager enableLogging: @"Sync"];
-return YES;
 ```
 
 ```swift+
-func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
-  CBLManager.enableLogging("Sync")
-  return true
-}
+CBLManager.enableLogging("Sync")
 ```
 
-```java+
-public class Application extends android.app.Application {
-    ...
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        ...
-        Manager.enableLogging("Sync", Log.VERBOSE);
-        ...
-    }
-}
+```java+android+
+Manager.enableLogging("Sync", Log.VERBOSE);
 ```
 
 ```c+
@@ -329,7 +275,7 @@ mgr.backgroundTellDatabaseNamed(name, to: { (bgdb: CBLDatabase!) -> Void in
 })
 ```
 
-```java+
+```java+android+
 No code example is currently available.
 ```
 
@@ -382,7 +328,7 @@ func runBackground(bgMgr: CBLManager) {
 }
 ```
 
-```java+
+```java+android+
 No code example is currently available.
 ```
 
@@ -429,7 +375,7 @@ func runBackground {
 }
 ```
 
-```java+
+```java+android+
 No code example is currently available.
 ```
 

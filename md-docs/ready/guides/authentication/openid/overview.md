@@ -84,6 +84,11 @@ replication.authenticator = CBLAuthenticator.OpenIDConnectAuthenticator(callback
 ```
 
 ```java+
+There is no built-in OpenID login UI for Java native.
+The next section explains how to build your own.
+```
+
+```android+
 There is no built-in OpenID login UI for Android.
 The next section explains how to build your own.
 ```
@@ -109,7 +114,7 @@ CBLAuthenticator.OpenIDConnectAuthenticator({(loginURL: NSURL, redirectURL: NSUR
 })
 ```
 
-```java+
+```java+android+
 OpenIDConnectAuthenticatorFactory.createOpenIDConnectAuthenticator(new OIDCLoginCallback() {
 	@Override
 	public void callback(URL loginURL, URL redirectURL, OIDCLoginContinuation loginContinuation) {

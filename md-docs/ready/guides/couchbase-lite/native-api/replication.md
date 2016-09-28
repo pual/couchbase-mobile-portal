@@ -49,7 +49,7 @@ push.authenticator = auth
 pull.authenticator = auth
 ```
 
-```java+
+```java+android+
 URL url = new URL("https://example.com/mydatabase/");
 Replication push = database.createPushReplication(url);
 Replication pull = database.createPullReplication(url);
@@ -111,7 +111,7 @@ self.pull = pull;
 // be called with notifications when their status changes.
 ```
 
-```java+
+```java+android+
 push.addChangeListener(new Replication.ChangeListener() {
     @Override
     public void changed(Replication.ChangeEvent event) {
@@ -184,7 +184,7 @@ db.setFilterNamed("byOwnder", asBlock: {
 })
 ```
 
-```java+
+```java+android+
 // Define a filter that matches only docs with a given "owner" property.
 // The value to match is given as a parameter named "name":
 db.setFilter("byOwner", new ReplicationFilter() {
@@ -240,7 +240,7 @@ var pull: CBLReplication = database.createPullReplication(url)
 pull.channels = ["sales"]
 ```
 
-```java+
+```java+android+
 // Set up a channel-filtered pull replication that will pull only
 // docs in the "sales" channel from the Sync Gateway:
 db.createPullReplication(url);
@@ -343,7 +343,7 @@ func replicationProgress(n: NSNotification) {
 }
 ```
 
-```java+
+```java+android+
 final ProgressDialog progressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Syncing", false);
 pull.addChangeListener(new Replication.ChangeListener() {
     @Override
@@ -435,7 +435,7 @@ func changeListener(notification: NSNotification) {
 }
 ```
 
-```java+
+```java+android+
 push = database.createPushReplication(url);
 push.addChangeListener(new Replication.ChangeListener() {
     @Override
