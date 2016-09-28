@@ -18,8 +18,9 @@ bulkdocs:
 filter:
   in: query
   name: filter
-  description: Indicates that the reported documents should be filtered. The valid values are sync_gateway/bychannel and _doc_ids.
+  description: Reference a filter function from a design document to selectively get updates.
   type: string
+  required: false
 replication:
   in: body
   name: body

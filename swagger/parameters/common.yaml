@@ -68,6 +68,12 @@ ddoc:
   description: Design document name
   type: string
   required: true
+descending:
+  name: descending
+  in: query
+  description: Return the change results in descending sequence order (most recent change first)
+  type: boolean
+  required: false
 doc:
   name: doc
   in: path

@@ -56,8 +56,9 @@ changes_body:
 filter:
   in: query
   name: filter
-  description: Indicates that the reported documents should be filtered.
+  description: Indicates that the reported documents should be filtered. The valid values are sync_gateway/bychannel and _doc_ids.
   type: string
+  required: false
 name:
   in: path
   name: name
