@@ -15,4 +15,4 @@ Couchbase Mobile is a schemaless database which means there are no restrictions 
 
 Once you have listed the different document types that will be used you can start thinking about the relationship between each one.
 
-![](./img/image01.png)
+![](img/image01.png)
