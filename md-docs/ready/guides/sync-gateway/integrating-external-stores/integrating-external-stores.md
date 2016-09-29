@@ -16,7 +16,7 @@ In this guide, you will learn how to run the following operations on the Admin R
 
 ## External Store
 
-In this guide, you will use a simple movies API as the external data store. [Download the stub data and API server](https://cl.ly/3g2g1L1j2S2i) and unzip the content into a new directory. To start the server of the external store run the following commands:
+In this guide, you will use a simple movies API as the external data store. [Download the stub data and API server](https://cl.ly/140P313l0p23/external-store.zip) and unzip the content into a new directory. To start the server of the external store run the following commands:
 
 ```bash
 cd external-store
@@ -64,7 +64,7 @@ var client = new Swagger({
     // 2
     .then(function (movies) {
       data = movies;
-      return client.database.post_db_bulk_docs({db: db, body: {docs: movies}});
+      return client.database.post_db_bulk_docs({db: db, BulkDocsBody: {docs: movies}});
     })
     .then(function (res) {
       return res.obj;
@@ -200,7 +200,7 @@ Run the program from the command line:
 node export.js
 ```
 
-Open the Admin UI on [http://localhost:4985/_admin/db/movies_lister](http://localhost:4985/_admin/db/movies_lister) and make changes to a document. Notice that the change is also updated in the external store.
+Open the Admin UI on [http://localhost:4985/\_admin/db/movies\_lister](http://localhost:4985/_admin/db/movies_lister) and make changes to a document. Notice that the change is also updated in the external store.
 
 [//]: # "TODO: Link to gif. It's there in ./img but AuthX ingestion ignores GIFs."
 ![](https://cl.ly/1s2Q0t1i3W2w/export-update.gif)
@@ -259,7 +259,7 @@ var client = new Swagger({
     })
     .then(function (movies) {
       // Save the documents and attachments in the same request
-      return client.database.post_db_bulk_docs({db: db, body: {docs: movies}});
+      return client.database.post_db_bulk_docs({db: db, BulkDocsBody: {docs: movies}});
     })
     .then(function (res) {
       console.log(res);
