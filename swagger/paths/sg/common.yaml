@@ -86,6 +86,7 @@
       This request deletes a local document. Local document IDs begin with _local/. Local documents are not replicated or indexed, don't support attachments, and don't save revision histories. In practice they are almost only used by Couchbase Lite's replicator, as a place to store replication checkpoint data.
     parameters:
       - $ref: '#/parameters/rev'
+      - $ref: '#/parameters/batch'
     responses:
       200:
         description: Document successfully removed
@@ -313,11 +314,16 @@
     description: |
       This request retrieves specified documents from the database.
     parameters:
-      - $ref: '#/parameters/db'
       - $ref: '#/parameters/access'
       - $ref: '#/parameters/channels'
       - $ref: '#/parameters/include_docs'
       - $ref: '#/parameters/revs'
+      - $ref: '#/parameters/update_seq'
+      - in: body
+        name: body
+        description: Request body
+        schema:
+          $ref: '#/definitions/AllDocs'      
     responses:
       200:
         description: Query results

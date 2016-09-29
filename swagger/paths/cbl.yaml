@@ -165,10 +165,21 @@
     description: |
       This request returns a built-in view of all the documents in the database.
     parameters:
-      - $ref: '#/parameters/access'
-      - $ref: '#/parameters/channels'
+      - $ref: '#/parameters/conflicts'
+      - $ref: '#/parameters/descending'
+      - $ref: '#/parameters/endkey'
+      - $ref: '#/parameters/end_key'
+      - $ref: '#/parameters/endkey_docid'
+      - $ref: '#/parameters/end_key_doc_id'
       - $ref: '#/parameters/include_docs'
-      - $ref: '#/parameters/revs'
+      - $ref: '#/parameters/inclusive_end'
+      - $ref: '#/parameters/key'
+      - $ref: '#/parameters/limit'
+      - $ref: '#/parameters/skip'
+      - $ref: '#/parameters/stale'
+      - $ref: '#/parameters/startkey'
+      - $ref: '#/parameters/start_key'
+      - $ref: '#/parameters/startkey_docid'
       - $ref: '#/parameters/update_seq'
     responses:
       200:

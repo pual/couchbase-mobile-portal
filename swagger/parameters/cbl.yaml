@@ -7,6 +7,7 @@ bulkdocs:
       all_or_nothing:
         description: Indicates whether to use all-or-nothing semantics for the database commit mode
         type: boolean
+        default: false
       docs:
         description: List containing new or updated documents. Each object in the array can contain the following properties _id, _rev, _deleted, and values for new and updated documents.
         type: array
@@ -15,10 +16,47 @@ bulkdocs:
       new_edits:
         description: Indicates whether to assign new revision identifiers to new edits.
         type: boolean
+        default: true
+conflicts:
+  in: query
+  name: conflicts
+  description: Default is false. Include conflict information in the response. This parameter is ignored if the include_docs parameter is false.
+  type: boolean
+  default: false
+end_key:
+  in: query
+  name: end_key
+  description: Alias for the endkey parameter.
+  type: string
+  required: false
+endkey_docid:
+  in: query
+  name: endkey_docid
+  description: If this parameter is provided, stop returning records when the specified document identifier is reached.
+  type: string
+  required: false
+end_key_doc_id:
+  in: query
+  name: end_key_doc_id
+  description: Alias for the endkey_docid parameter.
+  type: string
+  required: false
 filter:
   in: query
   name: filter
   description: Reference a filter function from a design document to selectively get updates.
+  type: string
+  required: false
+inclusive_end:
+  in: query
+  name: inclusive_end
+  description: Indicates whether the specified end key should be included in the result.
+  type: boolean
+  default: true
+key:
+  in: query
+  name: key
+  description: If this parameter is provided, return only document that match the specified key.
   type: string
   required: false
 replication:
@@ -42,10 +80,12 @@ replication:
         description: Specifies the timeout to use on HTTP requests
       continuous:
         type: boolean
-        description: Specifies whether the replication should be in continuous mode.
+        description: Default is false. Specifies whether the replication should be in continuous mode.
+        default: false
       create_target:
         type: boolean
-        description: Indicates whether to create the target database
+        description: Default is false. Indicates whether to create the target database.
+        default: false
       doc_ids:
         type: array
         description: Array of document IDs to be synchronized
@@ -101,3 +141,27 @@ replication:
         type: string
         description: iOS/Mac only. Can be set to false to disable the use of WebSockets for the _changes feed request
         default: true
+skip:
+  in: query
+  name: skip
+  description: If this parameter is provided, skip the specified number of documents before starting to return results.
+  type: integer
+  default: 0
+stale:
+  in: query
+  name: stale
+  description: Allow the results from a stale view to be used, without triggering a rebuild of all views within the encompassing design document. Valid values are 'ok' and 'update_after'.
+  type: string
+  required: false
+start_key:
+  in: query
+  name: start_key
+  description: Alias for startkey.
+  type: string
+  required: false
+startkey_docid:
+  in: query
+  name: startkey_docid
+  description: If this parameter is provided, return documents starting with the specified document identifier.
+  type: string
+  required: false

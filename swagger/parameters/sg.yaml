@@ -12,6 +12,13 @@ bulkdocs:
       new_edits:
         description: Indicates whether to assign new revision identifiers to new edits.
         type: boolean
+        default: true
+batch:
+  in: query
+  name: batch
+  description: Stores the document in batch mode. To use, set the value to ok.
+  type: string
+  required: false
 changes_body:
   in: body
   name: ChangesBody
@@ -22,16 +29,19 @@ changes_body:
         description: Limits the number of result rows to the specified value. Using a value of 0 has the same effect as the value 1.
         type: integer
       style:
-        description: Number of revisions to return in the changes array. The only possible value is all_docs and it returns all leaf revisions including conflicts and deleted former conflicts.
+        description: Default is 'main_only'. Number of revisions to return in the changes array. The only possible value is all_docs and it returns all leaf revisions including conflicts and deleted former conflicts.
         type: string
+        default: 'main_only'
       active_only:
-        description: When true, the changes response doesn't include either deleted documents, or notification for documents that the user no longer has access to.
+        description: Default is false. When true, the changes response doesn't include either deleted documents, or notification for documents that the user no longer has access to.
         type: boolean
+        default: false
       include_docs:
-        description: Indicates whether to include the associated document with each result. If there are conflicts, only the winning revision is returned.
+        description: Default is false. Indicates whether to include the associated document with each result. If there are conflicts, only the winning revision is returned.
         type: boolean
+        default: false
       filter:
-        description: Indicates that the reported documents should be filtered.
+        description: Indicates that the returned documents should be filtered. The valid values are sync_gateway/bychannel and _doc_ids.
         type: string
       channels:
         description: A comma-separated list of channel names. The response will be filtered to only documents in these channels. (This parameter must be used with the sync_gateway/bychannel filter parameter; see below.)
@@ -42,17 +52,20 @@ changes_body:
         items:
           type: string
       feed:
-        description: Specifies type of change feed. Valid values are normal, continuous, longpoll, websocket
+        description: Default is 'normal'. Specifies type of change feed. Valid values are normal, continuous, longpoll, websocket.
         type: string
+        default: 'normal'
       since:
         description: Starts the results from the change immediately after the given sequence ID. Sequence IDs should be considered opaque; they come from the last_seq property of a prior response.
         type: integer
       heartbeat:
-        description: Interval in milliseconds at which an empty line (CRLF) is written to the response. This helps prevent gateways from deciding the socket is idle and closing it. Only applicable to longpoll or continuous feeds. Overrides any timeout to keep the feed alive indefinitely. Setting to 0 results in no heartbeat.
+        description: Default is 0. Interval in milliseconds at which an empty line (CRLF) is written to the response. This helps prevent gateways from deciding the socket is idle and closing it. Only applicable to longpoll or continuous feeds. Overrides any timeout to keep the feed alive indefinitely. Setting to 0 results in no heartbeat.
         type: integer
+        default: 0
       timeout:
-        description: Maximum period in milliseconds to wait for a change before the response is sent, even if there are no results. Only applicable for longpoll or continuous feeds. Setting to 0 results in no timeout.
-        type: string
+        description: Default is 300000. Maximum period in milliseconds to wait for a change before the response is sent, even if there are no results. Only applicable for longpoll or continuous feeds. Setting to 0 results in no timeout.
+        type: integer
+        default: 300000
 filter:
   in: query
   name: filter

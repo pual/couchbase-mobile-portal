@@ -3,13 +3,13 @@ access:
   in: query
   description: Indicates whether to include in the response a list of what access this document grants (i.e. which users it allows to access which channels.) This option may only be used from the admin port.
   type: boolean
-  required: false
+  default: false
 active_only:
   name: active_only
   in: query
-  description: When true, the changes response doesn't include either deleted documents, or notification for documents that the user no longer has access to.
+  description: Default is false. When true, the changes response doesn't include either deleted documents, or notification for documents that the user no longer has access to.
   type: boolean
-  required: false
+  default: false
 attachment:
   in: path
   name: attachment
@@ -19,15 +19,17 @@ attachment:
 attachments:
   in: query
   name: attachments
-  description: Include attachment bodies in response
+  description: Default is false. Include attachment bodies in response.
   type: boolean
+  default: false
 atts_since:
   name: atts_since
   in: query
-  description: Include attachments only since specified revisions. Does not include attachments for specified revisions
+  description: Include attachments only since specified revisions. Does not include attachments for specified revisions.
   type: array
   items:
     type: string
+  required: false
 body:
   name: body
   in: body
@@ -50,6 +52,7 @@ channels:
   name: channels
   description: Indicates whether to include in the response a channels property containing an array of channels this document is assigned to. (Channels not accessible by the user making the request will not be listed.)
   type: boolean
+  default: false
 channels_list:
   in: query
   name: channels
@@ -71,7 +74,7 @@ ddoc:
 descending:
   name: descending
   in: query
-  description: Return the change results in descending sequence order (most recent change first)
+  description: Default is false. Return documents in descending order.
   type: boolean
   required: false
 doc:
@@ -90,24 +93,27 @@ doc_ids:
 endkey:
   name: endkey
   in: query
-  description: Stop returning records when the specified key is reached.
+  description: If this parameter is provided, stop returning records when the specified key is reached.
   type: string
   required: false
 feed:
   in: query
   name: feed
-  description: Specifies type of change feed. Valid values are normal, continuous, longpoll, websocket
+  description: Default is 'normal'. Specifies type of change feed. Valid values are normal, continuous, longpoll, websocket.
   type: string
+  default: 'normal'
 heartbeat:
   in: query
   name: heartbeat
-  description: Interval in milliseconds at which an empty line (CRLF) is written to the response. This helps prevent gateways from deciding the socket is idle and closing it. Only applicable to longpoll or continuous feeds. Overrides any timeout to keep the feed alive indefinitely. Setting to 0 results in no heartbeat.
+  description: Default is 0. Interval in milliseconds at which an empty line (CRLF) is written to the response. This helps prevent gateways from deciding the socket is idle and closing it. Only applicable to longpoll or continuous feeds. Overrides any timeout to keep the feed alive indefinitely. Setting to 0 results in no heartbeat.
   type: integer
+  default: 0
 include_docs:
   in: query
   name: include_docs
-  description: Indicates whether to include the associated document with each result. If there are conflicts, only the winning revision is returned.
+  description: Default is false. Indicates whether to include the associated document with each result. If there are conflicts, only the winning revision is returned.
   type: boolean
+  default: false
 keys:
   in: query
   name: keys
@@ -130,8 +136,9 @@ local_doc:
 new_edits:
   name: new_edits
   in: query
-  description: Setting this to false indicates that the request body is an already-existing revision that should be directly inserted into the database, instead of a modification to apply to the current document. (This mode is used by the replicato.)
+  description: Default is true. Setting this to false indicates that the request body is an already-existing revision that should be directly inserted into the database, instead of a modification to apply to the current document. (This mode is used by the replicato.)
   type: boolean
+  default: true
 open_revs:
   name: open_revs
   in: query
@@ -145,11 +152,13 @@ rev:
   in: query
   description: Revision identifier of the parent revision the new one should replace. (Not used when creating a new document.)
   type: string
+  required: false
 revs:
   in: query
   name: revs
-  description: Indicates whether to include a _revisions property for each document in the response, which contains a revision history of the document.
+  description: Default is false. Indicates whether to include a _revisions property for each document in the response, which contains a revision history of the document.
   type: boolean
+  default: false
 role:
   in: body
   name: role
@@ -182,21 +191,25 @@ since:
   name: since
   description: Starts the results from the change immediately after the given sequence ID. Sequence IDs should be considered opaque; they come from the last_seq property of a prior response.
   type: integer
+  required: false
 style:
   in: query
   name: style
-  description: Number of revisions to return in the changes array. The only possible value is all_docs and it returns all leaf revisions including conflicts and deleted former conflicts.
+  description: Default is 'main_only'. Number of revisions to return in the changes array. main_only returns the current winning revision, all_docs returns all leaf revisions including conflicts and deleted former conflicts.
   type: string
+  default: 'main_only'
 timeout:
   in: query
   name: timeout
-  description: Maximum period in milliseconds to wait for a change before the response is sent, even if there are no results. Only applicable for longpoll or continuous feeds. Setting to 0 results in no timeout.
-  type: string
+  description: Default is 300000. Maximum period in milliseconds to wait for a change before the response is sent, even if there are no results. Only applicable for longpoll or continuous feeds. Setting to 0 results in no timeout.
+  type: integer
+  default: 300000
 update_seq:
   in: query
   name: update_seq
-  description: Indicates whether to include the update_seq (document sequence ID) property in the response
+  description: Default is false. Indicates whether to include the update_seq (document sequence ID) property in the response.
   type: boolean
+  default: false
 user:
   in: body
   name: body

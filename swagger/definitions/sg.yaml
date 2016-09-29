@@ -1,3 +1,12 @@
+AllDocs:
+  type: object
+  properties:
+    keys:
+      type: array
+      description: List of identifiers of the documents to retrieve
+      items:
+        type: string
+        description: Document ID
 Changes:
   type: object
   properties:

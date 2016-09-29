@@ -390,8 +390,9 @@
               type: string
               description: Username of the user the session will be associated to.
             ttl:
-              type: string
-              description: The TTL (time-to-live) of the session, in seconds. Defaults to 24 hours.
+              description: Default is 24 hours (86400 seconds). The TTL (time-to-live) of the session, in seconds.
+              type: integer
+              default: 86400 
     responses:
       200:
         description: Session successfully created.
