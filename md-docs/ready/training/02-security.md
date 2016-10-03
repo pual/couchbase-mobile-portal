@@ -4,27 +4,39 @@ title: Security and Access Control
 permalink: ready/training/security/index.html
 ---
 
-In deciding the data model for the application you must also consider the access rules for each document type. More specifically, given a user with certain privileges, what operations can this user perform on each document type?
+In this lesson you’ll learn how to secure your data model using Couchbase Mobile’s built-in security framework. You’ll design the security rules for each object in your data model. This includes access control, data validation, and access grants.
 
-The sync function is the core API you interact with on Sync Gateway to implement those rules. It's responsible for validating the document properties, granting users access to specific documents and also granting users with privileges when there are multiple user roles in the application.
+To start designing your security model you must first have a basic understanding of the security features in Sync Gateway. The Sync Function is the core API you interact with on Sync Gateway. Every time a new document is added the Sync Function is called and given a change to examine the document. It can do the following things:
 
-Here are the top level access rules that you will implement in the sync function for each document type:
+- Validate the document.
+- Authorize the change if it's an update operation.
+- Assign the document to channels (i.e routing).
+- Grant users access to channels (i.e read permission).
 
-### task-list documents
+## List ownership
 
-- Grant the task list owner read access to the task list, the tasks within the list and its users
-- Allow moderators to access the task list
+The list and tasks are routed to the same channel (456) and the owner of that list has access to that channel. The channel name corresponds to the list _id.
 
-### task documents
+![](img/image62.png)
 
-- Once a task has been associated with a list it cannot be associated with another list
-- Allow moderators to access the tasks in any list
+## List sharing
 
-### task-list:user documents
+A list user document is created to grant a **username** access to a list.
 
-- Only the owner of the list and moderators can write `task-list:user` documents
-- The `task-list:user` is never displayed on the user interface. It's sole purpose is to grant another user access to a list
+![](img/image63.png)
 
-### moderator documents
+## Moderator role
 
-- Only a user with the role of `admin` can assign the `moderator` role to other users
+Users with the **moderator** role can access any list.
+
+![](img/image64.png)
+
+## Admin role
+
+Users with the **admin** role can give the **moderator** role to any user.
+
+![](img/image65.png)
+
+## Conclusion
+
+Well done! You've completed this lesson on designing the security model for each scenario in the application. In the next lesson you'll learn how to create an empty database to store documents. Feel free to share your feedback, findings or ask any questions on the forums.

@@ -12,7 +12,9 @@ In this lesson you’ll learn how to add security to your Couchbase Mobile appli
 
 - Xcode 8 (Swift 3)
 
-Download the project and Couchbase Lite SDK below.
+#### Getting Started
+
+Download the project below.
 
 <block class="ios" />
 
@@ -22,17 +24,12 @@ Download the project and Couchbase Lite SDK below.
   </a>
 </div>
 
-<div class="buttons-unit downloads">
-  <a href="http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile" class="button red">
-    Download Couchbase Lite for iOS
-  </a>
-</div>
+Unzip the file and install the dependencies using Cocoapods.
 
-<img src="img/image41.png" class="center-image" />
-
-Unzip the file and drag **CouchbaseLite.framework** to the **Frameworks** folder of the project in Finder. It's important to do this in Finder as opposed to Xcode.
-
-<img src="img/drag-framework-finder.png" class="center-image" />
+```bash
+$ cd xcode-project
+$ pod install
+```
 
 Open **Todo.xcodeproj** in Xcode. Then build & run the project.
 
@@ -48,30 +45,9 @@ Throughout this lesson, you will navigate in different files of the Xcode projec
 
 ## Implement User Authentication
 
-This section focuses on how to authorize users to be able to access Sync Gateway. Users are created with a name/password on Sync Gateway which can then be used on the Couchbase Lite replicator to authenticate as a given user.
+### Install Sync Gateway
 
-To authenticate as a user, you first need to create one. You can create a Sync Gateway user on the `/{db}/_user` endpoint of the Admin REST API. Follow the instructions below to get Sync Gateway up and running:
-
-1. [Download Sync Gateway](http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile)
-2. Unzip the file and locate the executable at **~/Downloads/couchbase-sync-gateway/bin/sync_gateway**
-3. Start it from the command-line by specifying a database name: `$ /path/to/sync_gateway --dbname=todo`
-
-You can create a user on the Admin REST API by specifying a name/password:
-
-```bash
-curl -vX PUT 'http://localhost:4985/todo/_user/user1' \
-      -H 'Content-Type: application/json' -d '{"name": "user1","password": "pass"}'
-```
-
-The user is then displayed on the Admin UI at [http://localhost:4985/_admin/db/todo/users](http://localhost:4985/_admin/db/todo/users). The Admin REST API is available on port **4985** by default and is only accessible on `localhost` for security reasons.
-
-Sending an HTTP request is a quick method to create a user during development but obviously it doesn’t scale. The recommended approach is to have an App Server sitting alongside Sync Gateway that performs that operation (the rest api client guide explains how to do it).
-
-Another method of creating the user is by hardcoding the name/password in the configuration file. This method has the advantage that you don't need to re-create the user every time Sync Gateway is restarted in walrus mode, the in-memory storage type.
-
-### Try it out
-
-Stop the running instance and start it with the following configuration file called **sync-gateway-config.json**:
+Users are created with a name/password on Sync Gateway which can then be used on the Couchbase Lite replicator to authenticate as a given user. You can create users by hardcoding the user's name/password in the configuration file. Create a new file called **sync-gateway-config.json** with the following.
 
 ```javascript
 {
@@ -88,27 +64,25 @@ Stop the running instance and start it with the following configuration file cal
 }
 ```
 
-Start Sync Gateway.
+#### Try it out
 
-```bash
-$ ~/Downloads/couchbase-sync-gateway/bin/sync_gateway sync-gateway-config.json
-```
+1. [Download Sync Gateway](http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile)
+2. Unzip the file and locate the executable at **~/Downloads/couchbase-sync-gateway/bin/sync_gateway**.
+3. Start it from the command-line with the config file.
 
-Two users are already created at [http://localhost:4985/_admin/db/todo/users](http://localhost:4985/_admin/db/todo/users).
+    ```bash
+    $ /path/to/sync_gateway sync-gateway-config.json
+    ```
 
-> **Tip:** To persist a walrus database to disk you can append the path to the directory to save it to, a `.` means the current directory (i.e `"server": "walrus:."`).
+4. Two users are now visible at [http://localhost:4985/_admin/db/todo/users](http://localhost:4985/_admin/db/todo/users).
 
-With Sync Gateway users defined you can now enable authentication on the Couchbase Lite replicator.
+### User Authentication
 
-<block class="ios" />
-
-Open the project in Xcode.
-
-- Locate the `startReplication(withUsername:andPassword:)` method in **AppDelegate.swift**.
-- The following enables authentication on the replication.
+With Sync Gateway users defined you can now enable authentication on the Couchbase Lite replicator. The code below creates two replications with authentication.
 
 ```swift
-// TRAINING: Start push/pull replications
+// This code can be found in AppDelegate.swift
+// in the startReplication(withUsername:andPassword:) method
 pusher = database.createPushReplication(kSyncGatewayUrl)
 pusher.continuous = true
 NotificationCenter.default.addObserver(self, selector: #selector(replicationProgress(notification:)),
@@ -137,14 +111,14 @@ The `CBLAuthenticator` class has static methods for each authentication method s
 
 <block class="ios" />
 
-- Set `kLoginFlowEnabled` to `true` in **AppDelegate.swift**.
+1. Set `kLoginFlowEnabled` to `true` in **AppDelegate.swift**.
 
-  ```swift
-  let kLoginFlowEnabled = true
-  ```
+    ```swift
+    let kLoginFlowEnabled = true
+    ```
 
-- Build and run.
-- The application will prompt you to enter a username and password. If you provide credentials for a user that doesn't exist a popup is displayed with the error message.
+2. Build and run.
+3. The application will prompt you to enter a username and password. If you provide credentials for a user that doesn't exist a popup is displayed with the error message.
     <img src="http://i.giphy.com/l0MYBknBqfEBAczIc.gif" class="portrait" />
 
 <block class="ios rn" />
@@ -189,7 +163,7 @@ function(doc, oldDoc){
 
 Then click on the **Deploy To Server** button. It will restart Sync Gateway with the updated sync function.
 
-![](https://cl.ly/3n2L071q051g/image37.gif)
+<img src="https://cl.ly/3n2L071q051g/image37.gif" class="center-image" />
 
 > **Caution:** It won't update the config file on your filesystem, make sure to copy/paste from the Admin UI to the config once you are happy with your changes.
 
@@ -386,7 +360,7 @@ If a document makes it through step 1 and 2 it will be written to Sync Gateway. 
 
 In the next section you will learn how to encrypt the local database on the device to provide additional security.
 
-## Add Database Encryption
+## Database Encryption
 
 The Couchbase Lite API allows you to encrypt the database on the device. By providing an encryption key, all the data stored in the database will be secure. To decrypt it in the future, the same key must be used.
 
@@ -436,7 +410,7 @@ if newKey != nil {
 - Build and run.
 - Browse to the database file and you'll find that it's now encrypted.
 
-## Enable Offline Login
+## Offline Login
 
 What about the scenario where a user attempts to login while being offline? Since data may already be in the database, it would be nice to allow the app to use it. From the previous section, you’ve learned that the database can be safely accessed with an encryption key so the user can attempt to enter credentials as if they were online (the **name** and **password** of the Sync Gateway user). To achieve offline login, you are mapping the user’s **name** to be the **database name** and the user’s **password** to be the **encryption key**.
 

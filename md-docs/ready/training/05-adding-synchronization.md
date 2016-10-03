@@ -12,7 +12,9 @@ In this lesson you’ll be introduced to Sync Gateway, our secure web gateway. Y
 
 - Xcode 8 (Swift 3)
 
-Download the project and Couchbase Lite SDK below.
+#### Getting Started
+
+Download the project below.
 
 <block class="ios" />
 
@@ -22,17 +24,12 @@ Download the project and Couchbase Lite SDK below.
   </a>
 </div>
 
-<div class="buttons-unit downloads">
-  <a href="http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile" class="button red">
-    Download Couchbase Lite for iOS
-  </a>
-</div>
+Unzip the file and install the dependencies using Cocoapods.
 
-<img src="img/image41.png" class="center-image" />
-
-Unzip the file and drag **CouchbaseLite.framework** to the **Frameworks** folder of the project in Finder. It's important to do this in Finder as opposed to Xcode.
-
-<img src="img/drag-framework-finder.png" class="center-image" />
+```bash
+$ cd xcode-project
+$ pod install
+```
 
 Open **Todo.xcodeproj** in Xcode. Then build & run the project.
 
@@ -50,11 +47,7 @@ Throughout this lesson, you will navigate in different files of the Xcode projec
 
 ## Install Sync Gateway
 
-Now that your application runs smoothly on the device you are ready to introduce Sync Gateway.
-
-- [Download Sync Gateway](http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile)
-- Unzip the file and locate the executable at **~/Downloads/couchbase-sync-gateway/bin/sync_gateway**
-- Create a new file called **sync-gateway-config.json** with the following.
+Now that your application runs smoothly on the device you are ready to introduce Sync Gateway. Create a new file called **sync-gateway-config.json** with the following.
 
 ```javascript
 {
@@ -65,7 +58,7 @@ Now that your application runs smoothly on the device you are ready to introduce
       "server": "walrus:",
       "users": {
   		  "GUEST": {"disabled": false, "admin_channels": ["*"] }
-	    }
+      }
     }
   }
 }
@@ -77,20 +70,24 @@ By default, Sync Gateway doesn't allow unauthenticated requests to be processed 
 
 > **Note:** User authentication is covered in more detail in the [Adding Security](/documentation/mobile/current/develop/training/adding-security/index.html) lesson.
 
+Sync Gateway is always listening on two ports:
+
+- 4984: the public port which will be used from the application.
+- 4985: the admin port used for administrative tasks (for security reasons, it’s only accessible on localhost).
+
 ### Try it out
 
-- Start Sync Gateway from the command-line in your project directory.
+1. [Download Sync Gateway](http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile)
+2. Unzip the file and locate the executable at **~/Downloads/couchbase-sync-gateway/bin/sync_gateway**
+3. Start Sync Gateway from the command-line in your project directory.
 
     ```bash
     $ sync_gateway sync-gateway-config.json
     ```
 
+> **Note:** You can find the same instructions for the other supported platforms on the [installation guide](/documentation/mobile/current/installation/net/index.html).
+
 <block class="ios rn"/>
-
-Sync Gateway is listening on two ports:
-
-- 4984 is the public port which will be used from the application.
-- 4985 is the admin port used for administrative tasks (for security reasons, it’s only accessible on localhost).
 
 ## Add synchronization
 
@@ -106,55 +103,53 @@ There are a few terminologies that designate the role of each database involved 
 - **Local:** The database that resides where the replication is running.
 - **Remote:** The database to which the replication is sending data.
 
-To get synchronization running, do the following:
+The following code starts a pull and push replication with progress notification.
 
 <block class="ios" />
 
-- Open **AppDelegate.swift** and locate the `startReplication(withUsername, andPassword)` method.
-- This method is called in `applicationDidFinishLaunchingWithOptions` when the application starts.
+```swift
+// This code can be found in AppDelegate.swift
+// in the startReplication(withUsername:andPassword:)
+pusher = database.createPushReplication(kSyncGatewayUrl)
+pusher.continuous = true
+NotificationCenter.default.addObserver(self, selector: #selector(replicationProgress(notification:)),
+                                        name: NSNotification.Name.cblReplicationChange, object: pusher)
 
-    ```swift
-    // TRAINING: Start push/pull replications
-    pusher = database.createPushReplication(kSyncGatewayUrl)
-    pusher.continuous = true
-    NotificationCenter.default.addObserver(self, selector: #selector(replicationProgress(notification:)),
-        name: NSNotification.Name.cblReplicationChange, object: pusher)
+puller = database.createPullReplication(kSyncGatewayUrl)
+puller.continuous = true
+NotificationCenter.default.addObserver(self, selector: #selector(replicationProgress(notification:)),
+                                        name: NSNotification.Name.cblReplicationChange, object: puller)
 
-    puller = database.createPullReplication(kSyncGatewayUrl)
-    puller.continuous = true
-    NotificationCenter.default.addObserver(self, selector: #selector(replicationProgress(notification:)),
-                                            name: NSNotification.Name.cblReplicationChange, object: puller)
+if kLoginFlowEnabled {
+    let authenticator = CBLAuthenticator.basicAuthenticator(withName: username, password: password!)
+    pusher.authenticator = authenticator
+    puller.authenticator = authenticator
+}
 
-    if kLoginFlowEnabled {
-        let authenticator = CBLAuthenticator.basicAuthenticator(withName: username, password: password!)
-        pusher.authenticator = authenticator
-        puller.authenticator = authenticator
-    }
-
-    pusher.start()
-    puller.start()
-    ```
+pusher.start()
+puller.start()
+```
 
 <block class="ios rn" />
-
-Here you are starting a push and pull replication to have bi-directional sync with the remote Sync Gateway.
-
-`kSyncGatewayUrl` is a constant in **AppDelegate.swift** and represents the URL to the Sync Gateway database (http://localhost:4984/todo/).
-
-If the application is running on a phone, you must replace **localhost** by the internal IP of the machine running Sync Gateway and ensure that the phone and laptop are connected to the same network. You can change this value to any valid URL pointing to a Sync Gateway database on the cloud, for example.
 
 ### Try it out
 
 <block class="ios" />
 
-- Set `kSyncEnabled` to true in **AppDelegate.swift**.
+1. In **AppDelegate.swift**, set `kSyncGatewayUrl` to the URL of the Sync Gateway database (http://localhost:4984/todo/). If the application is running on a phone, you must replace **localhost** by the internal IP of the machine running Sync Gateway and ensure that the phone and laptop are connected to the same network.
+
+    ```swift
+    let kSyncGatewayUrl = URL(string: "http://localhost:4984/todo/")!
+    ```
+
+2. Set `kSyncEnabled` to `true` in **AppDelegate.swift**.
 
     ```swift
     let kSyncEnabled = true
     ```
 
-- Build and run.
-- Open [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo) in the browser and notice that all the documents are pushed to Sync Gateway! You may have more or less rows depending on whether you used the pre-built database.
+3. Build and run.
+4. Open [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo) in the browser and notice that all the documents are pushed to Sync Gateway! You may have more or less rows depending on how many documents are present in the Couchbase Lite database.
 
 ![](./img/image19.png)
 
@@ -162,9 +157,11 @@ If the application is running on a phone, you must replace **localhost** by the 
 
 ## Resolve Conflicts
 
-Due to the unpredictability of mobile connections it's inevitable that more than one device will update the same document simultaneously. Couchbase Lite provides features to resolve these conflicts. The resolution rules are written by the developer to keep full control over which edit (also called a revision) should be picked.
+Due to the unpredictability of mobile connections it's inevitable that more than one device will update the same document simultaneously. Couchbase Lite provides features to resolve these conflicts. The resolution rules are written by the developer to keep full control over which revision should be picked. The most common resolution methods are:
 
-Couchbase Lite uses revisions to resolve conflicts detected during replication. One significant difference from other databases is document versioning. Couchbase Lite uses a technique called Multi-version Concurrency Control (MVCC) to manage conflicts between multiple writers. Document versioning is similar to the check-and-set mechanism (CAS) of Couchbase Server, except that in Couchbase Lite versioning is required rather than optional and the token is a UUID rather than an integer.
+- **Deletes always win:** if one side deletes a document it will always stay deleted, even if the other side has made changes to it later on.
+- **N-way merge:** if both sides have updated different properties, the document will end up with the updates from both side.
+- **Last update wins:** if both sides have updated the same property, the value will end up as the last one that was updated.
 
 Revisions form a tree data structure since they can have multiple branches. Here is an example of a revision tree which depicts the act of resolving a conflict by deleting one branch of the revision tree by adding a tombstone revision, and then adding a new rev to the winning branch.
 
@@ -174,201 +171,115 @@ The revision number follows a specific format.
 
 <img src="img/image20.png" class="center-image" />
 
-A conflict usually occurs when two writers are offline and save a different revision of the same document. In this application, it could occur when:
+### Detecting conflicts
 
-- Two database instances update the name of an existing list.
-- Two database instances update an existing task. One updates the task’s **name** while the other updates the **complete** property.
-
-To resolve conflicts you must first learn how to detect them. You will use the **allDocs** query with a few options. 
-
-The **allDocs** query allows you to query an index of all the documents in the local database. The options that you will use define a query that will only return documents for which there are conflicting revisions. A **LiveQuery** automatically refreshes every time the database changes.
+To resolve conflicts you must first learn how to detect them. The code below uses an **allDocs** query which is an index of all the documents in the local database. The **OnlyConflicts** option is passed to report only the documents with conflicts and a **LiveQuery** is used to continuously monitor the database for changes.
 
 <block class="ios" />
 
-- Open **AppDelegate.swift** and locate the `startConflictLiveQuery` method.
-- This method is called in `applicationDidFinishLaunchingWithOptions`.
+```swift
+// This code can be found in AppDelegate.swift
+// in the startConflictLiveQuery() method
+guard kConflictResolution else {
+    return
+}
 
-    ```swift
-    guard kConflictResolution else {
-        return
+conflictsLiveQuery = database.createAllDocumentsQuery().asLive()
+conflictsLiveQuery!.allDocsMode = .onlyConflicts
+conflictsLiveQuery!.addObserver(self, forKeyPath: "rows", options: .new, context: nil)
+conflictsLiveQuery!.start()
+```
+
+The query results are then posted to the application code using the KVO observer method.
+
+```swift
+// This code can be found in AppDelegate.swift
+// in the observeValue(forKeyPath:of:change:context:) method
+override func observeValue(forKeyPath keyPath: String?, of object: Any?,
+                            change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    if object as? NSObject == conflictsLiveQuery {
+        resolveConflicts()
     }
+}
+```
 
-    // TRAINING: Detecting when conflicts occur
-    conflictsLiveQuery = database.createAllDocumentsQuery().asLive()
-    conflictsLiveQuery!.allDocsMode = .onlyConflicts
-    conflictsLiveQuery!.addObserver(self, forKeyPath: "rows", options: .new, context: nil)
-    conflictsLiveQuery!.start()
-    ```
-
-- The KVO method then calls the `resolveConflicts` method when a new conflict is detected.
-
-    ```swift
-    // TRAINING: Responding to Live Query changes
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?,
-                                change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if object as? NSObject == conflictsLiveQuery {
-            resolveConflicts()
-        }
-    }
-    ```
-
-<block class="ios rn" />
-
-Here’s how you will resolve conflicts:
-
-- **task-list** conflicts: keep the default; the winner picked by Couchbase Lite will remain the current revision. However, you need to clean up the extraneous revision.
-- **task** conflicts: n-way merge; changes from all conflicting revisions are merged into a dictionary and saved to a new revision.
-
-Before you resolve the conflict you must learn how to create a conflict and what happens when there is no handling of conflicts.
-
-### Automatic: task-list documents
+### Automatic conflict resolution
 
 Even if the conflict isn’t resolved, Couchbase Lite has to return something. It chooses one of the two conflicting revisions as the "winner". The choice is deterministic, which means that every device that is faced with the same conflict will pick the same winner, without having to communicate.
 
-It’s not all that easy to create conflicts in development because you would have to deploy the app to multiple devices or simulators and stop the replications to create the conflict. So before you learn how to resolve conflicts, you will find the code to create one only for development purposes.
-
-<block class="ios" />
-
-- Open **ListsViewController.swift** and locate the `motionEnded(_:with)` method.
-- This method is called when the shake gesture is detected.
-
-    ```swift
-    // TRAINING: Create task list conflict (for development only)
-    let savedRevision = createTaskList(name: "Test Conflicts List")
-    let newRev1 = savedRevision?.createRevision()
-    let propsRev1 = newRev1?.properties
-    propsRev1?.setValue("Update 1", forKey: "name")
-    let newRev2 = savedRevision?.createRevision()
-    let propsRev2 = newRev2?.properties
-    propsRev2?.setValue("Update 2", forKey: "name")
-    do {
-        try newRev1?.saveAllowingConflict()
-        try newRev2?.saveAllowingConflict()
-    } catch let error as NSError {
-        NSLog("Could not create document %@", error)
-    }
-    ```
-
-<block class="ios rn" />
-
-Here, you are using the **Revision** which is one layer below the **Document** API. The **Revision** has a method called `saveAllowingConflicts` which is helpful in this scenario to create two conflicting revisions.
-
-#### Try it out
-
-<block class="ios" />
-
-- Build and run.
-- On the list screen, shake the device or use the **^⌘Z** shortcut on the simulator.
-- A new list called 'Update 1' is added. In fact this is a conflict but the other revision, 'Update 2', is not visible because it wasn't picked as the winner.
-    <img src="img/image06.png" class="portrait" />
-
-- To pick a winner, it compares the revision numbers and picks the higher one sorted lexicographically.
-- Delete that list and notice that 'Update 2' is now displayed. Since you deleted the current revision and there is another revision on another branch of the tree, Couchbase Lite promotes the other one as the **current** revision.
-    ![](img/image51.png)
+Shown below is a list document created with two conflicting revisions. After deleting the row, the text **Update 2** appears which is the name of the second conflicting revision. The action of deleting a document only detetes the current revision and if there are conflicting revisions it will be promoted as the new current revision.
 
 <img src="https://cl.ly/023t2k3w3k3c/image47.gif" class="portrait" />
 
+<block class="ios" />
+
+> **Note:** During development, the method `saveAllowingConflicts` is used to intentionally create a conflict. You can shake the device (**^⌘Z** on the simulator) to create a list conflict. The code is located in the `motionEnded(_:with:)` method of **ListsViewController.swift**.
+
 <block class="ios rn" />
 
-This can be surprising at first but it’s the strength of using a distributed database that defers the conflict resolution logic to the application. It’s your responsibility as the developer to ensure conflicts are resolved! Even if you decide to let Couchbase Lite pick the winner you must remove extraneous conflicting revisions to prevent the behaviour observed above.
+This can be surprising at first but it’s the strength of using a distributed database that defers the conflict resolution logic to the application. It’s your responsibility as the developer to ensure conflicts are resolved! Even if you decide to let Couchbase Lite pick the winner you must remove extraneous conflicting revisions to prevent the behaviour observed above. The code below removes all revisions expect the current one.
 
 <block class="ios" />
 
-- Open **AppDelegate.swift** and locate the `resolveConflicts(revisions revs: [CBLRevision])` method.
-- This method is called for every row return by the conflicting revisions query.
- 
 ```swift
-let rows = conflictsLiveQuery?.rows
-while let row = rows?.nextRow() {
-    if let revs = row.conflictingRevisions, revs.count > 1 {
-        let defaultWinning = revs[0]
-        let type = (defaultWinning["type"] as? String) ?? ""
-        switch type {
-        // TRAINING: Automatic conflict resolution
-        case "task-list", "task-list.user":
-            let props = defaultWinning.userProperties
-            let image = defaultWinning.attachmentNamed("image")
-            resolveConflicts(revisions: revs, withProps: props, andImage: image)
-        // TRAINING: N-way merge conflict resolution
-        case "task":
-            let merged = nWayMergeConflicts(revs: revs)
-            resolveConflicts(revisions: revs, withProps: merged.props, andImage: merged.image)
-        default:
-            break
+// This code can be found in AppDelegate.swift
+// in the resolveConflicts(revisions:withProps:andImage:) method
+database.inTransaction {
+    var i = 0
+    for rev in revs as! [CBLSavedRevision] {
+        let newRev = rev.createRevision()
+        if (i == 0) { // Default winning revision
+            newRev.userProperties = props
+            if rev.attachmentNamed("image") != image {
+                newRev.setAttachmentNamed("image", withContentType: "image/jpg",
+                    content: image?.content)
+            }
+        } else {
+            newRev.isDeletion = true
         }
+
+        do {
+            try newRev.saveAllowingConflict()
+        } catch let error as NSError {
+            NSLog("Cannot resolve conflicts with error: %@", error)
+            return false
+        }
+        i += 1
     }
+    return true
 }
 ```
 
 <block class="ios rn" />
 
-First, you're checking if there is a conflict (i.e is there strictly more than 1 revision). Then, a switch statement is used to check for the document type. In the case of a "task-list" document, the `resolveConflicts(revisions:withProps:andImage)` method will only keep the current revision.
-
 #### Try it out
 
 <block class="ios" />
 
-- To enable conflict resolution, set the `kConflictResolution` constant in **AppDelegate.swift** to true.
+1. To enable conflict resolution, set the `kConflictResolution` constant in **AppDelegate.swift** to `true`.
 
     ```swift
     let kConflictResolution = true
     ```
 
-- Perform the same actions and this time deleting the list conflict doesn’t reveal the subsequent conflicting revision anymore.
+2. Perform the same actions and this time deleting the list conflict doesn’t reveal the subsequent conflicting revision anymore.
     <img class="portrait" src="https://cl.ly/1N29282B3A0M/image48.gif"  />
 
 <block class="ios rn" />
 
-### N-way merge
+### N-way conflict resolution
 
-For task documents, you will follow the same steps as previously except this time the conflict resolution will merge the differences between the conflicting revisions into a new revision.
+For task documents, you will follow the same steps as previously except this time the conflict resolution will merge the differences between the conflicting revisions into a new revision before removing them. This time, one revision changes the title of the task while the other revision marks it as completed. Here the winning revision is the one that set the **completed** property to true.
 
-<block class="ios" />
+<img src="https://cl.ly/0P0w2k0s1a2z/image67.gif" class="portrait" />
 
-- Open **ListsViewController.swift** and locate the `motionEnded(_:with)` method.
-- This method is called when the shake gesture is detected. Here, one revision changes the **task** property to **Update 1** and the other sets **complete** to **true**.
-
-    ```swift
-    // TRAINING: Create task conflict (for development only)
-    let savedRevision = createTask(task: "Test Conflicts Task")
-    let newRev1 = savedRevision?.createRevision()
-    let propsRev1 = newRev1?.properties
-    propsRev1?.setValue("Update 1", forKey: "task")
-    let newRev2 = savedRevision?.createRevision()
-    let propsRev2 = newRev2?.properties
-    propsRev2?.setValue(true, forKey: "complete")
-    do {
-        try newRev1?.saveAllowingConflict()
-        try newRev2?.saveAllowingConflict()
-    } catch let error as NSError {
-        NSLog("Could not save revisions %@", error)
-    }
-    ```
-
-<block class="ios rn" />
-
-#### Try it out
-
-<block class="ios" />
-
-- Disable conflict resolution to see what happens when conflicts are not resolved.
-
-    ```swift
-    let kConflictResolution = false
-    ```
-
-- Build and run.
-- Open a new list and shake the device or use the **^⌘Z** shortcut to create a new task conflict. Here the winning revision is the one that set the **completed** property to true.
-    <img src="./img/image23.png" class="portrait" />
-
-- Delete the task. The revision that modified the **task** value to 'Update 1' becomes the **current revision**.
-    <img src="./img/image26.png" class="portrait" />
+> **Note:** To see the same result, open any list and shake the device (**^⌘Z** on the simulator) to create a task conflict. The code is located in the `motionEnded(_:with:)` method of **TasksViewController.swift**.
 
 Similarly to the previous section, you will learn how to resolve conflicts, this time for "task-list" documents. In this case, the resolution code will **merge the updates** (i.e n-way merge) of the conflicting revisions before promoting it as the current revisions.
 
-- Open **AppDelegate.swift** and locate the `resolveConflicts` method.
-
 ```swift
+// This code can be found in AppDelegate.swift
+// in the resolveConflicts() method
 let rows = conflictsLiveQuery?.rows
 while let row = rows?.nextRow() {
     if let revs = row.conflictingRevisions, revs.count > 1 {
@@ -391,18 +302,18 @@ while let row = rows?.nextRow() {
 }
 ```
 
-Notice that for 'task' documents, the `nWayMergeConflicts` method is used to merge the diffs of conflicting revisions before calling the `resolveConflicts(revisions:withProps:andImage)`.
+Notice that for 'task' documents, the `nWayMergeConflicts()` method is called to merge the differences of conflicting revisions. The method body is too long to copy here but you can find it in **AppDelegate.swift**.
 
 #### Try it out
 
-- Enable conflict resolution.
+1. Enable conflict resolution.
 
     ```swift
     let kConflictResolution = true
     ```
 
-- Build and run. 
-- Create a task conflict using the shake gesture (or **^⌘Z**) and this time the row contains the updated text **and** is marked as completed.
+2. Build and run. 
+3. Create a task conflict using the shake gesture (or **^⌘Z**) and this time the row contains the updated text **and** is marked as completed.
     ![](img/image03.png)
 
 <block class="ios rn" />

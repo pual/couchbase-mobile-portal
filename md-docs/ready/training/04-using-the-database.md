@@ -12,7 +12,9 @@ In this lesson you’ll be introduced to Couchbase Lite, our embedded NoSQL data
 
 - Xcode 8 (Swift 3)
 
-Download the project and Couchbase Lite SDK below.
+#### Getting Started
+
+Download the project below.
 
 <block class="ios" />
 
@@ -22,17 +24,12 @@ Download the project and Couchbase Lite SDK below.
   </a>
 </div>
 
-<div class="buttons-unit downloads">
-  <a href="http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile" class="button red">
-    Download Couchbase Lite for iOS
-  </a>
-</div>
+Unzip the file and install the dependencies using Cocoapods.
 
-<img src="img/image41.png" class="center-image" />
-
-Unzip the file and drag **CouchbaseLite.framework** to the **Frameworks** folder of the project in Finder. It's important to do this in Finder as opposed to Xcode.
-
-<img src="img/drag-framework-finder.png" class="center-image" />
+```bash
+$ cd xcode-project
+$ pod install
+```
 
 Open **Todo.xcodeproj** in Xcode. Then build & run the project.
 
@@ -50,101 +47,93 @@ Throughout this lesson, you will navigate in different files of the Xcode projec
 
 ## Create a Document
 
-In Couchbase Lite, the primary entity stored in a database is called a document instead of a "row" or "record". A document's body takes the form of a JSON object — a collection of key/value pairs where the values can be different types of data such as numbers, strings, arrays or even nested objects.
-
-In this section you will learn how to create the list documents in the application.
+In Couchbase Lite, the primary entity stored in a database is called a document instead of a "row" or "record". A document's body takes the form of a JSON object — a collection of key/value pairs where the values can be different types of data such as numbers, strings, arrays or even nested objects. The code below creates a new list document.
 
 <block class="ios" />
 
-- Open **ListsViewController.swift** and locate the `createTaskList(name:)` method.
-- This method is called when pressing the '+' navigation bar button and contains the code to create a new list document.
+```swift
+// This code can be found in ListsViewController.swift
+// in the createTaskList(name:) method
+let properties: [String : Any] = [
+    "type": "task-list",
+    "name": name,
+    "owner": username
+]
 
-    ```swift
-    // TRAINING: Create a document
-    let properties: [String : Any] = [
-        "type": "task-list",
-        "name": name,
-        "owner": username
-    ]
+let docId = username + "." + NSUUID().uuidString
+guard let doc = database.document(withID: docId) else {
+    Ui.showMessageDialog(onController: self, withTitle: "Error",
+        withMessage: "Couldn't save task list")
+    return nil
+}
 
-    let docId = username + "." + NSUUID().uuidString
-    guard let doc = database.document(withID: docId) else {
-        Ui.showMessageDialog(onController: self, withTitle: "Error",
-            withMessage: "Couldn't save task list")
-        return nil
-    }
-
-    do {
-        return try doc.putProperties(properties)
-    } catch let error as NSError {
-        Ui.showMessageDialog(onController: self, withTitle: "Error",
-            withMessage: "Couldn't save task list", withError: error)
-        return nil
-    }
-    ```
+do {
+    return try doc.putProperties(properties)
+} catch let error as NSError {
+    Ui.showMessageDialog(onController: self, withTitle: "Error",
+        withMessage: "Couldn't save task list", withError: error)
+    return nil
+}
+```
 
 <block class="ios rn" />
 
-Here you're creating an unsaved document instance with a pre-defined **document ID** (i.e. the **_id** property in the document’s JSON body) using the `documentWithID` method. The ID follows the form `{username}.{uuid}` where username is the name of the user logged in. Alternatively, you can use the `createDocument` method to let the database generate a random **ID** for you.
+Here you're creating an unsaved document instance with a pre-defined **document ID** (i.e. the **_id** property in the document’s JSON body) using the `documentWithID` method. The ID follows the form `{username}.{uuid}` where username is the name of the user logged in. Alternatively, you could also use the `createDocument` method to let the database generate a random **ID** for you.
 
 ### Try it out
 
 <block class="ios" />
 
-- Build and run.
-- Create a new list using the '+' button on the application's 'Task lists' screen.
-- A new list document is saved to the database.
+1. Build and run.
+2. Create a new list using the '+' button on the application's 'Task lists' screen.
+3. A new list document is saved to the database.
     <img src="img/image40.png" class="portrait" />
 
 <block class="ios rn" />
 
-In the next section you will learn how to update documents in a Couchbase Lite database.
-
 ## Update a Document
 
-There are two methods that update a document: `putProperties` and `update`. We will only cover the `update` method here.
+To update a document, you must retrieve it from the database, modify the desired properties and write them back to the database. The `update` method does this operation for you in the form of a callback. The code below updates a list's name property.
 
 <block class="ios" />
 
-- Open **ListsViewController.swift** and locate the `updateTaskList` method.
-- This method is called when the user clicks the OK and updates the document's `name` field with the text from the input field.
-
-    ```swift
-    // TRAINING: Update a document
-    do {
-        try list.update { newRev in
-            newRev["name"] = name
-            return true
-        }
-    } catch let error as NSError {
-        Ui.showMessageDialog(onController: self, withTitle: "Error",
-            withMessage: "Couldn't update task list", withError: error)
+```swift
+// This code can be found in ListsViewController.swift
+// in the updateTaskList(list:withName:) method
+do {
+    try list.update { newRev in
+        newRev["name"] = name
+        return true
     }
-    ```
+} catch let error as NSError {
+    Ui.showMessageDialog(onController: self, withTitle: "Error",
+        withMessage: "Couldn't update task list", withError: error)
+}
+```
 
 <block class="ios rn" />
 
-The update method takes a callback function or block (the details vary by language). It loads the current revision's properties, then calls this function, passing it an [UnsavedRevision](/documentation/mobile/current/develop/guides/couchbase-lite/native-api/revision/index.html#saved-vs-unsaved-revision) object, whose properties are a mutable copy of the current ones. Your callback code can modify this object's properties as it sees fit; after it returns, the modified revision is saved and becomes the current one.
+Your callback code can modify this object's properties as it sees fit; after it returns, the modified revision is saved and becomes the current one.
 
 ### Try it out
 
 <block class="ios" />
 
-- Build and run.
-- Swipe to the left on a row to reveal the **Edit** button and update the List name.
+1. Build and run.
+2. Swipe to the left on a row to reveal the **Edit** button and update the List name in the pop-up.
     <img src="img/image04.png" class="portrait" />
 
 <block class="ios rn" />
 
 ## Delete a Document
 
-Deleting a document actually creates a new revision (informally called a "tombstone"). This ensures that the deletion will replicate to the server, and then to other endpoints that pull from that database, just like any other document revision.
+A document can be deleted using the `delete` method. This operation actually creates a new revision in order to propagate the deletion to other clients. The code below deletes a list.
 
-- Open **ListsViewController.swift** and locate the `deleteTaskList` method.
-- It is called when the user clicks the **Delete** action and removes the corresponding document in the database.
+<block class="ios" />
 
 ```swift
-// TRAINING: Delete a list
+// This code can be found in ListsViewController.swift
+// in the deleteTaskList(list:) method
 do {
     try list.delete()
 } catch let error as NSError {
@@ -157,46 +146,41 @@ do {
 
 <block class="ios" />
 
-- Build and run.
-- Click the **Delete** action to delete a list.
+1. Build and run.
+2. Click the **Delete** action to delete a list.
     <img class="portrait" src="https://cl.ly/383h2q2C2Z3V/image46.gif" />
 
 <block class="ios rn"/>
 
 ## Query Documents
 
-The way to query data in Couchbase Lite is by registering a View and then running a Query on it with **QueryOptions**. The first thing to know about Couchbase Views is that they have nothing to do with UI views.
+The way to query data in Couchbase Lite is by registering a View and then running a Query on it with QueryOptions. The first thing to know about Couchbase Views is that they have nothing to do with UI views.
 
 A [View](/documentation/mobile/current/develop/guides/couchbase-lite/native-api/view/index.html) in Couchbase is a persistent index of documents in a database, which you then query to find data. The main component of a View is its map function. It takes a document’s JSON as input, and emits (outputs) any number of key/value pairs to be indexed. First, you will define the view to index the documents of type **task-list**. The diagram below shows the result of the code you will review shortly.
 
 ![](img/img.001.png)
 
-So you can remember that a view index is a list of key/value pairs, sorted by key. The view’s logic is written in the native language of the platform you’re developing on.
+So you can remember that a view index is a list of key/value pairs, sorted by key. In addition, the view’s logic is written in the native language of the platform you’re developing on. The code below indexes documents as shown on the diagram above. Then it create the Query and monitors the result set using a Live Query.
 
 <block class="ios" />
 
-- Open **ListsViewController.swift** and locate the `setupViewAndQuery` method.
-- This method is called in `viewDidLoad` (i.e when the view controller is initialized).
+```swift
+// This code can be found in ListsViewController.swift
+// in the setupViewAndQuery method
+let listsView = database.viewNamed("list/listsByName")
+if listsView.mapBlock == nil {
+    listsView.setMapBlock({ (doc, emit) in
+        if let type: String = doc["type"] as? String, let name = doc["name"]
+            , type == "task-list" {
+                emit(name, nil)
+        }
+    }, version: "1.0")
+}
 
-    ```swift
-    // TRAINING: Writing a View
-    let listsView = database.viewNamed("list/listsByName")
-    if listsView.mapBlock == nil {
-        listsView.setMapBlock({ (doc, emit) in
-            if let type: String = doc["type"] as? String, let name = doc["name"]
-                , type == "task-list" {
-                    emit(name, nil)
-            }
-        }, version: "1.0")
-    }
-
-    // TRAINING: Running a Query
-    listsLiveQuery = listsView.createQuery().asLive()
-    listsLiveQuery.addObserver(self, forKeyPath: "rows", options: .new, context: nil)
-    listsLiveQuery.start()
-    ```
-
-<block class="ios rn" />
+listsLiveQuery = listsView.createQuery().asLive()
+listsLiveQuery.addObserver(self, forKeyPath: "rows", options: .new, context: nil)
+listsLiveQuery.start()
+```
 
 The `viewNamed` method returns a [View](http://developer.couchbase.com/documentation/mobile/current/develop/guides/couchbase-lite/native-api/view/index.html) object on which the map function can be set. The map function is indexing documents where the type property is equal to "task-list". Each cell on the screen will contain a list name and nothing else. For that reason, you can emit the name property as the key and nil is the value. If you also wanted to display the owner of the list in the row you could emit the `owner` property as the value.
 
@@ -204,15 +188,13 @@ The `listsView.createQuery()` method returns a [Query](/documentation/mobile/cur
 
 ![](img/image25.png)
 
-The notifications are posted to the application code using the idiomatic APIs on each platform (KVO, change event, callback).
-
 <block class="ios" />
 
-- Open **ListsViewController.swift** and locate the `observeValue(forKeyPath:of:_:_)` method.
-- This method is called every time there is a change to a property that is being observed which then calls the `reloadTaskLists` method to reload the Table View.
+In the code blow, the notifications are posted to the application code using the KVO observer method.
 
 ```swift
-// TRAINING: Responding to Live Query changes
+// This code can be found in ListsViewController.swift
+// in the observeValue(forKeyPath:of:_:_:) method
 override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
     if object as? NSObject == listsLiveQuery {
         reloadTaskLists()
@@ -222,15 +204,15 @@ override func observeValue(forKeyPath keyPath: String?, of object: Any?, change:
 }
 ```
 
-### Try it out
-
-- Build and run.
-- Save a new list to the database and the live query will pick it up to reload the **UI**.
-    <img src="img/image05.png" class="portrait" />
-
 <block class="ios rn" />
 
-In the next section you will learn how to query documents in a Couchbase Lite database.
+### Try it out
+
+1. Build and run.
+2. Save a new list to the database and the live query will pick it up instantly and reload the table view.
+    <img src="https://cl.ly/3z3i0k1C2W1p/image66.gif" class="portrait" />
+
+<block class="ios rn" />
 
 ## Aggregating Data
 
@@ -249,54 +231,48 @@ The most commonly used reduce functions are Count and Sum:
 - Count: A function that counts the number of documents contained in the map (used on the diagram above).
 - Sum: A function that adds all of the items contained in the map.
 
-Now you are ready to write the view to query the number of uncompleted tasks for each list.
+The code below indexes documents as shown on the diagram above. Then it create the Query and monitors the result set using a Live Query.
 
 <block class="ios" />
 
-- Open **ListsViewController.swift** and locate the `setupViewAndQuery` method.
-- The following view indexes `task` documents and groups them by the list they belong to.
-
-    ```swift
-    // TRAINING: Writing an Aggregation View
-    let incompTasksCountView = database.viewNamed("list/incompleteTasksCount")
-    if incompTasksCountView.mapBlock == nil {
-        incompTasksCountView.setMapBlock({ (doc, emit) in
-            if let type: String = doc["type"] as? String , type == "task" {
-                if let list = doc["taskList"] as? [String: AnyObject], let listId = list["id"],
-                    let complete = doc["complete"] as? Bool , !complete {
-                    emit(listId, nil)
-                }
+```swift
+// This code can be found in ListsViewController.swift
+// in the setupViewAndQuery() method
+let incompTasksCountView = database.viewNamed("list/incompleteTasksCount")
+if incompTasksCountView.mapBlock == nil {
+    incompTasksCountView.setMapBlock({ (doc, emit) in
+        if let type: String = doc["type"] as? String , type == "task" {
+            if let list = doc["taskList"] as? [String: AnyObject], let listId = list["id"],
+                let complete = doc["complete"] as? Bool , !complete {
+                emit(listId, nil)
             }
-            }, reduce: { (keys, values, reredeuce) in
-            return values.count
-        }, version: "1.0")
-    }
+        }
+        }, reduce: { (keys, values, reredeuce) in
+        return values.count
+    }, version: "1.0")
+}
 
-    // TRAINING: Running a Query
-    incompTasksCountsLiveQuery = incompTasksCountView.createQuery().asLive()
-    incompTasksCountsLiveQuery.groupLevel = 1
-    incompTasksCountsLiveQuery.addObserver(self, forKeyPath: "rows", options: .new, context: nil)
-    incompTasksCountsLiveQuery.start()
-    ```
+incompTasksCountsLiveQuery = incompTasksCountView.createQuery().asLive()
+incompTasksCountsLiveQuery.groupLevel = 1
+incompTasksCountsLiveQuery.addObserver(self, forKeyPath: "rows", options: .new, context: nil)
+incompTasksCountsLiveQuery.start()
+```
 
 This time, you call emit only if the document `type` is "task" and `complete` is `false`. The document ID of the list it belongs to (**doc.taskList._id**) serves as the key and the value is nil. The reduce function simply counts the number of rows with the same key. Notice that the **groupLevel** is a property on the live query object.
 
-The code that creates the query then uses the **groupLevel = 1** query option to group rows by the list they belong to.
+Every time there is a change to `incompTasksCountsLiveQuery.rows` the `observeValueForKeyPath` method is called which will reload the list count for each row.
 
-<block class="ios" />
-
-- Every time there is a change to `incompTasksCountsLiveQuery.rows` the `observeValueForKeyPath` method is called which will reload the list count for each row.
-
-    ```swift
-    // TRAINING: Responding to Live Query changes
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if object as? NSObject == listsLiveQuery {
-            reloadTaskLists()
-        } else if object as? NSObject == incompTasksCountsLiveQuery {
-            reloadIncompleteTasksCounts()
-        }
+```swift
+// This code can be found in ListsViewController.swift
+// in the observeValue(forKeyPath:of:_:_:) method
+override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    if object as? NSObject == listsLiveQuery {
+        reloadTaskLists()
+    } else if object as? NSObject == incompTasksCountsLiveQuery {
+        reloadIncompleteTasksCounts()
     }
-    ```
+}
+```
 
 <block class="ios rn" />
 
@@ -304,8 +280,8 @@ The code that creates the query then uses the **groupLevel = 1** query option to
 
 <block class="ios" />
 
-- Build and run.
-- You will see the uncompleted task count for each list.
+1. Build and run.
+2. You will see the uncompleted task count for each list.
     <img src="./img/image08.png" class="portrait" />
 
 <block class="ios rn" />
