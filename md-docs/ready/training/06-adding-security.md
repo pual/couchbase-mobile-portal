@@ -19,7 +19,7 @@ Download the project below.
 <block class="ios" />
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/2H1c3E3D3l2S/xcode-project.zip" class="button" id="project">
+  <a href="https://cl.ly/1R1t0S1x2j17/xcode-project.zip" class="button" id="project">
     <img src="img/download-xcode.png">
   </a>
 </div>
