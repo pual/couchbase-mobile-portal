@@ -241,6 +241,25 @@ Following are properties that you can define for a `webhook` event handler:
 
 ## Cache configuration
 
+The Cache configuration forms part of the Database configuration and is defined at a per-Database level under the `cache` key, for example:
+
+```javascript
+{
+  "databases": {
+    "db": {
+      "server": "http://localhost:8091",
+      "bucket": "default",
+      "users": { "GUEST": { "disabled": false, "admin_channels": ["*"] } },
+      "cache": {
+        "channel_cache_expiry": 30,
+        "channel_cache_max_length": 250,
+        "channel_cache_min_length": 25
+      }
+    }
+  }
+}
+```
+
 Following are configuration properties for cache configuration:
 
 |Property|Type|Description and default|
