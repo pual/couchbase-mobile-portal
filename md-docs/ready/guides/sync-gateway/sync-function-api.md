@@ -60,13 +60,21 @@ In plain English: by default, a document will be assigned to the channels listed
 
 ### Changing the sync function
 
-To change a database's sync function, you simply edit the function definition in the configuration file, then restart the Sync Gateway. (Or instead of restarting, you can use the REST API to "delete" and then "create" the database.)
+The Sync Function computes assignments to roles and access to channels as documents are being replicated. Upon changing the Sync Function it must process all existing documents in the bucket again to update those access assignments.
 
-Changing the sync function is an expensive operation because it requires every document in the database to be processed by the new function, to update the channel and access assignments. This happens while the database is being opened, and the database can't accept any requests until this process is complete (because no user's full access privileges are known until all documents have been scanned.) Therefore the update may result in application downtime.
+The Admin REST API has a resync endpoint to process every document in the database again. To update the Sync Function, it is recommended to follow the steps outlined below:
+
+1. Update the configuration file of the Sync Gateway instance.
+2. Restart Sync Gateway.
+3. Call the resync endpoint on the Admin REST API. The message body of the response contains the number of changes that were made as a result of calling resync.
+
+This is an expensive operation because it requires every document in the database to be processed by the new function. The database can't accept any requests until this process is complete (because no user's full access privileges are known until all documents have been scanned). Therefore the update may result in application downtime.
+
+When running a resync operation, the context in the Sync Function is the admin user. For that reason, calling the **requireUser**, **requireAccess** and **requireRole** methods will always succeed. It is very likely that you are using those functions in production to govern write operations. But in a resync operation, all the documents are already written to the database. For that reason, it is recommended to use resync for changing the assignment to channels only (i.e. reads). Keep in mind that it's perfectly fine if the Sync Function in a resync operation does not ressemble the Sync Function you expect to use in production. The former is only an intermediary function used in the resync operation and the latter is used to process reads and writes in a production environment.
 
 If you need to ensure access to the database during the update, you can create a read-only backup of the Sync Gateway's bucket beforehand, then run a secondary Sync Gateway on the backup bucket, in read-only mode. After the update is complete, switch to the main Gateway and bucket.
 
-In a clustered environment with multiple Sync Gateways sharing the load, all the Gateways need to share the same configuration, so they all need to be taken down together. After the configuration is updated, one instance should be brought up so it can update the database — if more than one is running at this time, they'll conflict with each other. After the first instance finishes opening the database, the others can be started.
+In a clustered environment with multiple Sync Gateways sharing the load, all the Gateways need to share the same configuration, so they all need to be taken down together. After the configuration is updated, **one** instance should be brought up so it can update the database — if more than one is running at this time, they'll conflict with each other. After the first instance finishes opening the database, the others can be started.
 
 ## Validation and Authorization
 
