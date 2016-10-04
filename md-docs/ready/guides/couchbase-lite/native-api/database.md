@@ -93,25 +93,21 @@ if database == nil {
 ```
 
 ```java+
-File srcDir = new File(manager.getContext().getFilesDir(), "catalog.cblite2");
-Database database = null;
-try {
-    database = manager.getExistingDatabase("catalog");
-} catch (CouchbaseLiteException e) {
-    e.printStackTrace();
-}
+No code example is currently available.
+```
+
+```android+
+// catalog.zip should unzip in the root folder as a CBL database (i.e catalog.cblite2) 
+Manager manager = new Manager(new AndroidContext(getApplicationContext()), Manager.DEFAULT_OPTIONS);
+Database database = manager.getExistingDatabase("catalog");
 if (database == null) {
     try {
         ZipUtils.unzip(getAssets().open("catalog.zip"), manager.getContext().getFilesDir());
     } catch (IOException e) {
         e.printStackTrace();
     }
-    manager.replaceDatabase("catalog", srcDir.getAbsolutePath());
+    database = manager.getExistingDatabase("catalog");
 }
-```
-
-```android+
-No code example is currently available.
 ```
 
 ```c+
