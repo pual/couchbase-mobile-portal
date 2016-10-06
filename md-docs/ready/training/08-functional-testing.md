@@ -10,7 +10,7 @@ In this lesson you'll learn how to perform functional tests on your Couchbase Mo
 
 ## Introduction
 
-In this section you will learn how to categorize the different types of functional tests. The Sync Function is the application's core security component so it's important to test it extensively.
+In this section you will learn how to categorize the different types of functional tests. The Sync Function is the application's core security component so it's important to test it.
 
 When a document is processed in the Sync Function, there are usually 4 steps to determine if the operation will succeed.
 
@@ -50,11 +50,25 @@ In the project folder you will find the sync function. The table below translate
 
 ## Testing Validation Rules
 
-The first type of test is to validate that the document meets the schema requirements.
+The first test you will write is to validate that the document meets the schema requirements.
 
 |Scenario|Document Type|Type of Test|
 |:-------|:------------|:---------------|
 |`taskList.id`, `taskList.owner` and `task` are required|task|Validation|
+
+The section of the Sync Function that implements this rule is the following.
+
+```javascript
+...
+/* Validate */
+if (!oldDoc) {
+    // Validate required fields.
+    validateNotEmpty("taskList.id", doc.taskList.id);
+    validateNotEmpty("taskList.owner", doc.taskList.owner);
+    validateNotEmpty("task", doc.task);
+}
+...
+```
 
 ### Try it out
 
@@ -91,6 +105,18 @@ In this section you will test that normal users can't create a list for another 
 |Scenario|Document Type|Type of Test|
 |:-------|:------------|:---------------|
 |Only owner can create lists for themselves|task-list|Write|
+
+The section of the Sync Function that implements this rule is the following.
+
+```javascript
+...
+/* Control Write Access */
+if (!oldDoc) {
+    // Users can create/update lists for themselves.
+    requireUser(doc.owner);
+}
+...
+```
 
 #### Try it out
 
@@ -138,7 +164,7 @@ In this section you will test that moderators have the right to create lists for
 
 ### Making a test pass
 
-The previous test failed. It looks like the Sync Function doesn't honor the "moderator" role. Open `sync-gateway-config.json` and replace and add the following the `try/catch` block.
+The previous test failed. It looks like the Sync Function doesn't honor the "moderator" role. Open `sync-gateway-config.json` and replace the previous snippet with the following.
 
 ```javascript
 try {
@@ -181,6 +207,23 @@ In this section you will test that the owner property of a list cannot be change
 |:-------|:------------|:---------------|
 |Owner field is immutable|task-list|Validation|
 
+The section of the Sync Function that implements this rule is the following.
+
+```javascript
+...
+/* Validate */
+if (!doc._deleted) {
+    // Validate required fields.
+    validateNotEmpty("name", doc.name);
+    validateNotEmpty("owner", doc.owner);
+    // Validate that the _id is prefixed with the owner.
+    validatePrefix("_id", doc._id, "owner");
+    // Don't allow task-list ownership to be changed.
+    validateReadOnly("owner", doc, oldDoc);
+}
+...
+```
+
 ### Try it out
 
 1. Create a list for user1.
@@ -213,7 +256,7 @@ In this section you will test the action of sharing a list.
 |:-------|:------------|:---------------|
 |The doc.username user is granted read access to the "task-list.{doc.taskList.id}" channel|task-list:user|Routing|
 
-Different users have access to different channels. The Sync Gateway changes feed has a special filter property to receive changes related to a channel only.
+When subscribing to the changes feed as a particular user, only the documents that the user has access to are returned in the response. Thus, you can subscribe to the changes feed to test that the list is successfully shared with the user.
 
 ### Try it out
 
@@ -227,23 +270,27 @@ Different users have access to different channels. The Sync Gateway changes feed
     [{"id":"user1.123","rev":"1-7008921932d980b285d18c173e0dff1f"},{"id":"766233c993c6ec0e74d5e2c679d53155","rev":"1-67572fec1d27bd246ce45c691648586d"},{"id":"061f8c1e7b0d8a02571559ebf062f2ea","rev":"1-389c6e91a20adae28acd1e5f76d732b8"},{"id":"94305dc7a5ce76a75141c9836d3924a7","rev":"1-f7f5519d3f2c0a5bdf3a122c8bf93042"}]
     ```
 
-2. Subscribe to the changes feed for the channel the document is expected to be written to.
+2. Query the changes feed as user2.
 
     ```bash
-    curl -vX GET 'http://user1:pass@localhost:4984/todo/_changes?feed=longpoll&since=6'
+    curl -vX GET 'http://user2:pass@localhost:4984/todo/_changes'
     ```
+
+    Notice that the response doesn't contain the list that was added previously because user2 doesn't have access to this list's channel.
 
     > **Tip:** Tail the Sync Gateway logs.
 
-3. Create a new list user to and monitor the results of the changes feed for user1.
+3. Create a new list user document to share the list with user2.
 
     ```bash
     curl -vX POST 'http://user1:pass@localhost:4984/todo/' \
         -H 'Content-Type: application/json' \
-        -d '{"_id": "user1.123.user2", "type": "task-list:user", "taskList": {"id": "user1.123", "owner": "user1"}, "username": "user2"}'
+        -d '{"_id": "user1.123.user2", "type": "task-list.user", "taskList": {"id": "user1.123", "owner": "user1"}, "username": "user2"}'
     ```
 
-    The document is routed to the "task-list.user1.123" channel. The test has passed.
+    The sole purpose of this document is to grant user2 access to the "task-list.user1.123" channel.
+
+4. Query the changes feed as user2 again and notice that now the list and task documents are in the response. User2 has now access to the shared list. The test has passed.
 
 ## Conclustion
 
