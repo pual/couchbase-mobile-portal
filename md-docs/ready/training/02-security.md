@@ -1,7 +1,7 @@
 ---
 id: security
 title: Security and Access Control
-permalink: ready/training/security/index.html
+permalink: ready/training/design/security/index.html
 ---
 
 In this lesson you’ll learn how to secure your data model using Couchbase Mobile’s built-in security framework. You’ll design the security rules for each object in your data model. This includes access control, data validation, and access grants.

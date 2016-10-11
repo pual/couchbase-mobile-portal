@@ -1,7 +1,7 @@
 ---
 id: integration
 title: Integration
-permalink: ready/training/integration/index.html
+permalink: ready/training/develop/integration/index.html
 ---
 
 In this lesson you’ll learn how to integrate Couchbase Mobile with external systems using Sync Gateway. You’ll use the changes stream for real-time streaming access to data changes and the bulk APIs for bulk import/export operations.

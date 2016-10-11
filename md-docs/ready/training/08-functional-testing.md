@@ -1,7 +1,7 @@
 ---
 id: functional-testing
 title: Functional Testing
-permalink: ready/training/functional-testing/index.html
+permalink: ready/training/test/functional-testing/index.html
 ---
 
 In this lesson you'll learn how to perform functional tests on your Couchbase Mobile application. You'll test the Sync Function to make sure it conforms to the business rules of the application.
@@ -294,4 +294,4 @@ When subscribing to the changes feed as a particular user, only the documents th
 
 ## Conclustion
 
-Well done! You've completed this lesson on functional testing. In the next lesson you'll learn how to run performance tests. Feel free to share you feedback, findings or ask any questions on the forums.
+Well done! You've completed this lesson on functional testing. In the next lesson you'll learn how to run performance tests. Feel free to share your feedback, findings or ask any questions on the forums.

@@ -1,7 +1,7 @@
 ---
 id: adding-synchronization
 title: Adding Synchronization
-permalink: ready/training/adding-synchronization/index.html
+permalink: ready/training/develop/adding-synchronization/index.html
 ---
 
 In this lesson you’ll be introduced to Sync Gateway, our secure web gateway. You’ll learn how to use Couchbase Lite’s synchronization APIs, set up Sync Gateway for synchronization with the cloud and other devices, and resolve data conflicts within your application.

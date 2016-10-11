@@ -1,7 +1,7 @@
 ---
 id: create-database
 title: Create a Database
-permalink: ready/training/create-database/index.html
+permalink: ready/training/develop/create-database/index.html
 ---
 
 In this lesson you’ll be introduced to Couchbase Lite, our embedded NoSQL database. You’ll learn how to create a new embedded database and optionally use databases pre-packaged in your application.
