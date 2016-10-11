@@ -83,6 +83,11 @@
         <set id="deploy">
           <title>Deploy</title>
           <description></description>
+          <items>
+            <xi:include href="../../docs/src/training/install.xml"/>
+            <xi:include href="../../docs/src/training/upgrade.xml"/>
+            <xi:include href="../../docs/src/training/scale.xml"/>
+          </items>
         </set>
       </items>
     </set>
