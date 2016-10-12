@@ -6,6 +6,10 @@ permalink: ready/training/using-the-database/index.html
 
 In this lesson you’ll be introduced to Couchbase Lite, our embedded NoSQL database. You’ll learn how to create a new embedded database and optionally use databases pre-packaged in your application. Then, you’ll learn how to create, read, update, delete, and query data using Couchbase Lite. 
 
+#### Requirements
+
+- Xcode 7 (Swift 2)
+
 To save us time coding the user interface for the application, download the starter project below.
 
 <block class="ios" />

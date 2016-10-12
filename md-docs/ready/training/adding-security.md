@@ -6,6 +6,10 @@ permalink: ready/training/adding-security/index.html
 
 In this lesson you’ll learn how to add security to your Couchbase Mobile application. You’ll implement authentication and define access control, data validation, and access grant policies.
 
+#### Requirements
+
+- Xcode 7 (Swift 2)
+
 Download the project for this lesson. The project already contains all the code that will be covered below.
 
 <block class="ios" />

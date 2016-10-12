@@ -6,6 +6,10 @@ permalink: ready/training/adding-synchronization/index.html
 
 In this lesson you’ll be introduced to Sync Gateway, our secure web gateway. You’ll learn how to use Couchbase Lite’s synchronization APIs, set up Sync Gateway for synchronization with the cloud and other devices, and resolve data conflicts within your application.
 
+#### Requirements
+
+- Xcode 7 (Swift 2)
+
 Start this lesson by downloading the starter project below.
 
 <block class="ios" />
