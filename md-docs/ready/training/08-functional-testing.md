@@ -6,7 +6,11 @@ permalink: ready/training/test/functional-testing/index.html
 
 In this lesson you'll learn how to perform functional tests on your Couchbase Mobile application. You'll test the Sync Function to make sure it conforms to the business rules of the application.
 
-// Download project
+<div class="buttons-unit downloads">
+  <a href="https://cl.ly/2A2D3q3R2d1g/xcode-project.zip" class="button" id="project">
+    <img src="img/download-xcode.png">
+  </a>
+</div>
 
 ## Introduction
 
