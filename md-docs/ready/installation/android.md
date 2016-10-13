@@ -55,6 +55,30 @@ For ForestDB databases, the supported architectures are:
 |:------------|:----|:----------|:-------|:-------|:--------|:-----|
 | Yes         | Yes | Yes       | Yes    | Yes    | No      | No   |
 
+## Optional packages
+
+The SDK contains other dependencies that are optional. Here's what each one does:
+
+- **couchbase-lite-java-listener:** To access the database through HTTP (often used for hybrid development and peer-to-peer sync). Add it to your Android Studio project using Gradle.
+
+    ```groovy
+    compile 'com.couchbase.lite:couchbase-lite-java-listener:+'
+    ```
+
+    > **Note:** Android emulators run as separate VMs with a different network interface. You can use the `adb forward tcp:5984 tcp:5984` command to access the Listener running on the Android emulator from the host machine.
+
+- **couchbase-lite-android-forestdb:** To use the ForestDB storage type.
+
+    ```groovy
+    compile 'com.couchbase.lite:couchbase-lite-android-forestdb:+'
+    ```
+
+- **couchbase-lite-android-sqlcipher:** To enable encryption on SQLite databases.
+
+    ```groovy
+    compile 'com.couchbase.lite:couchbase-lite-android-sqlcipher:+'
+    ```
+
 ## Getting Started
 
 Create a new project in Android Studio.
