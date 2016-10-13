@@ -63,7 +63,7 @@ dpkg -i couchbase-sync-gateway-community_1.3.1-16_x86_64.deb
 ### Try it out
 
 1. Log on the terminal console of VM1.
-2. Run the upgrade script.
+2. Run the **deploy/upgrade.sh** script.
 3. Verify that the Sync Gateway version is now 1.3.1
 
     ```bash

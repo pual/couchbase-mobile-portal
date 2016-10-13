@@ -21,47 +21,74 @@ In the previous lesson you already deployed 1 node of Sync Gateway and 1 node of
 
 ## Scaling Sync Gateway
 
-There are two ways in which Sync Gateway can scale:
-
-- **Vertically:** A single instance running on a quad-core/4GB virtual machine can handle up to 5000 users in normal load conditions. One way of increasing the load that can be handled is by increasing the virtual machine specs.
-- **Horizontally:** By running identically configured instances of Sync Gateway on each of several machines, and load-balancing them by directing each incoming HTTP request to a random one. Sync Gateway nodes are “shared-nothing,” so they don’t need to coordinate any state or even know about each other.
+By running identically configured instances of Sync Gateway on each of several machines, and load-balancing them by directing each incoming HTTP request to a random one. Sync Gateway nodes are “shared-nothing,” so they don’t need to coordinate any state or even know about each other.
 
 ### Try it out
 
-1. Access the second VM instance.
-2. Follow the instructions from the [Install](https://google.com) to deploy Sync Gateway only on the second virtual machine. You will deploy another node of Couchbase Server later in this lesson.
+1. Log on the terminal console of VM2.
+2. Run the **deploy/install\_sync\_gateway.sh** script passing the IP of the node running Couchbase Server.
 
-## Scaling Couchbase Server
+```bash
+
+```
+
+3. Monitor the log file.
+
+    ```bash
+    tail -f /home/sync_gateway/logs/sync_gateway_error.log
+    ```
+
+4. Send a `/{db}/_all_docs` request with the **user1/password** credentials http://VM4_IP:4984/todo. The Sync Gateway logs will print this operation.
+
+// gif
+
+## Balancing the traffic
+
+There are now 3 Sync Gateway nodes but the reverse proxy is forwarding the load to only 2 of them. To balance the traffic across all 3 you must update the NGINX config file with the IP of VM4.
+
+The following NGINX configuration file balances the traffic between VM2, VM3 and VM4.
+
+```bash
+upstream sync_gateway {
+    server VM2:4984;
+    server VM3:4984;
+    server VM4:4984;
+}
+# HTTP server
+#
+server {
+    listen 80;
+    client_max_body_size 20m;
+    location / {
+        proxy_pass              http://sync_gateway;
+        proxy_pass_header       Accept;
+        proxy_pass_header       Server;
+        proxy_http_version      1.1;
+        keepalive_requests      1000;
+        keepalive_timeout       360s;
+        proxy_read_timeout      360s;
+    }
+}
+```
 
 ### Try it out
 
-1. Download Couchbase Server 4.1 using `wget`.
+1. Log on the terminal console of VM2.
+2. Run the **deploy/scale.sh** script passing the IPs of the different VMs.
 
     ```bash
-    wget http://packages.couchbase.com/releases/4.1.0/couchbase-server-community_4.1.0-ubuntu14.04_amd64.deb
+    ./deploy/scale.sh VM2 VM3 VM4
     ```
 
-2. Install Couchbase Server 4.1 using `dpkg`.
+3. Monitor the NGINX operations in real-time.
 
-    ```bash
-    dpkg -i couchbase-server-community_4.1.0-ubuntu14.04_amd64.deb
-    ```
+```bash
 
-3. Add this Couchbase Server instance to the existing cluster.
+```
 
-    ```bash
-    /opt/couchbase/bin/couchbase-cli server-add --cluster localhost:8091 --server-add=139.59.178.239:8091 --server-add-username=Administrator --server-add-password=password -u Administrator -p password
-    ```
+4. Send a `/{db}/_all_docs` request with the **user1/password** credentials to http://VM2_IP:8000/todo. The NGINX logs will print this operation.
 
-4. Start the rebalance.
-
-    ```bash
-    /opt/couchbase/bin/couchbase-cli rebalance -c localhost:8091 --server-add-username=Administrator --server-add-password=password -u Administrator -p password
-    ```
-
-5. The Couchbase Server Admin Console now contains 2 nodes.
-
-    ![](img/image70.png)
+// gif
 
 ## Conclusion
 

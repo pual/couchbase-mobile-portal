@@ -10,17 +10,17 @@ In this lesson you'll learn how to install Sync Gateway and Couchbase Server, ou
 
 #### Requirements
 
-Two instances with the following:
+Three instances with the following:
 
 - Ubuntu >= 12.04, =< 14.04
 - RAM >= 2GB
 
 #### Getting Started
 
-This lesson contains some deployment scripts to automically deploy and configure Sync Gateway with Couchbase Server. Download those scripts on each VM using wget.
+This lesson contains some scripts to automatically deploy and configure Sync Gateway with Couchbase Server. Download those scripts on each VM using wget.
 
-```
-wget https://cl.ly/3E2u2j0c1k0y/deploy.zip
+```bash
+wget https://cl.ly/3Z0D2D0l3R0O/deploy.zip
 sudo apt-get install unzip
 unzip deploy.zip
 ```
@@ -31,50 +31,56 @@ Throughout this lesson, you will use different scripts located in the **deploy**
 
 ## Architecture
 
-The server-side architecture will be comprised of 1 node of Sync Gateway and 1 node of Couchbase Server. Both nodes will run on the same Ubuntu instance. Whether hosting on-premise or in the cloud you will want to have your Sync Gateway and Couchbase Server sit closely to each other for optimal performance between these two systems.
+The server-side architecture will be comprised of 2 nodes of Sync Gateway and 1 node of Couchbase Server. Each node will run on a different VM. The diagram below describes the architecture:
+
+- Couchbase Server is running VM1
+- Sync Gateway is running on VM2 and VM3
 
 ![](img/image74.png)
 
 ## Install Couchbase Server
 
-To deploy Couchbase Mobile to production you must first get familiar Couchbase Server. It can deployed on a whole host of [operating systems](http://www.couchbase.com/nosql-databases/downloads) and can scale horizontally with multiple nodes or vertically by increasing the VM specs.
+To deploy Couchbase Mobile to production you must first get familiar with Couchbase Server. It can deployed on a whole host of [operating systems](http://www.couchbase.com/nosql-databases/downloads) and can scale horizontally with multiple nodes or vertically by increasing the VM specs. The following script downloads Couchbase Server and creates a new bucket called todo.
+
+```bash
+#!/usr/bin/env bash
+
+# Download Couchbase Server 4.1
+wget http://packages.couchbase.com/releases/4.1.0/couchbase-server-community_4.1.0-ubuntu14.04_amd64.deb
+
+# Install Couchbase Server 4.1
+dpkg -i couchbase-server-community_4.1.0-ubuntu14.04_amd64.deb
+
+# Waiting for server
+sleep 10
+
+# Initialize the cluster and a new user (Administrator/password)
+/opt/couchbase/bin/couchbase-cli cluster-init -c 127.0.0.1 --cluster-init-username=Administrator --cluster-init-password=password --cluster-init-ramsize=600 -u admin -p password
+
+# Create a new bucket called todo
+/opt/couchbase/bin/couchbase-cli bucket-create -c 127.0.0.1:8091 --bucket=todo --bucket-type=couchbase --bucket-port=11211 --bucket-ramsize=600 --bucket-replica=1 -u Administrator -p password
+```
 
 ### Try it out
 
-1. Log on terminal console of VM1.
-2. Download Couchbase Server 4.1 using `wget`.
+1. Log on VM1.
+2. Run the **deploy/install\_couchbase\_server.sh** script.
 
     ```bash
-    wget http://packages.couchbase.com/releases/4.1.0/couchbase-server-community_4.1.0-ubuntu14.04_amd64.deb
+    bash deploy/install_couchbase_server.sh
     ```
 
-2. Install Couchbase Server 4.1 using `dpkg`.
+3. Log on the Couchbase Server Admin Console on [http://VM1_IP:8091](http://VM1_IP:8091) with the user credentials that were created above (**Administrator/password**).
 
-    ```bash
-    dpkg -i couchbase-server-community_4.1.0-ubuntu14.04_amd64.deb
-    ```
+    <img src="https://cl.ly/2v400A2s0I2v/image68.gif" class="center-image" />
 
-3. Initialize the cluster and a new user (**Administrator/password**).
-
-    ```bash
-    /opt/couchbase/bin/couchbase-cli cluster-init -c 127.0.0.1 --cluster-init-username=Administrator --cluster-init-password=password --cluster-init-ramsize=600 -u admin -p password
-    ```
-
-4. Initialize a new bucket called **todo**.
-
-    ```bash
-    /opt/couchbase/bin/couchbase-cli bucket-create -c 127.0.0.1:8091 --bucket=todo --bucket-type=couchbase --bucket-port=11211 --bucket-ramsize=600 --bucket-replica=1 -u Administrator -p password
-    ```
-
-5. Log in the Couchbase Server Admin Console on [http://NODE_IP:8091](http://NODE_IP:8091) with the user credentials that were created above (**Administrator/password**).
-
-    ![](https://cl.ly/2v400A2s0I2v/image68.gif)
+    > **Note:** To uninstall Couchbase Server you can run the following: `dpkg -r couchbase-server-community`.
 
 ## Install Sync Gateway
 
 Sync Gateway is the middleman server that exposes a database API for Couchbase Lite databases to replicate to and from. It connects internally to a Couchbase Server bucket to persist the documents.
 
-In the production, the configuration file should point to a Couchbase Server URL and bucket as shown below.
+In production, the configuration file should look similar to the one used in development except that instead of using **walrus:** for the bucket it will connect to an instance of Couchbase Server URL as shown below.
 
 ```javascript
 {
@@ -84,100 +90,131 @@ In the production, the configuration file should point to a Couchbase Server URL
     "todo": {
       "server": "http://localhost:8091",
       "bucket": "todo",
-      "users": {
-        "user1": {"password": "pass"},
-        "user2": {"password": "pass"}
-      },
       ...
     }
   }
 }
 ```
 
+The script below downloads and installs Sync Gateway 1.3. Then it restarts the `sync_gateway` service with the configuration file of the todo application.
+
+```bash
+#!/usr/bin/env bash
+
+# Download Sync Gateway 1.3
+wget http://packages.couchbase.com/releases/couchbase-sync-gateway/1.3.0/couchbase-sync-gateway-enterprise_1.3.0-274_x86_64.deb
+
+# Install Sync Gateway 1.3
+dpkg -i couchbase-sync-gateway-enterprise_1.3.0-274_x86_64.deb
+
+# Update Sync Gateway config with Couchbase Server URL
+sed 's/walrus:/http:\/\/'${1}':8091/g' sync-gateway-config.json > sync_gateway.json
+
+# Replace the default config file with the one from the app
+mv sync_gateway.json /home/sync_gateway/sync_gateway.json
+
+# Restart the sync_gateway service
+service sync_gateway restart
+```
+
 ### Try it out 
 
 1. Log on the terminal console of VM2.
-2. Download Sync Gateway 1.3.1
+2. Run the Sync Gateway install script passing the IP of VM1 where Couchbase Server is running.
 
     ```bash
-    wget http://latestbuilds.hq.couchbase.com/couchbase-sync-gateway/1.3.1/1.3.1-16/couchbase-sync-gateway-community_1.3.1-16_x86_64.deb
+    bash install_sync_gateway.sh VM1
     ```
 
-2. Install Sync Gateway using `dpkg`. This will install Sync Gateway as a service and start it automatically.
+3. Monitor the log file.
 
     ```bash
-    dpkg -i couchbase-sync-gateway-community_1.3.1-16_x86_64.deb
+    tail -f /home/sync_gateway/logs/sync_gateway_error.log
     ```
 
-3. By default, the config file is located at `/home/sync_gateway/sync_gateway.json`. You must upload the configuration file in the project file to this location on the VM. scp is a good utility for such operations.
+4. Send a `/{db}/_all_docs` request with the **user1/password** credentials http://VM2_IP:4984/todo. The Sync Gateway logs will print this operation.
 
     ```bash
-    scp sync-gateway-config.json root@NODE_IP:/home/sync_gateway/sync_gateway.json
+    curl -X GET 'http://user1:pass@**VM2**:4984/todo/_all_docs'
     ```
 
-4. Restart the `sync_gateway` service.
+    ![](https://cl.ly/1j1q3p333D47/image75.gif)
 
-    ```bash
-    service sync_gateway restart
-    ```
-
-5. The database is now accessible at [http://NODE_IP:4984/todo](http://NODE_IP:4984/todo).
-
-    ![](https://cl.ly/3r3J3S3b2G1Q/image69.gif)
-
-    > **Note:** You can now run the Todo mobile app with the Sync Gateway URL pointing to your publicly accessible Sync Gateway database.
-
-6. Repeat the same process for VM3.
+5. Repeat the same steps on VM3.
 
 ## Using a reverse proxy
 
 With two Sync Gateway nodes you can now configure the reverse proxy and update the sync endpoint in the mobile app to start replications pointing to the reverse proxy instead of an individual Sync Gateway instance.
 
+The following NGINX configuration file balances the traffic between VM2 and VM3.
+
+```bash
+upstream sync_gateway {
+# sync_gateway_nodes
+}
+# HTTP server
+#
+server {
+		access_log /var/log/nginx/access_log combined;
+		listen 8000;
+		client_max_body_size 20m;
+		location / {
+				proxy_pass              http://sync_gateway;
+				proxy_pass_header       Accept;
+				proxy_pass_header       Server;
+				proxy_http_version      1.1;
+				keepalive_requests      1000;
+				keepalive_timeout       360s;
+				proxy_read_timeout      360s;
+		}
+}
+```
+
+In this example the NGINX instance will run on VM2 to keep the number of VMs to a minimum. You could consider running NGINX on a separate VM (e.g VM4). The following script install NGINX and configures it for two Sync Gateway instances.
+
+```bash
+#!/usr/bin/env bash
+
+# Install NGINX
+sudo apt-get install nginx
+
+# Update NGINX config with IPs
+cp nginx_template.txt tmp.txt
+for ip in "$@"
+do
+	echo "$ip"
+	output="$(awk '{print} /sync_gateway_nodes/{print "server '${ip}':4984;"}' tmp.txt)"
+	echo "$output" > tmp.txt
+done
+
+# Move NGINX config to /etc/nginx/sites-available/sync_gateway_nginx
+mv tmp.txt /etc/nginx/sites-available/sync_gateway_nginx
+
+# Enable the configuration file by creating a symlink
+ln -s /etc/nginx/sites-available/sync_gateway_nginx /etc/nginx/sites-enabled/sync_gateway_nginx
+
+# Restart NGINX
+sudo service nginx restart
+```
+
 ### Try it out
 
-1. Install Nginx.
+1. Log on the terminal console of VM2.
+2. Run the NGINX install script passing the IP of VM2 and VM3 where the Sync Gateway instances are running.
 
     ```bash
-    sudo apt-get install nginx
+    bash install_nginx.sh VM2 VM3
     ```
 
-2. Insert the following in a new file **/etc/nginx/sites-available/sync_gateway**.
+3. Monitor the NGINX operations in real-time.
 
     ```bash
-    upstream sync_gateway {
-        server 139.59.178.239:4984;
-        server 139.59.162.112:4984;
-    }
-    # HTTP server
-    #
-    server {
-        listen 80;
-        client_max_body_size 20m;
-        location / {
-            proxy_pass              http://sync_gateway;
-            proxy_pass_header       Accept;
-            proxy_pass_header       Server;
-            proxy_http_version      1.1;
-            keepalive_requests      1000;
-            keepalive_timeout       360s;
-            proxy_read_timeout      360s;
-        }
-    }
+    tail -f /var/log/nginx/access_log
     ```
 
-3. Enable this configuration by creating a symlink to a file with the same name in the folder **/etc/nginx/sites-enabled**.
+4. Send a `/{db}/_all_docs` request with the **user1/password** credentials to http://VM2_IP:8000/todo. The Sync Gateway logs will print this operation.
 
-    ```bash
-    ln -s /etc/nginx/sites-available/sync_gateway /etc/nginx/sites-enabled/sync_gateway
-    ```
-
-4. Restart nginx.
-
-    ```bash
-    sudo service nginx restart
-    ```
-
-> **Note:** You can now run the Todo mobile app with the URL pointing to your nginx server publicly accessible.
+    ![](https://cl.ly/392N2E2K0J0T/image76.gif)
 
 ## Conclusion
 
