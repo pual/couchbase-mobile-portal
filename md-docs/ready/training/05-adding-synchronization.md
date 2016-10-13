@@ -163,13 +163,9 @@ Due to the unpredictability of mobile connections it's inevitable that more than
 - **N-way merge:** if both sides have updated different properties, the document will end up with the updates from both side.
 - **Last update wins:** if both sides have updated the same property, the value will end up as the last one that was updated.
 
-Revisions form a tree data structure since they can have multiple branches. Here is an example of a revision tree which depicts the act of resolving a conflict by deleting one branch of the revision tree by adding a tombstone revision, and then adding a new rev to the winning branch.
+Revisions form a tree data structure and a conflict occurs when there are multiple branches in the revision tree. On the diagram below the conflict is resolved by deleting one branch of the tree (the branch starting at **3-42cc**). The other one is the active branch (i.e the winner) where further child revisions can be persisted (**4-45cb** and **5-42bb**).
 
 <img src="img/image16.png" class="portrait" />
-
-The revision number follows a specific format.
-
-<img src="img/image20.png" class="center-image" />
 
 ### Detecting conflicts
 

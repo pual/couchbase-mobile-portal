@@ -20,26 +20,22 @@ When a document is processed in the Sync Function, there are usually 4 steps to 
 
 ![](img/image15.png)
 
-In the project folder you will find the sync function. The table below translates each line into what it means from an access control standpoint.
+In the project folder you will find the sync function. The table below translates each line from the Sync Function into what it means from an access control standpoint.
 
 |Scenario|Document Type|Type of Test|
 |:-------|:------------|:---------------|
-|The type property must be defined and immutable|*|Validation|
-||||
+|The type property must be defined and immutable|all|Validation|
 |Only users with **admin** role can write|moderator|Write|
 |The _id property must be follow "moderator.{username}"|moderator|Validation|
 |The username property is immutable|moderator|Validation|
 |Document is added to user channel|moderator|Routing|
 |User has access to moderators channels|moderator|Read|
-||||
 |Only owner can create lists for themselves|task-list|Write|
 |Moderators can create lists for other users|task-list|Write|
 |Name and owner properties are required|task-list|Validation|
 |The _id must be "{username}.uuid"|task-list|Validation|
 |Owner field is immutable|task-list|Validation|
 |Add doc to "task-list.{doc._id}" channel|task-list|Validation|
-||||
-||task||
 |`taskList.id`, `taskList.owner` and `task` are required|task|Validation|
 |The doc.username user is granted read access to the "task-list.{doc.taskList.id}" channel|task-list:user|Routing|
 
@@ -144,6 +140,18 @@ In this section you will test that moderators have the right to create lists for
 |:-------|:------------|:---------------|
 |Moderators can create lists for other users|task-list|Write|
 
+The section of the Sync Function that implements this rule is the following.
+
+```javascript
+try {
+    // Users can create/update lists for themselves.
+    requireUser(doc.owner);
+} catch (e) {
+    // Moderators can create/update lists for other users.
+    requireRole("moderator");
+}
+```
+
 #### Try it out
 
 1. Grant user1 with the **moderator** role.
@@ -161,44 +169,7 @@ In this section you will test that moderators have the right to create lists for
         -X POST 'http://user1:pass@localhost:4984/todo/' \
         -d '{"_id": "user2.123", "name": "Groceries", "type": "task-list", "owner": "user2"}'
 
-    {"error":"Forbidden","reason":"exception thrown"}
-    ```
-
-    The operation is rejected with a **403 Forbidden** error eventhough user1 has the moderator role. The test has failed.
-
-### Making a test pass
-
-The previous test failed. It looks like the Sync Function doesn't honor the "moderator" role. Open `sync-gateway-config.json` and replace the previous snippet with the following.
-
-```javascript
-try {
-    // Users can create/update lists for themselves.
-    requireUser(doc.owner);
-} catch (e) {
-    // Moderators can create/update lists for other users.
-    requireRole("moderator");
-}
-```
-
-#### Try it out
-
-1. Save the updated configuration file and restart Sync Gateway.
-2. Assign the moderator role to user1 again.
-
-    ```bash
-    curl -H 'Content-Type: application/json' \
-        -X PUT 'http://localhost:4985/todo/_user/user1' \
-        -d '{"admin_roles": ["moderator"]}'
-    ```
-
-3. Create a new list for user2
-
-    ```bash
-    curl -H 'Content-Type: application/json' \
-        -X POST 'http://user1:pass@localhost:4984/todo/' \
-        -d '{"_id": "user2.123", "name": "Groceries", "type": "task-list", "owner": "user2"}'
-
-    {"error":"Forbidden","reason":"exception thrown"}
+    200 OK
     ```
 
     The operation is accepted. The test has passed.

@@ -186,8 +186,6 @@ The `viewNamed` method returns a [View](http://developer.couchbase.com/documenta
 
 The `listsView.createQuery()` method returns a [Query](/documentation/mobile/current/develop/guides/couchbase-lite/native-api/query/index.html) object which has a **run** method to return the results as a [QueryEnumerator](/documentation/mobile/current/develop/references/couchbase-lite/couchbase-lite/query/query-enumerator/index.html) object. However, in this case, you are hooking into a [Live Query](/documentation/mobile/current/develop/guides/couchbase-lite/native-api/query/index.html) to keep monitoring the database for new results. Any time the result of that query changes through user interaction or synchronization, it will notify your application via the change event. A live query provides an easy way to build reactive UIs, which will be especially useful when you enable sync in the [Adding Synchronization](/documentation/mobile/current/develop/training/adding-synchronization/index.html) lesson. The change event is triggered as a result of user interaction locally as well as during synchronization with Sync Gateway.
 
-![](img/image25.png)
-
 <block class="ios" />
 
 In the code blow, the notifications are posted to the application code using the KVO observer method.
@@ -218,7 +216,13 @@ override func observeValue(forKeyPath keyPath: String?, of object: Any?, change:
 
 A problem in typical applications is how to perform data aggregation. Couchbase Lite lets you run those data queries using the full capabilities of map/reduce. To run aggregation queries on the rows emitted by the map function, you can use the reduce function which is the part of map/reduce that takes several rows from the index and aggregates them together in a single object.
 
-Let’s write a view to query and display the number of uncompleted tasks for each list. A task is marked as completed if its **complete** property is true. You need to define a **map** function which returns the number of uncompleted task documents, **group** them by the list they belong to and **count** the number of rows in each group.
+Let’s write a view to query and display the number of uncompleted tasks for each list. A task is marked as completed if its **complete** property is true. You need to define a **map** function which:
+
+1. Returns the number of uncompleted task documents,
+2. Groups them by the list they belong to,
+3. Counts the number of rows in each group.
+
+The diagram below shows this process.
 
 ![](./img/image32.png)
 
@@ -226,7 +230,7 @@ Notice that **groupingLevel = 1** coalesces the rows in the view index by their 
 
 [Grouping](/documentation/mobile/current/develop/guides/couchbase-lite/native-api/query/index.html) is a powerful feature of Couchbase Lite. It is available on a **Query** using the **groupLevel** property, which is a number, and it defaults to 0. It basically takes the entire range of output that the query produces (i.e. the entire range of rows) and it coalesces together adjacent rows with the same key.
 
-The most commonly used reduce functions are Count and Sum:
+The most commonly used aggregation functions are Count and Sum:
 
 - Count: A function that counts the number of documents contained in the map (used on the diagram above).
 - Sum: A function that adds all of the items contained in the map.

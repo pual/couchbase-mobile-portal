@@ -15,61 +15,21 @@ Two instances with the following:
 
 ## Architecture
 
+In the previous lesson you already deployed 1 node of Sync Gateway and 1 node of Couchbase Server on the same Ubuntu instance. In this lesson you will deploy an additional set of Sync Gateway and Couchbase Server to another Ubuntu instance. The diagram describes the architecture. With two Sync Gateway instances you will also deploy a reverse proxy to distribute the load between each one. Both Sync Gateways will use the exact same configuration file.
+
+![](img/image71.png)
+
 ## Scaling Sync Gateway
 
-### Try it out
+There are two ways in which Sync Gateway can scale:
 
-1. Deploy 2 nodes of Sync Gateway on different instances.
-
-## Using a reverse proxy
-
-When using more than 1 node of Sync Gateway it is recommended to use a proxy server to distribute the load accross the different Sync Gateway instances. In this lesson you will use Nginx before adding another node of Sync Gateway.
+- **Vertically:** A single instance running on a quad-core/4GB virtual machine can handle up to 5000 users in normal load conditions. One way of increasing the load that can be handled is by increasing the virtual machine specs.
+- **Horizontally:** By running identically configured instances of Sync Gateway on each of several machines, and load-balancing them by directing each incoming HTTP request to a random one. Sync Gateway nodes are “shared-nothing,” so they don’t need to coordinate any state or even know about each other.
 
 ### Try it out
 
-1. Install Nginx.
-
-    ```bash
-    sudo apt-get install nginx
-    ```
-
-2. Insert the following in a new file **/etc/nginx/sites-available/sync_gateway**.
-
-    ```bash
-    upstream sync_gateway {
-        server 139.59.178.239:4984;
-        server 139.59.162.112:4984;
-    }
-    # HTTP server
-    #
-    server {
-        listen 80;
-        client_max_body_size 20m;
-        location / {
-            proxy_pass              http://sync_gateway;
-            proxy_pass_header       Accept;
-            proxy_pass_header       Server;
-            proxy_http_version      1.1;
-            keepalive_requests      1000;
-            keepalive_timeout       360s;
-            proxy_read_timeout      360s;
-        }
-    }
-    ```
-
-3. Enable this configuration by creating a symlink to a file with the same name in the folder **/etc/nginx/sites-enabled**.
-
-    ```bash
-    ln -s /etc/nginx/sites-available/sync_gateway /etc/nginx/sites-enabled/sync_gateway
-    ```
-
-4. Restart nginx.
-
-    ```bash
-    sudo service nginx restart
-    ```
-
-> **Note:** You can now run the Todo mobile app with the URL pointing to your nginx server publicly accessible.
+1. Access the second VM instance.
+2. Follow the instructions from the [Install](https://google.com) to deploy Sync Gateway only on the second virtual machine. You will deploy another node of Couchbase Server later in this lesson.
 
 ## Scaling Couchbase Server
 

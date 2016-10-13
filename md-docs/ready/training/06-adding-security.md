@@ -118,19 +118,15 @@ The `CBLAuthenticator` class has static methods for each authentication method s
     ```
 
 2. Build and run.
-3. The application will prompt you to enter a username and password. If you provide credentials for a user that doesn't exist a popup is displayed with the error message.
-    <img src="http://i.giphy.com/l0MYBknBqfEBAczIc.gif" class="portrait" />
 
 <block class="ios rn" />
 
-Now login with the credentials saved in the config file previously (**user1/pass**) and create a new list. Open the Sync Gateway Admin UI at [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo), the list document is successfully replicated to Sync Gateway as an authenticated user.
+3. Now login with the credentials saved in the config file previously (**user1/pass**) and create a new list. Open the Sync Gateway Admin UI at [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo), the list document is successfully replicated to Sync Gateway as an authenticated user.
 
-![](img/image35.png)
+    ![](img/image35.png)
 
-You can verify if the pull replication retrieves the document present on Sync Gateway. On macOS, use the [SimPholders](https://simpholders.com/) utility app to quickly find the data directory of the application and delete the database called **user1**. Then restart the app and you'll notice that the "Today" list isn't displayed. That is, the list document wasn't replicated from Sync Gateway to Couchbase Lite. Indeed, the document is not routed to a channel that the user has access to. **Channel** and **access** are new terms so don't worry, we'll cover what they mean in the next section.
-
-[//]: # "TODO: Link to video."
-<video src="https://d3vv6lp55qjaqc.cloudfront.net/items/1s1G3C1i2a0G2P3o0G0m/movie1.mp4" controls="true"></video>
+> **Note:** You can remove the local database and check if the pull replication retrieves the documents now present on Sync Gateway. On macOS, use the [SimPholders](https://simpholders.com/) utility app to quickly find the data directory of the application and delete the database called **user1**. Then restart the app and you'll notice that the "Today" list isn't displayed. That is, the list document wasn't replicated from Sync Gateway to Couchbase Lite. Indeed, the document is not routed to a channel that the user has access to. **Channel** and **access** are new terms so don't worry, we'll cover what they mean in the next section.
+<video src="https://d3vv6lp55qjaqc.cloudfront.net/items/1s1G3C1i2a0G2P3o0G0m/movie1.mp4" controls="true" poster="https://cl.ly/1W2T3w463S0f/image72.png"></video>
 
 ## Define Access Control Policies
 
@@ -138,7 +134,7 @@ In order to give different users access to different documents, you must write a
 
 In the sync function, you can use different API methods to route documents to channels, grant users access to channels and even assign roles to users. Open the data modeling lesson in a new tab, it will be useful throughout this section.
 
-Sync Functions can be relatively long so it's recommended to write a small piece of code and test that it does what you expect before moving on to the next clause. To achieve this, you will use the Admin UI to make changes to the Sync Function, the `/{db}/_bulk_docs` endpoint to add documents and then check the result in the Admin UI.
+Sync Functions can be relatively long so it's recommended to write a small piece of code and test that it does what you expect before moving on to the next clause. To achieve this, you will use the Admin UI to make changes to the Sync Function and the `/{db}/_bulk_docs` endpoint to add documents and then check the result in the Admin UI.
 
 ![](img/image39.png)
 
@@ -149,7 +145,12 @@ With walrus enabled in the **todos** database, every time you change the Sync Fu
 
 ### Data Validation
 
-First, you will enforce a validation rule that requires documents to have a `type` property. In addition, this property is immutable. In the Admin UI, update the sync function with the following.
+The Sync Function takes two arguments:
+
+- **doc:** The current revision being processed.
+- **oldDoc:** The parent revisions if it's an update operation and `null` if it's a create operation.
+
+The first operation to perform in the Sync Function is schema validation. If a document doesn't honour the expected document schema the **throw** function can be used to reject the operation. The following code rejects the operation if the document doesn't have a `type` property.
 
 ```javascript
 function(doc, oldDoc){
@@ -161,36 +162,39 @@ function(doc, oldDoc){
 }
 ```
 
-Then click on the **Deploy To Server** button. It will restart Sync Gateway with the updated sync function.
+#### Try it out
 
-<img src="https://cl.ly/3n2L071q051g/image37.gif" class="center-image" />
+1. Copy the code above in the Sync Function input box of the Admin UI.
+2. Then click on the **Deploy To Server** button. It will restart Sync Gateway with the updated sync function.
 
-> **Caution:** It won't update the config file on your filesystem, make sure to copy/paste from the Admin UI to the config once you are happy with your changes.
+    <img src="https://cl.ly/3n2L071q051g/image37.gif" class="center-image" />
 
-Use the following curl command to add two documents. One has the `type` property and the second doesn't. Notice that the user credentials (user1/pass) are passed in the URL.
+    > **Note:** It won't update the config file on your filesystem, make sure to copy/paste from the Admin UI to the config once you are happy with your changes.
 
-```bash
-curl -vX POST 'http://user1:pass@localhost:4984/todo/_bulk_docs' \
-      -H 'Content-Type: application/json' \
-      -d '{"docs": [{"type": "task-list", "name": "Groceries"}, {"names": "Today"}]}'
+3. Use the following curl command to add two documents. One has the `type` property and the second doesn't. Notice that the user credentials (user1/pass) are passed in the URL.
 
-[
-  {"id":"e498cad0380e30a86ed5572140c94831","rev":"1-e4ac377fc9bd3345ddf5892b509c4d79"},
-  {"error":"forbidden","reason":"type property missing","status":403}
-]
-```
+    ```bash
+    curl -vX POST 'http://user1:pass@localhost:4984/todo/_bulk_docs' \
+          -H 'Content-Type: application/json' \
+          -d '{"docs": [{"type": "task-list", "name": "Groceries"}, {"names": "Today"}]}'
 
-Success! The response contains the _type property missing_ error message for the document that doesn't have the `type` property.
+    [
+      {"id":"e498cad0380e30a86ed5572140c94831","rev":"1-e4ac377fc9bd3345ddf5892b509c4d79"},
+      {"error":"forbidden","reason":"type property missing","status":403}
+    ]
+    ```
+
+    As expected, the response contains the _type property missing_ error message for the document that doesn't have the `type` property.
 
 ### Write Permissions
 
-The sync function should handle every document **type** present in your application. Based on the document type and user logged in, it must enforce write permissions. If the user sending this document doesn't have the required privileges then the sync function should reject that operation. The sync function API provides a few methods to check the user's identity and role(s).
+The sync function should handle every document **type** present in your application. Based on the document type and user logged in, it must ensure the user has write permissions for the given operation. If the user sending this document doesn't have the required privileges then the sync function should reject that operation. The folloing methods are used in the Sync Function to check the user's identity and role(s).
 
 - **requireUser([]string names)**: authorizes a document update by rejecting it unless it's made by a specific user or users.
 - **requireRole([]string roles)**: authorizes a document update by rejecting it unless the user making it has a specific role or roles.
 - **requireAccess([]string channels)**: authorizes a document update by rejecting it unless the user making it has access to at least one of the given channels.
 
-Append the following in the sync function body on the Admin UI.
+The following code first ensures that the `doc.owner` is indeed the user performing this operation. If that's not the case, the `} catch (e) {` block is called and another check is performed that checks if the user has the `moderator` role. If none of those conditions are met then the document is rejected.
 
 ```javascript
 if (doc.type == "task-list") {
@@ -207,42 +211,45 @@ if (doc.type == "task-list") {
 }
 ```
 
-Use the **Deploy To Server** button and add the following task lists.
+#### Try it out
 
-```bash
-curl -vX POST 'http://user1:pass@localhost:4984/todo/_bulk_docs' \
-      -H 'Content-Type: application/json' \
-      -d '{"docs": [{"name": "Today", "type": "task-list", "owner": "user1"}, {"name": "Groceries", "type": "task-list", "owner": "user2"}]}'
-      
-[
-  {"id":"49c9d5cbbc1cfa05d253f4847d02b8a0","rev":"1-477f7c4f36a31ce9e86a5f465b168b8a"},
-  {"error":"forbidden","reason":"missing role","status":403}
-]
-```
+1. Copy the code above in the Sync Function input box of the Admin UI.
+2. Then click on the **Deploy To Server** button. It will restart Sync Gateway with the updated sync function.
+3. Add the following list documents.
 
-The **Groceries** list is successfully rejected because the `owner` property is set to `user2` but the request authenticates as `user1`. Additionally, `user1` doesn't have the `moderator` role so it can't create a list for other users.
+    ```bash
+    curl -vX POST 'http://user1:pass@localhost:4984/todo/_bulk_docs' \
+          -H 'Content-Type: application/json' \
+          -d '{"docs": [{"name": "Today", "type": "task-list", "owner": "user1"}, {"name": "Groceries", "type": "task-list", "owner": "user2"}]}'
+          
+    [
+      {"id":"49c9d5cbbc1cfa05d253f4847d02b8a0","rev":"1-477f7c4f36a31ce9e86a5f465b168b8a"},
+      {"error":"forbidden","reason":"missing role","status":403}
+    ]
+    ```
 
-You can assign a role to user using the `/{db}/_user` endpoint on the admin port.
+    The **Groceries** list is successfully rejected because the `owner` property is set to `user2` but the request authenticates as `user1`. Additionally, `user1` doesn't have the `moderator` role so it can't create a list for other users.
 
-```bash
-curl -H 'Content-Type: application/json' \
-      -vX PUT 'http://localhost:4985/todo/_user/user1' \
-      -d '{"admin_roles": ["moderator"]}'
+4. You can assign a role to a user using the `/{db}/_user` endpoint on the admin port.
 
-200 OK
-```
+    ```bash
+    curl -H 'Content-Type: application/json' \
+          -vX PUT 'http://localhost:4985/todo/_user/user1' \
+          -d '{"admin_roles": ["moderator"]}'
 
-With user1 as a moderator, run the curl command on the `/{db}/_bulk_docs` endpoint again and this time both lists are persisted.
+    200 OK
+    ```
 
-Well done! You've successfully added write permission rules to allow users with the **moderator** role to create lists for other users. In the next section, you will add validation rules for list documents.
+    With user1 as a moderator, run the curl command on the `/{db}/_bulk_docs` endpoint again and this time both lists are persisted.
 
 ### Validating Changes
 
-In this section you will add some validation logic. A document that doesn’t follow the schema specified in your application could have an impact on other clients when they receive it. That’s why you must check for the existence of the properties required in your application. Secondly, some document keys may follow a specific format (prefix.uuid) that will be used throughout your system so making sure that it follows the desired format is good practice. Lastly, you may decide that some properties should be immutable and cannot change during an update operation.
+In this section you will add some validation logic for list documents. There are 3 types of validation:
 
-For that reason, two arguments are passed to the sync function (the current revision, **doc**, and its parent, **oldDoc**); that way you can enforce immutability where required.
+- **Schema validation:** A document that doesn’t follow the schema specified in your application could have an impact on other clients when they receive it. That’s why you must check for the existence of the properties required in your application.
+- **Key validation:** Some document keys may follow a specific format (prefix.uuid) that will be used throughout your system so making sure that it follows the desired format is good practice.
+- **Read-only validation:** You may decide that some properties should be immutable and cannot change during an update operation.
 
-Validation rules can be repetitive to write in the sync function so you will define 3 utility methods. Add the following before the last curly brace.
 
 ```javascript
 function validateNotEmpty(key, value) {
@@ -275,6 +282,8 @@ There are 3 types of validation performed here:
 
 With those utility functions you can now write the validation logic for documents of type "task-list". Append the following inside the "task-list" if statement on the Admin UI.
 
+The following code ensures that the document passed in the Sync Function meets the schema requirements.
+
 ```javascript
 /* Validate */
 if (!doc._deleted) {
@@ -287,6 +296,8 @@ if (!doc._deleted) {
   validateReadOnly("owner", doc, oldDoc);
 }
 ```
+
+Validation rules can be repetitive to write in the sync function so you will define 3 utility methods. Add the following before the last curly brace.
 
 This validation is very similar to the one you added in the first step for document types. You can go ahead and click **Deploy To Server**.
 
