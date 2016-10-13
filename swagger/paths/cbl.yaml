@@ -234,6 +234,19 @@
               description: List of changes to the database. See the following table for a list of fields in this object.
               items:
                 $ref: '#/definitions/ChangesFeedRow'
+  post:
+    tags:
+      - database
+    parameters:
+      - $ref: '#/parameters/changes_body'
+    summary: Changes
+    description: |
+      Same as the GET /_changes request except the parameters are in the JSON body.
+    responses:
+      200:
+        description: Request completed successfully
+        schema:
+          $ref: '#/definitions/ChangesFeedRow'
 /{db}/{doc}:
   parameters:
     - $ref: '#/parameters/db'
