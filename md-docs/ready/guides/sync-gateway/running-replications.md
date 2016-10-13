@@ -218,3 +218,9 @@ When an active task is cancelled, the response returns the stats of the replicat
     "end_last_seq":"28"
 }
 ```
+
+## SG-Replicate versus XDCR
+
+XDCR (cross data centre replication) is the Couchbase Server API to replicate between Couchbase Server clusters. Both XDCR and SG-Replicate can be used to keep clusters in different data centres in sync. However, SG-Replicate was designed specifically for a Couchbase Mobile deployment. The diagram below describes the notable differences between SG-Replicate and XDCR.
+
+![](img/xdcr-sg-replicate.png)
