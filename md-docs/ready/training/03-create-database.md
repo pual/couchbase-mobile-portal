@@ -8,6 +8,8 @@ In this lesson you’ll be introduced to Couchbase Lite, our embedded NoSQL data
 
 [//]: # "COMMON ACROSS LESSONS"
 
+<block class="ios" />
+
 #### Requirements
 
 - Xcode 8 (Swift 3)
@@ -15,6 +17,21 @@ In this lesson you’ll be introduced to Couchbase Lite, our embedded NoSQL data
 #### Getting Started
 
 Download the project below.
+
+<block class="ios rn" />
+
+<block class="net" />
+
+#### Requirements
+
+- Visual Studio 2015+ (Windows) or Xamarin Studio 6+ (OS X)
+
+#### Getting Started
+
+- Clone this repo and open the `dotnet\Training.sln` project
+- (optional) Update to the latest version of the Couchbase.Lite / Couchbase.Lite.Storage.SQLCipher nuget package, if not already added
+
+<block class="net rn" />
 
 <block class="ios" />
 
@@ -67,9 +84,44 @@ try database = CBLManager.sharedInstance().openDatabaseNamed(dbname, with: optio
 
 <block class="ios rn" />
 
+<block class="net" />
+
+```c#
+// This code can be found in CoreApp.cs
+// in the OpenDatabase(string, string, string) method
+var encryptionKey = default(SymmetricKey);
+if(key != null) {
+    encryptionKey = new SymmetricKey(key);
+}
+
+var options = new DatabaseOptions {
+    Create = true,
+    EncryptionKey = encryptionKey
+};
+
+Database = AppWideManager.OpenDatabase(dbName, options);
+if(newKey != null) {
+    Database.ChangeEncryptionKey(new SymmetricKey(newKey));
+}
+```
+
+<block class="net rn" />
+
+<block class="ios" />
+
 Here you're using the `openDatabaseNamed` method where the database is the user currently logged in and `options.create` is set to `true`.
 
 > **Note:** You can ignore the `kEncryptionEnabled` constant. Database encryption will be covered in the [Adding Security](/documentation/mobile/current/develop/training/adding-security/index.html) lesson.
+
+<block class="ios rn" />
+
+<block class="net" />
+
+Here you're using the `OpenDatabase` method where the database is the user currently logged in and `options.Create` is set to `true`.
+
+> **Note:** You can ignore the `key` and `newKey` parameters. Database encryption will be covered in the [Adding Security](/documentation/mobile/current/develop/training/adding-security/index.html) lesson.
+
+<block class="net rn" />
 
 ### Try it out
 
@@ -82,9 +134,26 @@ Here you're using the `openDatabaseNamed` method where the database is the user 
 
 <block class="ios rn" />
 
+<block class="wpf" />
+
+1. Build and run.
+2. Create a new list using `Action -> Add List...` on the application's 'Task lists' screen.
+3. The task list is persisted to the database.
+
+<block class="wpf rn" />
+
+<block class="xam" />
+
+1. Build and run.
+2. Create a new list using the '+' navigation bar button on the application's 'Task lists' screen.
+3. The task list is persisted to the database.
+    <img src="img/image40.png" class="portrait" />
+
+<block class="xam rn" />
+
 ## Using the pre-built database
 
-In this section, you will learn how to bundle a pre-built Couchbase Lite database in an application. It can be a lot more efficient to bundle a database in your application and install it on the first launch. Even if some of the content changes on the server after you create the app, the app's first pull replication will bring the database up to date. Here, you will use a pre-built database that contains a list of groceries. The code below moves the pre-built database from the assets folder to the application directory.
+In this section, you will learn how to bundle a pre-built Couchbase Lite database in an application. It can be a lot more efficient to bundle a database in your application and install it on the first launch. Even if some of the content changes on the server after you create the app, the app's first pull replication will bring the database up to date. Here, you will use a pre-built database that contains a list of groceries. The code below moves the pre-built database from the bundled location to the application directory.
 
 <block class="ios" />
 
@@ -109,7 +178,26 @@ if (!db) {
 
 <block class="ios rn" />
 
-The prebuilt database is installed using the `replaceDatabaseNamed` method only if there isn't any existing database called 'todo'. Since you created an empty database called 'todo' in the previous step you must first remove the existing database. The easiest way to do that is by deleting the app.
+<block class="net" />
+
+```c#
+// This code can be found in CoreApp.cs
+// in the InstallPrebuildDB() method
+var db = AppWideManager.GetExistingDatabase("todo");
+if(db == null) {
+    try {
+        using(var asset = typeof(CoreApp).Assembly.GetManifestResourceStream("todo.zip")) {
+            AppWideManager.ReplaceDatabase("todo", asset, false);
+        }
+    } catch(Exception e) {
+        Debug.WriteLine($"Cannot replicate the database: {e}");
+    }
+}
+```
+
+<block class="net rn" />
+
+The prebuilt database is installed using the database replacement API only if there isn't any existing database called 'todo'. Since you created an empty database called 'todo' in the previous step you must first remove the existing database.
 
 ### Try it out
 
@@ -126,6 +214,20 @@ The prebuilt database is installed using the `replaceDatabaseNamed` method only 
   <img src="https://cl.ly/3e1J2I0G1U1U/image45.gif" class="portrait" />
 
 <block class="ios rn" />
+
+<block class="net" />
+
+1. Open **CoreApp.cs** and navigate to the `CoreAppStart.CreateHint()` method
+2. Change the `usePrebuiltDB` on the return value of the function to `true`
+
+    ```c#
+    retVal.usePrebuiltDB = true;
+    ```
+
+3. Build and run with the command line argument `/clean` (this will clear the existing database)
+4. A Groceries list will now be visible on the Lists screen. Click on it to see the tasks.
+
+<block class="net rn" />
 
 > **Note:** Refer to the [Database](/documentation/mobile/current/develop/guides/couchbase-lite/native-api/database/index.html) guide to learn how to create **pre-built** databases.
 
