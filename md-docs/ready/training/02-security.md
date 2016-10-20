@@ -4,48 +4,57 @@ title: Security and Access Control
 permalink: ready/training/design/security/index.html
 ---
 
-In this lesson you’ll learn how to secure your data model using Couchbase Mobile’s built-in security framework. You’ll design the security rules for each object in your data model. This includes access control, data validation, and access grants.
+In this lesson you’ll learn how to secure your data model using Couchbase Mobile’s built-in security framework.
 
-So far you learned how to model your data according to the application's data requirements. You may also have security requirements to enforce data access for each user of your app. With Couchbase Mobile your data schema is coupled with the security rules.
+Security rules are used to determine who has read and write access to the database. They live on the server in Sync Gateway and are enforced at all times.
 
-To understand why you must first have a basic understanding of the security features in Sync Gateway. It contains a feature called the Sync Function which has the ability to assign documents to something we call channels. Channels act as an organization mechanism. The graphic below may help to understand how channels work. It shows conceptually the idea of Sync Gateway feeding documents to channels during a replication.
+Documents can either be created to store data or to grant other users access to data. Most documents fall somewhere in the middle where some properties are used to persist data and others to control access.
+
+![](img/image83.png)
+
+In this lesson you will learn how to extend the existing data model to add security to your application.
+
+![](https://cl.ly/3b231e0D3U2h/image85.gif)
+
+## Routing
+
+Sync Gateway provides an ability to assign documents to something we call channels. Channels act as an organization mechanism. The graphic below may help to understand how channels work. It shows conceptually the idea of Sync Gateway feeding documents to channels during a replication.
 
 ![](img/image81.png)
 
-You control assigning documents to channels through the Sync Gateway sync function. Each blue pipe in the diagram represents a channel. The green arrows illustrate the idea that the sync function can assign any individual document to any number of channels.
+You control assigning documents to channels through the Sync Function. Each blue pipe in the diagram represents a channel. The green arrows illustrate the idea that the sync function can assign any individual document to any number of channels.
 
-The Sync Function is the core API you interact with on Sync Gateway. Every time a new document is added the Sync Function is called and given a change to examine the document. It can do the following things:
+The diagram below adds a note to specify a dynamic channel name for task and list documents to be in the same channel.
 
-- Validate the document.
-- Authorize the change if it's an update operation.
-- Assign the document to channels (i.e routing).
-- Grant users access to channels (i.e read permission).
+![](img/02-list-channel.png)
 
-## List ownership
+## Read Access
 
-The list and tasks are routed to the same channel (456) and the owner of that list has access to that channel. The channel name corresponds to the list _id.
+### Single user
 
-![](img/image82.png)
+Sync Gateway provides different methods of authenticating users. Regardless of the provider you choose, all of your users are stored in Sync Gateway. The following diagram adds a note to specify that the owner should have read access to the list.
 
-![](img/image62.png)
+![](img/03-read-access.png)
 
-## List sharing
+### Multiple users
 
-A list user document is created to grant a **username** access to a list.
+In the application, any list can be shared with other users. In the **list** document, that's represented by the `users` array. Instead of keeping the list of users on the **list** document itself, you'll create a new document of type `list.user` whose purpose will be to grant a user access to a list. The diagram below adds a note to specify that the document ID of the `list.user` document is responsible for granting user2 access to user1's list.
 
-![](img/image63.png)
+![](img/04-multiple-users.png)
 
-## Moderator role
+## Write Access
 
-Users with the **moderator** role can access any list.
+You must add write access security rules to ensure the system is secure. Generally that means checking that a user is allowed to perform the intended operation. The diagram below adds notes to ensure document can't be created by any user.
 
-![](img/image64.png)
+![](img/05-write-access.png)
 
-## Admin role
+As you can see, only owners of a list can invite other users to access it.
 
-Users with the **admin** role can give the **moderator** role to any user.
+## Roles
 
-![](img/image65.png)
+Another design requirements of the application is that moderators can invite other users to a list they have access to. In out current design this isn't possible because all users have equal privileges. However we can use Sync Gateway roles to assign roles to users to limit or extend write permission privileges. The diagram below adds a `moderator` document whose purpose is to grant a user with the "moderator" role.
+
+![](img/06-role.png)
 
 ## Conclusion
 
