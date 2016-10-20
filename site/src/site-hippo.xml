@@ -91,27 +91,6 @@
         </set>
       </items>
     </set>
-    <set id="develop">
-      <title>Develop</title>
-      <description>Develop</description>
-      <introduction></introduction>
-      <items>
-        <set id="training">
-          <title>Training</title>
-          <description></description>
-          <items>
-            <xi:include href="../../docs/src/training/data-modeling.xml"/>
-            <xi:include href="../../docs/src/training/security.xml"/>
-            <xi:include href="../../docs/src/training/create-database.xml"/>
-            <xi:include href="../../docs/src/training/using-database.xml"/>
-            <xi:include href="../../docs/src/training/adding-sync.xml"/>
-            <xi:include href="../../docs/src/training/adding-security.xml"/>
-            <xi:include href="../../docs/src/training/integration.xml"/>
-            <xi:include href="../../docs/src/training/functional-testing.xml"/>
-          </items>
-        </set>
-      </items>
-    </set>
     <!--<set id="guides">-->
       <!--<title>Guides</title>-->
       <!--<description></description>-->
