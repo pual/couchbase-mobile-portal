@@ -18,8 +18,6 @@ In this lesson you’ll be introduced to Couchbase Lite, our embedded NoSQL data
 
 Download the project below.
 
-<block class="ios rn" />
-
 <block class="net" />
 
 #### Requirements
@@ -30,8 +28,6 @@ Download the project below.
 
 - Clone this repo and open the `dotnet\Training.sln` project
 - (optional) Update to the latest version of the Couchbase.Lite / Couchbase.Lite.Storage.SQLCipher nuget package, if not already added
-
-<block class="net rn" />
 
 <block class="ios" />
 
@@ -58,7 +54,7 @@ Throughout this lesson, you will navigate in different files of the Xcode projec
 
 [//]: # "COMMON ACROSS LESSONS"
 
-<block class="rn ios" />
+<block class="all" />
 
 ## Create a new database
 
@@ -82,8 +78,6 @@ if kEncryptionEnabled {
 try database = CBLManager.sharedInstance().openDatabaseNamed(dbname, with: options)
 ```
 
-<block class="ios rn" />
-
 <block class="net" />
 
 ```c#
@@ -105,51 +99,31 @@ if(newKey != null) {
 }
 ```
 
-<block class="net rn" />
-
-<block class="ios" />
+<block class="all" />
 
 Here you're using the `openDatabaseNamed` method where the database is the user currently logged in and `options.create` is set to `true`.
 
 > **Note:** You can ignore the `kEncryptionEnabled` constant. Database encryption will be covered in the [Adding Security](/documentation/mobile/current/develop/training/adding-security/index.html) lesson.
 
-<block class="ios rn" />
-
-<block class="net" />
-
-Here you're using the `OpenDatabase` method where the database is the user currently logged in and `options.Create` is set to `true`.
-
-> **Note:** You can ignore the `key` and `newKey` parameters. Database encryption will be covered in the [Adding Security](/documentation/mobile/current/develop/training/adding-security/index.html) lesson.
-
-<block class="net rn" />
+<block class="all" />
 
 ### Try it out
 
+<block class="all" />
+
+1. Build and run.
+2. Create a new list on the application's 'Task lists' screen.
+3. The task list is persisted to the database.
+    
 <block class="ios" />
 
-1. Build and run.
-2. Create a new list using the '+' navigation bar button on the application's 'Task lists' screen.
-3. The task list is persisted to the database.
     <img src="img/image40.png" class="portrait" />
-
-<block class="ios rn" />
-
-<block class="wpf" />
-
-1. Build and run.
-2. Create a new list using `Action -> Add List...` on the application's 'Task lists' screen.
-3. The task list is persisted to the database.
-
-<block class="wpf rn" />
 
 <block class="xam" />
 
-1. Build and run.
-2. Create a new list using the '+' navigation bar button on the application's 'Task lists' screen.
-3. The task list is persisted to the database.
-    <img src="img/image40.png" class="portrait" />
+<block class="wpf" />
 
-<block class="xam rn" />
+<block class="all" />
 
 ## Using the pre-built database
 
@@ -176,8 +150,6 @@ if (!db) {
 }
 ```
 
-<block class="ios rn" />
-
 <block class="net" />
 
 ```c#
@@ -195,7 +167,7 @@ if(db == null) {
 }
 ```
 
-<block class="net rn" />
+<block class="all" />
 
 The prebuilt database is installed using the database replacement API only if there isn't any existing database called 'todo'. Since you created an empty database called 'todo' in the previous step you must first remove the existing database.
 
@@ -213,8 +185,6 @@ The prebuilt database is installed using the database replacement API only if th
 3. A Groceries list will now be visible on the Lists screen. Click on it to see the tasks.
   <img src="https://cl.ly/3e1J2I0G1U1U/image45.gif" class="portrait" />
 
-<block class="ios rn" />
-
 <block class="net" />
 
 1. Open **CoreApp.cs** and navigate to the `CoreAppStart.CreateHint()` method
@@ -227,7 +197,7 @@ The prebuilt database is installed using the database replacement API only if th
 3. Build and run with the command line argument `/clean` (this will clear the existing database)
 4. A Groceries list will now be visible on the Lists screen. Click on it to see the tasks.
 
-<block class="net rn" />
+<block class="all" />
 
 > **Note:** Refer to the [Database](/documentation/mobile/current/develop/guides/couchbase-lite/native-api/database/index.html) guide to learn how to create **pre-built** databases.
 
