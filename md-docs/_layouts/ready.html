@@ -138,7 +138,8 @@ sectionid: docs
           .display-platform-ios .toggler .button-ios,
           .display-platform-android .toggler .button-android,
           .display-platform-rn .toggler .button-rn,
-          .display-platform-net .toggler .button-net {
+          .display-platform-wpf .toggler .button-wpf,
+          .display-platform-xam .toggler .button-xam {
             background-color: #05A5D1;
             color: white;
           }
@@ -149,6 +150,8 @@ sectionid: docs
           .display-platform-android .android,
           .display-platform-rn .rn,
           .display-platform-net .net,
+          .display-platform-wpf .wpf,
+          .display-platform-xam .xam,
           .display-platform-all .all {
             display: block;
           }</style>
@@ -156,7 +159,8 @@ sectionid: docs
         <a href="javascript:void(0);" class="button-ios" onclick="display('platform', 'ios')">iOS</a>
         <a href="javascript:void(0);" class="button-rn" onclick="display('platform', 'rn')">React Native</a>
         <a href="javascript:void(0);" class="button-android" onclick="display('platform', 'android')">Android</a>
-        <a href="javascript:void(0);" class="button-net" onclick="display('platform', 'net')">.NET</a>
+        <a href="javascript:void(0);" class="button-wpf" onclick="display('platform', 'wpf')">WPF</a>
+        <a href="javascript:void(0);" class="button-xam" onclick="display('platform', 'xam')">Xamarin</a>
       </div>
       <!-- SDK buttons -->
       <div id="swagger-libs" style="display: none;">
@@ -211,8 +215,11 @@ sectionid: docs
         }
         function display(type, value) {
           var container = document.getElementsByTagName('block')[0].parentNode;
-          container.className = 'display-' + type + '-' + value + ' display-platform-all ' +
-                  container.className.replace(RegExp('display-' + type + '-[a-z]+ ?'), '');
+          container.className = 'display-' + type + '-' + value;
+          if (value == 'wpf' || value == 'xam') {
+            container.className += ' display-platform-net';
+          }
+          container.className += ' display-platform-all';
         }
 
         // If we are coming to the page with a hash in it (i.e. from a search, for example), try to get
