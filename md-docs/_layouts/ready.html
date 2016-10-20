@@ -125,7 +125,7 @@ sectionid: docs
     <div class="inner-content">
       <!-- Platform tabs -->
       <!-- TODO: Make visible when ready to show multi-platform training -->
-      <div class="toggler" style="display: none;">
+      <div class="toggler">
         <style>
           .toggler a {
             display: inline-block;
@@ -148,7 +148,8 @@ sectionid: docs
           .display-platform-ios .ios,
           .display-platform-android .android,
           .display-platform-rn .rn,
-          .display-platform-net .net {
+          .display-platform-net .net,
+          .display-platform-all .all {
             display: block;
           }</style>
         <span>Platform:</span>
@@ -210,7 +211,7 @@ sectionid: docs
         }
         function display(type, value) {
           var container = document.getElementsByTagName('block')[0].parentNode;
-          container.className = 'display-' + type + '-' + value + ' ' +
+          container.className = 'display-' + type + '-' + value + ' display-platform-all ' +
                   container.className.replace(RegExp('display-' + type + '-[a-z]+ ?'), '');
         }
 
