@@ -20,8 +20,9 @@ Three instances with the following:
 This lesson contains some scripts to automatically deploy and configure Sync Gateway with Couchbase Server. Download those scripts on each VM using wget.
 
 ```bash
+ssh vagrant@VM1
 wget https://cl.ly/3Z0D2D0l3R0O/deploy_NEEDS_REDO.zip
-sudo apt-get install unzip
+sudo yum install -y unzip
 unzip deploy.zip
 ```
 
@@ -178,8 +179,8 @@ In this example the NGINX instance will run on VM2 to keep the number of VMs to 
 ```bash
 #!/usr/bin/env bash
 
-# Install NGINX
-sudo apt-get install nginx
+# Disable SELinux (TODO: bake this into VM)
+setenforce 0
 
 # Update NGINX config with IPs
 cp nginx_template.txt tmp.txt
@@ -191,10 +192,7 @@ do
 done
 
 # Move NGINX config to /etc/nginx/sites-available/sync_gateway_nginx
-mv tmp.txt /etc/nginx/sites-available/sync_gateway_nginx
-
-# Enable the configuration file by creating a symlink
-ln -s /etc/nginx/sites-available/sync_gateway_nginx /etc/nginx/sites-enabled/sync_gateway_nginx
+mv tmp.txt /etc/nginx/conf.d/sync_gateway_nginx.conf
 
 # Restart NGINX
 sudo service nginx restart
@@ -206,13 +204,13 @@ sudo service nginx restart
 2. Run the NGINX install script passing the IP of VM2 and VM3 where the Sync Gateway instances are running.
 
     ```bash
-    bash install_nginx.sh VM2 VM3
+    sudo install_nginx.sh VM2 VM3
     ```
 
 3. Monitor the NGINX operations in real-time.
 
     ```bash
-    tail -f /var/log/nginx/access_log
+    sudo tail -f /var/log/nginx/access_log
     ```
 
 4. Send a `/{db}/_all_docs` request with the **user1/password** credentials to http://VM2_IP:8000/todo. The Sync Gateway logs will print this operation.
