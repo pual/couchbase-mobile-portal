@@ -12,7 +12,7 @@ In this lesson you'll learn how to install Sync Gateway and Couchbase Server, ou
 
 Three instances with the following:
 
-- Ubuntu >= 12.04, =< 14.04
+- Centos 7
 - RAM >= 2GB
 
 #### Getting Started
@@ -20,7 +20,7 @@ Three instances with the following:
 This lesson contains some scripts to automatically deploy and configure Sync Gateway with Couchbase Server. Download those scripts on each VM using wget.
 
 ```bash
-wget https://cl.ly/3Z0D2D0l3R0O/deploy.zip
+wget https://cl.ly/3Z0D2D0l3R0O/deploy_NEEDS_REDO.zip
 sudo apt-get install unzip
 unzip deploy.zip
 ```
@@ -70,7 +70,7 @@ sleep 10
 2. Run the **deploy/install\_couchbase\_server.sh** script.
 
     ```bash
-    bash deploy/install_couchbase_server.sh
+    sudo deploy/install_couchbase_server.sh
     ```
 
 3. Log on the Couchbase Server Admin Console on [http://VM1_IP:8091](http://VM1_IP:8091) with the user credentials that were created above (**Administrator/password**).
@@ -126,7 +126,7 @@ service sync_gateway restart
 2. Run the Sync Gateway install script passing the IP of VM1 where Couchbase Server is running.
 
     ```bash
-    bash install_sync_gateway.sh VM1
+    sudo install_sync_gateway.sh VM1
     ```
 
 3. Monitor the log file.
