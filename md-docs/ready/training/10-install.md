@@ -12,7 +12,7 @@ In this lesson you'll learn how to install Sync Gateway and Couchbase Server, ou
 
 Three instances with the following:
 
-- Ubuntu >= 12.04, =< 14.04
+- Centos 7
 - RAM >= 2GB
 
 #### Getting Started
@@ -20,8 +20,9 @@ Three instances with the following:
 This lesson contains some scripts to automatically deploy and configure Sync Gateway with Couchbase Server. Download those scripts on each VM using wget.
 
 ```bash
-wget https://cl.ly/3Z0D2D0l3R0O/deploy.zip
-sudo apt-get install unzip
+ssh vagrant@VM1
+wget https://cl.ly/3Z0D2D0l3R0O/deploy_NEEDS_REDO.zip
+sudo yum install -y unzip
 unzip deploy.zip
 ```
 
@@ -46,10 +47,13 @@ To deploy Couchbase Mobile to production you must first get familiar with Couchb
 #!/usr/bin/env bash
 
 # Download Couchbase Server 4.1
-wget http://packages.couchbase.com/releases/4.1.0/couchbase-server-community_4.1.0-ubuntu14.04_amd64.deb
+wget http://packages.couchbase.com/releases/4.1.0/couchbase-server-community-4.1.0-centos6.x86_64.rpm
 
 # Install Couchbase Server 4.1
-dpkg -i couchbase-server-community_4.1.0-ubuntu14.04_amd64.deb
+yum install -y couchbase-server-community-4.1.0-centos6.x86_64.rpm
+
+# Start Couchbase Server 4.1
+/opt/couchbase/etc/couchbase_init.d start
 
 # Waiting for server
 sleep 10
@@ -67,7 +71,7 @@ sleep 10
 2. Run the **deploy/install\_couchbase\_server.sh** script.
 
     ```bash
-    bash deploy/install_couchbase_server.sh
+    sudo deploy/install_couchbase_server.sh
     ```
 
 3. Log on the Couchbase Server Admin Console on [http://VM1_IP:8091](http://VM1_IP:8091) with the user credentials that were created above (**Administrator/password**).
@@ -101,11 +105,11 @@ The script below downloads and installs Sync Gateway 1.3. Then it restarts the `
 ```bash
 #!/usr/bin/env bash
 
-# Download Sync Gateway 1.3
-wget http://packages.couchbase.com/releases/couchbase-sync-gateway/1.3.0/couchbase-sync-gateway-enterprise_1.3.0-274_x86_64.deb
+# Download Sync Gateway 1.3.1
+wget http://packages.couchbase.com/releases/couchbase-sync-gateway/1.3.1/couchbase-sync-gateway-community_1.3.1-16_x86_64.rpm
 
-# Install Sync Gateway 1.3
-dpkg -i couchbase-sync-gateway-enterprise_1.3.0-274_x86_64.deb
+# Install Sync Gateway 1.3.1
+rpm -i couchbase-sync-gateway-community_1.3.1-16_x86_64.rpm
 
 # Update Sync Gateway config with Couchbase Server URL
 sed 's/walrus:/http:\/\/'${1}':8091/g' sync-gateway-config.json > sync_gateway.json
@@ -123,7 +127,7 @@ service sync_gateway restart
 2. Run the Sync Gateway install script passing the IP of VM1 where Couchbase Server is running.
 
     ```bash
-    bash install_sync_gateway.sh VM1
+    sudo install_sync_gateway.sh VM1
     ```
 
 3. Monitor the log file.
@@ -175,8 +179,8 @@ In this example the NGINX instance will run on VM2 to keep the number of VMs to 
 ```bash
 #!/usr/bin/env bash
 
-# Install NGINX
-sudo apt-get install nginx
+# Disable SELinux (TODO: bake this into VM)
+setenforce 0
 
 # Update NGINX config with IPs
 cp nginx_template.txt tmp.txt
@@ -188,10 +192,7 @@ do
 done
 
 # Move NGINX config to /etc/nginx/sites-available/sync_gateway_nginx
-mv tmp.txt /etc/nginx/sites-available/sync_gateway_nginx
-
-# Enable the configuration file by creating a symlink
-ln -s /etc/nginx/sites-available/sync_gateway_nginx /etc/nginx/sites-enabled/sync_gateway_nginx
+mv tmp.txt /etc/nginx/conf.d/sync_gateway_nginx.conf
 
 # Restart NGINX
 sudo service nginx restart
@@ -203,13 +204,13 @@ sudo service nginx restart
 2. Run the NGINX install script passing the IP of VM2 and VM3 where the Sync Gateway instances are running.
 
     ```bash
-    bash install_nginx.sh VM2 VM3
+    sudo install_nginx.sh VM2 VM3
     ```
 
 3. Monitor the NGINX operations in real-time.
 
     ```bash
-    tail -f /var/log/nginx/access_log
+    sudo tail -f /var/log/nginx/access_log
     ```
 
 4. Send a `/{db}/_all_docs` request with the **user1/password** credentials to http://VM2_IP:8000/todo. The Sync Gateway logs will print this operation.
