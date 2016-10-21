@@ -119,8 +119,6 @@ The `CBLAuthenticator` class has static methods for each authentication method s
 
 2. Build and run.
 
-<block class="ios rn" />
-
 3. Now login with the credentials saved in the config file previously (**user1/pass**) and create a new list. Open the Sync Gateway Admin UI at [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo), the list document is successfully replicated to Sync Gateway as an authenticated user.
 
     ![](img/image35.png)
@@ -249,7 +247,6 @@ In this section you will add some validation logic for list documents. There are
 - **Schema validation:** A document that doesn’t follow the schema specified in your application could have an impact on other clients when they receive it. That’s why you must check for the existence of the properties required in your application.
 - **Key validation:** Some document keys may follow a specific format (prefix.uuid) that will be used throughout your system so making sure that it follows the desired format is good practice.
 - **Read-only validation:** You may decide that some properties should be immutable and cannot change during an update operation.
-
 
 ```javascript
 function validateNotEmpty(key, value) {
