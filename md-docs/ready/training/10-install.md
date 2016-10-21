@@ -46,10 +46,13 @@ To deploy Couchbase Mobile to production you must first get familiar with Couchb
 #!/usr/bin/env bash
 
 # Download Couchbase Server 4.1
-wget http://packages.couchbase.com/releases/4.1.0/couchbase-server-community_4.1.0-ubuntu14.04_amd64.deb
+wget http://packages.couchbase.com/releases/4.1.0/couchbase-server-community-4.1.0-centos6.x86_64.rpm
 
 # Install Couchbase Server 4.1
-dpkg -i couchbase-server-community_4.1.0-ubuntu14.04_amd64.deb
+yum install -y couchbase-server-community-4.1.0-centos6.x86_64.rpm
+
+# Start Couchbase Server 4.1
+/opt/couchbase/etc/couchbase_init.d start
 
 # Waiting for server
 sleep 10
@@ -101,11 +104,11 @@ The script below downloads and installs Sync Gateway 1.3. Then it restarts the `
 ```bash
 #!/usr/bin/env bash
 
-# Download Sync Gateway 1.3
-wget http://packages.couchbase.com/releases/couchbase-sync-gateway/1.3.0/couchbase-sync-gateway-enterprise_1.3.0-274_x86_64.deb
+# Download Sync Gateway 1.3.1
+wget http://packages.couchbase.com/releases/couchbase-sync-gateway/1.3.1/couchbase-sync-gateway-community_1.3.1-16_x86_64.rpm
 
-# Install Sync Gateway 1.3
-dpkg -i couchbase-sync-gateway-enterprise_1.3.0-274_x86_64.deb
+# Install Sync Gateway 1.3.1
+rpm -i couchbase-sync-gateway-community_1.3.1-16_x86_64.rpm
 
 # Update Sync Gateway config with Couchbase Server URL
 sed 's/walrus:/http:\/\/'${1}':8091/g' sync-gateway-config.json > sync_gateway.json
