@@ -8,6 +8,8 @@ In this lesson you’ll learn how to add security to your Couchbase Mobile appli
 
 [//]: # "COMMON ACROSS LESSONS"
 
+<block class="ios" />
+
 #### Requirements
 
 - Xcode 8 (Swift 3)
@@ -15,6 +17,17 @@ In this lesson you’ll learn how to add security to your Couchbase Mobile appli
 #### Getting Started
 
 Download the project below.
+
+<block class="net" />
+
+#### Requirements
+
+- Visual Studio 2015+ (Windows) or Xamarin Studio 6+ (OS X)
+
+#### Getting Started
+
+- Clone this repo and open the `dotnet\Training.sln` project
+- (optional) Update to the latest version of the Couchbase.Lite / Couchbase.Lite.Storage.SQLCipher nuget package, if not already added
 
 <block class="ios" />
 
@@ -41,7 +54,7 @@ Throughout this lesson, you will navigate in different files of the Xcode projec
 
 [//]: # "COMMON ACROSS LESSONS"
 
-<block class="ios rn" />
+<block class="all" />
 
 ## Implement User Authentication
 
@@ -80,6 +93,8 @@ Users are created with a name/password on Sync Gateway which can then be used on
 
 With Sync Gateway users defined you can now enable authentication on the Couchbase Lite replicator. The code below creates two replications with authentication.
 
+<block class="ios" />
+
 ```swift
 // This code can be found in AppDelegate.swift
 // in the startReplication(withUsername:andPassword:) method
@@ -103,7 +118,34 @@ pusher.start()
 puller.start()
 ```
 
-<block class="ios rn" />
+<block class="net" />
+
+```c#
+// This code can be found in CoreApp.cs
+// in the StartReplication(string, string) method
+var authenticator = default(IAuthenticator);
+if(username != null && password != null) {
+    authenticator = AuthenticatorFactory.CreateBasicAuthenticator(username, password);
+}
+
+var db = AppWideManager.GetDatabase(username);
+var pusher = db.CreatePushReplication(SyncGatewayUrl);
+pusher.Continuous = true;
+pusher.Authenticator = authenticator;
+
+
+var puller = db.CreatePullReplication(SyncGatewayUrl);
+puller.Continuous = true;
+puller.Authenticator = authenticator;
+
+pusher.Start();
+puller.Start();
+
+_pusher = pusher;
+_puller = puller;
+```
+
+<block class="all" />
 
 The `CBLAuthenticator` class has static methods for each authentication method supported by Couchbase Lite. Here, you're passing the name/password to the `basicAuthenticatorWithName` method. The object returned by this method can be set on the replication's `authenticator` property.
 
@@ -125,6 +167,37 @@ The `CBLAuthenticator` class has static methods for each authentication method s
 
 > **Note:** You can remove the local database and check if the pull replication retrieves the documents now present on Sync Gateway. On macOS, use the [SimPholders](https://simpholders.com/) utility app to quickly find the data directory of the application and delete the database called **user1**. Then restart the app and you'll notice that the "Today" list isn't displayed. That is, the list document wasn't replicated from Sync Gateway to Couchbase Lite. Indeed, the document is not routed to a channel that the user has access to. **Channel** and **access** are new terms so don't worry, we'll cover what they mean in the next section.
 <video src="https://d3vv6lp55qjaqc.cloudfront.net/items/1s1G3C1i2a0G2P3o0G0m/movie1.mp4" controls="true" poster="https://cl.ly/1W2T3w463S0f/image72.png"></video>
+
+<block class="net" />
+
+1. Change `LoginEnabled = false` to `LoginEnabled = true` in the `CreateHint()` method in **CoreApp.cs**
+
+    ```c#
+    var retVal = new CoreAppStartHint {
+        LoginEnabled = true, // Line to change is here
+        EncryptionEnabled = false,
+        SyncEnabled = false,
+        UsePrebuiltDB = false,
+        ConflictResolution = false,
+        Username = "todo"
+    };
+
+    return retVal;
+    ```
+    
+2. Build and run
+
+3. Now login with the credentials saved in the config file previously (**user1/pass**) and create a new list. Open the Sync Gateway Admin UI at [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo), the list document is successfully replicated to Sync Gateway as an authenticated user.
+
+<block class="wpf" />
+
+> **Note:** You can remove the local database and check if the pull replication retrieves the documents now present on Sync Gateway. Using File Explorer, type `%LOCALAPPDATA%` into the location bar and press enter, then delete the database **user1.cblite2**. Then restart the app and you'll notice that the "Today" list isn't displayed. That is, the list document wasn't replicated from Sync Gateway to Couchbase Lite. Indeed, the document is not routed to a channel that the user has access to. **Channel** and **access** are new terms so don't worry, we'll cover what they mean in the next section.
+
+<block class="xam" />
+
+> **Note:** You can remove the local database and check if the pull replication retrieves the documents now present on Sync Gateway. On macOS, use the [SimPholders](https://simpholders.com/) utility app to quickly find the data directory of the application and delete the database called **user1** on iOS, or you can use the adb shell to navigate to the application's data folder and delete it on Android. Then restart the app and you'll notice that the "Today" list isn't displayed. That is, the list document wasn't replicated from Sync Gateway to Couchbase Lite. Indeed, the document is not routed to a channel that the user has access to. **Channel** and **access** are new terms so don't worry, we'll cover what they mean in the next section.
+
+<block class="all" />
 
 ## Define Access Control Policies
 
@@ -379,7 +452,7 @@ You must first include the correct dependencies before enabling encryption.
 <block class="ios" />
 
 - Locate the `openDatabase(username:withKey:newKey)` method in **AppDelegate.swift**, this method is called from `startSession` which is in turn getting called in `processLogin` after the user has logged in.
-- The Database's `openDatabaseName` is used to create an encrypted database.
+- The manager's `openDatabaseName` is used to create an encrypted database.
 
 ```swift
 let dbname = username
@@ -398,7 +471,33 @@ if newKey != nil {
 }
 ```
 
+<block class="net" />
+
+- Locate the `OpenDatabase(string, string, string)` method in **CoreApp.cs**, this method is called from `StartSession` which is in turn getting called from the login page's logic.
+- The manager's `OpenDatabase` is used to create an encrypted database.
+
+```c#
+var encryptionKey = default(SymmetricKey);
+if(key != null) {
+    encryptionKey = new SymmetricKey(key);
+}
+
+var options = new DatabaseOptions {
+    Create = true,
+    EncryptionKey = encryptionKey
+};
+
+Database = AppWideManager.OpenDatabase(dbName, options);
+if(newKey != null) {
+    Database.ChangeEncryptionKey(new SymmetricKey(newKey));
+}
+```
+
+<block class="all" />
+
 ### Try it out
+
+<block class="ios" />
 
 - Drag **Extras/libsqlcipher.a** from the Couchbase Lite SDK folder to the Frameworks folder in the Xcode project.
   ![](img/image50.png)
@@ -418,6 +517,38 @@ if newKey != nil {
 - Build and run.
 - Browse to the database file and you'll find that it's now encrypted.
 
+<block class="net" />
+
+- In the `CreateHint()` method in **CoreApp.cs**, change `EncryptionEnabled = false` to `EncryptionEnabled = true`
+
+    ```c#
+    var retVal = new CoreAppStartHint {
+        LoginEnabled = false,
+        EncryptionEnabled = true, // Line to change is here
+        SyncEnabled = false,
+        UsePrebuiltDB = false,
+        ConflictResolution = false,
+        Username = "todo"
+    };
+
+    return retVal;
+    ```
+    
+<block class="xam" />
+
+- Delete the application if you ran it previously without encryption.
+
+<block class="wpf" />
+
+- Delete the database file with the username in question from the `%LOCALAPPDATA%` folder if you previous ran without encryption
+
+<block class="net" />
+    
+- Build and run.
+- Browse to the database file and you'll find that it's now encrypted.
+
+<block class="all" />
+
 ## Offline Login
 
 What about the scenario where a user attempts to login while being offline? Since data may already be in the database, it would be nice to allow the app to use it. From the previous section, you’ve learned that the database can be safely accessed with an encryption key so the user can attempt to enter credentials as if they were online (the **name** and **password** of the Sync Gateway user). To achieve offline login, you are mapping the user’s **name** to be the **database name** and the user’s **password** to be the **encryption key**.
@@ -434,11 +565,23 @@ In **AppDelegate.swift**, scroll to the `processLogin` method. Notice that if an
 
 When the user clicks **Delete** it will remove the database and create a new one with no data in it. If the user remembers the old password and clicks **Migrate** it will call the `processLogin` method again passing it the old and new encryption keys. The following code at the end of the `openDatabase` method is changing that encryption key to the user's new password.
 
+<block class="ios" />
+
 ```swift
 if newKey != nil {
     try database.changeEncryptionKey(newKey)
 }
 ```
+
+<block class="net" />
+
+```c#
+if(newKey != null) {
+    Database.ChangeEncryptionKey(new SymmetricKey(newKey));
+}
+```
+
+<block class="all" />
 
 Build and run. Change the password for the user with the following curl request.
 
@@ -449,6 +592,8 @@ curl -vX PUT 'http://localhost:4985/todo/_user/user1' \
 ```
 
 Add a new list which will wake up the replicator to push the new document. Since the user credentials have changed, the task list will not be persisted to Sync Gateway. The way to get notified of this is by checking the replication `lastError` property in the replication change event. In this case it will be a **401 Unauthorized**.
+
+<block class="ios" />
 
 The **lastError** property is checked in the `replicationProgress` method of **AppDelegate.swift**.
 
@@ -480,6 +625,27 @@ If the error code is 401 it displays the popup below and logs the user out of th
 
 <img src="./img/image18.png" class="portrait" />
 
+<block class="net" />
+
+The **LastError** property is checked in the `HandleReplicationChanged` method of **CoreApp.cs**.
+
+```c#
+private static void HandleReplicationChanged(object sender, ReplicationChangeEventArgs args)
+{
+    var error = Interlocked.Exchange(ref _syncError, args.LastError);
+    if(error != args.LastError) {
+        var errorCode = (args.LastError as CouchbaseLiteException)?.CBLStatus?.Code;
+        if(errorCode == StatusCode.Unauthorized) {
+            _dialogs.ShowError("Authorization failed: Your username or password is not correct.");
+        }
+    }
+}
+```
+
+If the error code is 401 it displays the popup below.
+
+<block class="all" />
+
 Click **OK** and on the login screen type **user1** and **newpass**, the new password on the login screen.
 
 <img src="./img/image00.png" class="portrait" />
@@ -495,8 +661,6 @@ Click **Migrate**. Notice that the list added after the password changed is ther
 ### Key Rotation
 
 Key rotation is defined as the process of decrypting data with an old key and re-keying the data with a new one. The benefits of key rotation are all centered on security; for example, if the password to sensitive data is being shared between many users, you may decide to use key rotation to add an extra layer of security. By regularly changing the password you will mitigate the scenario where the encryption key can be compromised unknowingly. Rotating your keys offers more protection and better security for your sensitive business data, but it is not a requirement and it should be considered on a per-application basis.
-
-<block class="ios rn" />
 
 ## Conclusion
 
