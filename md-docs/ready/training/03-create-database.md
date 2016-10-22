@@ -194,7 +194,16 @@ The prebuilt database is installed using the database replacement API only if th
     retVal.usePrebuiltDB = true;
     ```
 
+<block class="xam" />
+
 3. Build and run with the command line argument `/clean` (this will clear the existing database)
+
+<block class="wpf" />
+
+3. Build and run (don't forget to delete the app first).
+
+<block class="net" />
+
 4. A Groceries list will now be visible on the Lists screen. Click on it to see the tasks.
 
 <block class="all" />

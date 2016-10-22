@@ -8,6 +8,8 @@ In this lesson you’ll be introduced to Couchbase Lite, our embedded NoSQL data
 
 [//]: # "COMMON ACROSS LESSONS"
 
+<block class="ios" />
+
 #### Requirements
 
 - Xcode 8 (Swift 3)
@@ -15,6 +17,17 @@ In this lesson you’ll be introduced to Couchbase Lite, our embedded NoSQL data
 #### Getting Started
 
 Download the project below.
+
+<block class="net" />
+
+#### Requirements
+
+- Visual Studio 2015+ (Windows) or Xamarin Studio 6+ (OS X)
+
+#### Getting Started
+
+- Clone this repo and open the `dotnet\Training.sln` project
+- (optional) Update to the latest version of the Couchbase.Lite / Couchbase.Lite.Storage.SQLCipher nuget package, if not already added
 
 <block class="ios" />
 
@@ -41,7 +54,7 @@ Throughout this lesson, you will navigate in different files of the Xcode projec
 
 [//]: # "COMMON ACROSS LESSONS"
 
-<block class="ios rn" />
+<block class="all" />
 
 > **Tip:** To make things a bit more exciting, you may want to use the pre-built database containing a list of Groceries. Refer to the [Create a Database](/documentation/mobile/current/develop/training/using-the-database/index.html) lesson to learn how to use it.
 
@@ -76,7 +89,7 @@ do {
 }
 ```
 
-<block class="ios rn" />
+<block class="all" />
 
 Here you're creating an unsaved document instance with a pre-defined **document ID** (i.e. the **_id** property in the document’s JSON body) using the `documentWithID` method. The ID follows the form `{username}.{uuid}` where username is the name of the user logged in. Alternatively, you could also use the `createDocument` method to let the database generate a random **ID** for you.
 
@@ -88,8 +101,20 @@ Here you're creating an unsaved document instance with a pre-defined **document 
 2. Create a new list using the '+' button on the application's 'Task lists' screen.
 3. A new list document is saved to the database.
     <img src="img/image40.png" class="portrait" />
+    
+<block class="xam" />
 
-<block class="ios rn" />
+1. Build and run.
+2. Create a new list using the '+' button on the application's 'Task lists' screen.
+3. A new list document is saved to the database.
+
+<block class="wpf" />
+
+1. Build and run
+2. Create a new list using the 'Action -> Add List...' command.
+3. A new list document is saved to the database.
+
+<block class="all" />
 
 ## Update a Document
 
@@ -111,7 +136,27 @@ do {
 }
 ```
 
-<block class="ios rn" />
+<block class="net" />
+
+```c#
+// This code can be found in TaskListModel.cs
+// in the Edit(string) method
+try {
+    _document.Update(rev =>
+    {
+        var props = rev.UserProperties;
+        var lastName = props["name"];
+        props["name"] = name;
+        rev.SetUserProperties(props);
+
+        return !String.Equals(name, lastName);
+    });
+} catch(Exception e) {
+    throw new ApplicationException("Couldn't edit task list", e);
+}
+```
+
+<block class="all" />
 
 Your callback code can modify this object's properties as it sees fit; after it returns, the modified revision is saved and becomes the current one.
 
@@ -122,8 +167,18 @@ Your callback code can modify this object's properties as it sees fit; after it 
 1. Build and run.
 2. Swipe to the left on a row to reveal the **Edit** button and update the List name in the pop-up.
     <img src="img/image04.png" class="portrait" />
+    
+<block class="xam" />
 
-<block class="ios rn" />
+1. Build and run
+2. On iOS, swipe to the left, and on Android long press on a row to reveal the **Edit** button and update the List name in the pop-up.
+
+<block class="wpf" />
+
+1. Build and run
+2. Right click on a row to reveal the **Edit** context action.  Click it and update the List name in the pop-up.
+
+<block class="all" />
 
 ## Delete a Document
 
@@ -142,6 +197,20 @@ do {
 }
 ```
 
+<block class="net" />
+
+```c#
+// This code can be found in TaskListModel.cs
+// in the Delete() method
+try {
+    _document.Delete();
+} catch(Exception e) {
+    throw new ApplicationException("Couldn't delete task list", e);
+}
+```
+
+<block class="all" />
+
 ### Try it out
 
 <block class="ios" />
@@ -149,8 +218,18 @@ do {
 1. Build and run.
 2. Click the **Delete** action to delete a list.
     <img class="portrait" src="https://cl.ly/383h2q2C2Z3V/image46.gif" />
+    
+<block class="xam" />
 
-<block class="ios rn"/>
+1. Build and run.
+2. On iOS, swipe to the left, and on Android long press on a row to reveal the **Delete** button.
+
+<block class="wpf" />
+
+1. Build and run.
+2. Right click on a row to reveal the **Delete** context action.
+
+<block class="all"/>
 
 ## Query Documents
 
@@ -182,6 +261,30 @@ listsLiveQuery.addObserver(self, forKeyPath: "rows", options: .new, context: nil
 listsLiveQuery.start()
 ```
 
+<block class="net" />
+
+```c#
+// This code can be found in TaskListsModel.cs
+// in the SetupViewAndQuery() method
+var view = _db.GetView("list/listsByName");
+view.SetMap((doc, emit) =>
+{
+    if(!doc.ContainsKey("type") || doc["type"] as string != "task-list" || !doc.ContainsKey("name")) {
+        return;
+    }
+
+    emit(doc["name"], null);
+}, "1.0");
+
+_byNameQuery = view.CreateQuery().ToLiveQuery();
+
+// ...Changed lamdba omitted for brevity
+
+_byNameQuery.Start();
+```
+
+<block class="all" />
+
 The `viewNamed` method returns a [View](http://developer.couchbase.com/documentation/mobile/current/develop/guides/couchbase-lite/native-api/view/index.html) object on which the map function can be set. The map function is indexing documents where the type property is equal to "task-list". Each cell on the screen will contain a list name and nothing else. For that reason, you can emit the name property as the key and nil is the value. If you also wanted to display the owner of the list in the row you could emit the `owner` property as the value.
 
 The `listsView.createQuery()` method returns a [Query](/documentation/mobile/current/develop/guides/couchbase-lite/native-api/query/index.html) object which has a **run** method to return the results as a [QueryEnumerator](/documentation/mobile/current/develop/references/couchbase-lite/couchbase-lite/query/query-enumerator/index.html) object. However, in this case, you are hooking into a [Live Query](/documentation/mobile/current/develop/guides/couchbase-lite/native-api/query/index.html) to keep monitoring the database for new results. Any time the result of that query changes through user interaction or synchronization, it will notify your application via the change event. A live query provides an easy way to build reactive UIs, which will be especially useful when you enable sync in the [Adding Synchronization](/documentation/mobile/current/develop/training/adding-synchronization/index.html) lesson. The change event is triggered as a result of user interaction locally as well as during synchronization with Sync Gateway.
@@ -202,15 +305,24 @@ override func observeValue(forKeyPath keyPath: String?, of object: Any?, change:
 }
 ```
 
-<block class="ios rn" />
+<block class="net" />
+
+```c#
+// This code can be found in TaskListsModel.cs
+// in the SetupViewAndQuery()
+_byNameQuery.Changed += (sender, args) =>
+{
+    TasksList.Replace(args.Rows.Select(x => new TaskListCellModel(x.DocumentId)));
+};
+```
+
+<block class="all" />
 
 ### Try it out
 
 1. Build and run.
 2. Save a new list to the database and the live query will pick it up instantly and reload the table view.
     <img src="https://cl.ly/3z3i0k1C2W1p/image66.gif" class="portrait" />
-
-<block class="ios rn" />
 
 ## Aggregating Data
 
@@ -262,9 +374,44 @@ incompTasksCountsLiveQuery.addObserver(self, forKeyPath: "rows", options: .new, 
 incompTasksCountsLiveQuery.start()
 ```
 
+<block class="net" />
+
+```c#
+var incompleteTasksView = _db.GetView("list/incompleteTasksCount");
+incompleteTasksView.SetMapReduce((doc, emit) =>
+{
+    if(!doc.ContainsKey("type") || doc["type"] as string != "task") {
+        return;
+    }
+
+    if(!doc.ContainsKey("taskList")) {
+        return;
+    }
+
+    var list = JsonUtility.ConvertToNetObject<IDictionary<string, object>>(doc["taskList"]);
+    if(!list.ContainsKey("id") || (doc.ContainsKey("complete") && (bool)doc["complete"])) {
+        return;
+    }
+
+    emit(list["id"], null);
+
+ }, BuiltinReduceFunctions.Count, "1.0");
+
+_incompleteQuery = incompleteTasksView.CreateQuery().ToLiveQuery();
+_incompleteQuery.GroupLevel = 1;
+
+// ...Changed lambda omitted for brevity
+
+ _incompleteQuery.Start();
+```
+
+<block class="all" />
+
 This time, you call emit only if the document `type` is "task" and `complete` is `false`. The document ID of the list it belongs to (**doc.taskList._id**) serves as the key and the value is nil. The reduce function simply counts the number of rows with the same key. Notice that the **groupLevel** is a property on the live query object.
 
 Every time there is a change to `incompTasksCountsLiveQuery.rows` the `observeValueForKeyPath` method is called which will reload the list count for each row.
+
+<block class="ios" />
 
 ```swift
 // This code can be found in ListsViewController.swift
@@ -278,17 +425,30 @@ override func observeValue(forKeyPath keyPath: String?, of object: Any?, change:
 }
 ```
 
-<block class="ios rn" />
+<block class="net" />
+
+```c#
+ _incompleteQuery.Changed += (sender, e) => 
+{
+    var newItems = TasksList.ToList();
+    foreach(var row in e.Rows) {
+        var item = newItems.FirstOrDefault(x => x.DocumentID == row.Key as string);
+        if(item != null) {
+            item.IncompleteCount = (int)row.Value;
+        }
+    }
+
+    TasksList.Replace(newItems);
+};
+```
+
+<block class="all" />
 
 ### Try it out
-
-<block class="ios" />
 
 1. Build and run.
 2. You will see the uncompleted task count for each list.
     <img src="./img/image08.png" class="portrait" />
-
-<block class="ios rn" />
 
 ## Conclusion
 

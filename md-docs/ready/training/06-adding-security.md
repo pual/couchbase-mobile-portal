@@ -8,6 +8,8 @@ In this lesson you’ll learn how to add security to your Couchbase Mobile appli
 
 [//]: # "COMMON ACROSS LESSONS"
 
+<block class="ios" />
+
 #### Requirements
 
 - Xcode 8 (Swift 3)
@@ -15,6 +17,17 @@ In this lesson you’ll learn how to add security to your Couchbase Mobile appli
 #### Getting Started
 
 Download the project below.
+
+<block class="net" />
+
+#### Requirements
+
+- Visual Studio 2015+ (Windows) or Xamarin Studio 6+ (OS X)
+
+#### Getting Started
+
+- Clone this repo and open the `dotnet\Training.sln` project
+- (optional) Update to the latest version of the Couchbase.Lite / Couchbase.Lite.Storage.SQLCipher nuget package, if not already added
 
 <block class="ios" />
 
@@ -41,7 +54,7 @@ Throughout this lesson, you will navigate in different files of the Xcode projec
 
 [//]: # "COMMON ACROSS LESSONS"
 
-<block class="ios rn" />
+<block class="all" />
 
 ## User Authentication
 
@@ -80,6 +93,8 @@ Users are created with a name/password on Sync Gateway which can then be used on
 
 With Sync Gateway users defined you can now enable authentication on the Couchbase Lite replicator. The code below creates two replications with authentication.
 
+<block class="ios" />
+
 ```swift
 // This code can be found in AppDelegate.swift
 // in the startReplication(withUsername:andPassword:) method
@@ -103,7 +118,34 @@ pusher.start()
 puller.start()
 ```
 
-<block class="ios rn" />
+<block class="net" />
+
+```c#
+// This code can be found in CoreApp.cs
+// in the StartReplication(string, string) method
+var authenticator = default(IAuthenticator);
+if(username != null && password != null) {
+    authenticator = AuthenticatorFactory.CreateBasicAuthenticator(username, password);
+}
+
+var db = AppWideManager.GetDatabase(username);
+var pusher = db.CreatePushReplication(SyncGatewayUrl);
+pusher.Continuous = true;
+pusher.Authenticator = authenticator;
+
+
+var puller = db.CreatePullReplication(SyncGatewayUrl);
+puller.Continuous = true;
+puller.Authenticator = authenticator;
+
+pusher.Start();
+puller.Start();
+
+_pusher = pusher;
+_puller = puller;
+```
+
+<block class="all" />
 
 The `CBLAuthenticator` class has static methods for each authentication method supported by Couchbase Lite. Here, you're passing the name/password to the `basicAuthenticatorWithName` method. The object returned by this method can be set on the replication's `authenticator` property.
 
@@ -125,6 +167,37 @@ The `CBLAuthenticator` class has static methods for each authentication method s
 
 > **Note:** You can remove the local database and check if the pull replication retrieves the documents now present on Sync Gateway. On macOS, use the [SimPholders](https://simpholders.com/) utility app to quickly find the data directory of the application and delete the database called **user1**. Then restart the app and you'll notice that the "Today" list isn't displayed. That is, the list document wasn't replicated from Sync Gateway to Couchbase Lite. Indeed, the document is not routed to a channel that the user has access to. **Channel** and **access** are new terms so don't worry, we'll cover what they mean in the next section.
 <video src="https://d3vv6lp55qjaqc.cloudfront.net/items/1s1G3C1i2a0G2P3o0G0m/movie1.mp4" controls="true" poster="https://cl.ly/1W2T3w463S0f/image72.png"></video>
+
+<block class="net" />
+
+1. Change `LoginEnabled = false` to `LoginEnabled = true` in the `CreateHint()` method in **CoreApp.cs**
+
+    ```c#
+    var retVal = new CoreAppStartHint {
+        LoginEnabled = true, // Line to change is here
+        EncryptionEnabled = false,
+        SyncEnabled = false,
+        UsePrebuiltDB = false,
+        ConflictResolution = false,
+        Username = "todo"
+    };
+
+    return retVal;
+    ```
+    
+2. Build and run
+
+3. Now login with the credentials saved in the config file previously (**user1/pass**) and create a new list. Open the Sync Gateway Admin UI at [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo), the list document is successfully replicated to Sync Gateway as an authenticated user.
+
+<block class="wpf" />
+
+> **Note:** You can remove the local database and check if the pull replication retrieves the documents now present on Sync Gateway. Using File Explorer, type `%LOCALAPPDATA%` into the location bar and press enter, then delete the database **user1.cblite2**. Then restart the app and you'll notice that the "Today" list isn't displayed. That is, the list document wasn't replicated from Sync Gateway to Couchbase Lite. Indeed, the document is not routed to a channel that the user has access to. **Channel** and **access** are new terms so don't worry, we'll cover what they mean in the next section.
+
+<block class="xam" />
+
+> **Note:** You can remove the local database and check if the pull replication retrieves the documents now present on Sync Gateway. On macOS, use the [SimPholders](https://simpholders.com/) utility app to quickly find the data directory of the application and delete the database called **user1** on iOS, or you can use the adb shell to navigate to the application's data folder and delete it on Android. Then restart the app and you'll notice that the "Today" list isn't displayed. That is, the list document wasn't replicated from Sync Gateway to Couchbase Lite. Indeed, the document is not routed to a channel that the user has access to. **Channel** and **access** are new terms so don't worry, we'll cover what they mean in the next section.
+
+<block class="all" />
 
 ## Access Control
 
@@ -366,4 +439,4 @@ function (doc, oldDoc) {
 
 ## Conclusion
 
-Well done! You have implemented all the access rules for List documents. You can find the complete sync function in the project folder. Feel free to share your feedback, findings or ask any questions on the forums.
+Well done! You've completed this lesson on adding authentication, writing a sync function and adding database encryption. Feel free to share your feedback, findings or ask any questions on the forums.
