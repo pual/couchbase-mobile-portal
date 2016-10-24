@@ -43,28 +43,6 @@ The server-side architecture will be comprised of 2 nodes of Sync Gateway and 1 
 
 To deploy Couchbase Mobile to production you must first get familiar with Couchbase Server. It can deployed on a whole host of [operating systems](http://www.couchbase.com/nosql-databases/downloads) and can scale horizontally with multiple nodes or vertically by increasing the VM specs. The following script downloads Couchbase Server and creates a new bucket called todo.
 
-```bash
-#!/usr/bin/env bash
-
-# Download Couchbase Server 4.1
-wget http://packages.couchbase.com/releases/4.1.0/couchbase-server-community-4.1.0-centos6.x86_64.rpm
-
-# Install Couchbase Server 4.1
-yum install -y couchbase-server-community-4.1.0-centos6.x86_64.rpm
-
-# Start Couchbase Server 4.1
-/opt/couchbase/etc/couchbase_init.d start
-
-# Waiting for server
-sleep 10
-
-# Initialize the cluster and a new user (Administrator/password)
-/opt/couchbase/bin/couchbase-cli cluster-init -c 127.0.0.1 --cluster-init-username=Administrator --cluster-init-password=password --cluster-init-ramsize=600 -u admin -p password
-
-# Create a new bucket called todo
-/opt/couchbase/bin/couchbase-cli bucket-create -c 127.0.0.1:8091 --bucket=todo --bucket-type=couchbase --bucket-port=11211 --bucket-ramsize=600 --bucket-replica=1 -u Administrator -p password
-```
-
 ### Try it out
 
 1. Log on VM1.
@@ -100,26 +78,8 @@ In production, the configuration file should look similar to the one used in dev
 }
 ```
 
-The script below downloads and installs Sync Gateway 1.3. Then it restarts the `sync_gateway` service with the configuration file of the todo application.
+The `install_sync_gateway.sh` script downloads and installs Sync Gateway 1.3. Then it restarts the `sync_gateway` service with the configuration file of the todo application.
 
-```bash
-#!/usr/bin/env bash
-
-# Download Sync Gateway 1.3.1
-wget http://packages.couchbase.com/releases/couchbase-sync-gateway/1.3.1/couchbase-sync-gateway-community_1.3.1-16_x86_64.rpm
-
-# Install Sync Gateway 1.3.1
-rpm -i couchbase-sync-gateway-community_1.3.1-16_x86_64.rpm
-
-# Update Sync Gateway config with Couchbase Server URL
-sed 's/walrus:/http:\/\/'${1}':8091/g' sync-gateway-config.json > sync_gateway.json
-
-# Replace the default config file with the one from the app
-mv sync_gateway.json /home/sync_gateway/sync_gateway.json
-
-# Restart the sync_gateway service
-service sync_gateway restart
-```
 
 ### Try it out 
 
@@ -174,29 +134,8 @@ server {
 }
 ```
 
-In this example the NGINX instance will run on VM2 to keep the number of VMs to a minimum. You could consider running NGINX on a separate VM (e.g VM4). The following script install NGINX and configures it for two Sync Gateway instances.
+In this example the NGINX instance will run on VM2 to keep the number of VMs to a minimum. You could consider running NGINX on a separate VM (e.g VM4). The `install_nginx.sh` script will install NGINX and configures it for two Sync Gateway instances.
 
-```bash
-#!/usr/bin/env bash
-
-# Disable SELinux (TODO: bake this into VM)
-setenforce 0
-
-# Update NGINX config with IPs
-cp nginx_template.txt tmp.txt
-for ip in "$@"
-do
-	echo "$ip"
-	output="$(awk '{print} /sync_gateway_nodes/{print "server '${ip}':4984;"}' tmp.txt)"
-	echo "$output" > tmp.txt
-done
-
-# Move NGINX config to /etc/nginx/sites-available/sync_gateway_nginx
-mv tmp.txt /etc/nginx/conf.d/sync_gateway_nginx.conf
-
-# Restart NGINX
-sudo service nginx restart
-```
 
 ### Try it out
 
