@@ -46,13 +46,14 @@ To deploy Couchbase Mobile to production you must first get familiar with Couchb
 ### Try it out
 
 1. Log on VM1.
-2. Run the **deploy/install\_couchbase\_server.sh** script.
+1. `cd deploy`
+1. Run the **install\_couchbase\_server.sh** script.
 
     ```bash
-    sudo deploy/install_couchbase_server.sh
+    sudo install_couchbase_server.sh
     ```
 
-3. Log on the Couchbase Server Admin Console on [http://VM1_IP:8091](http://VM1_IP:8091) with the user credentials that were created above (**Administrator/password**).
+1. Log on the Couchbase Server Admin Console on [http://VM1_IP:8091](http://VM1_IP:8091) with the user credentials that were created above (**Administrator/password**).
 
     <img src="https://cl.ly/2v400A2s0I2v/image68.gif" class="center-image" />
 
@@ -84,19 +85,20 @@ The `install_sync_gateway.sh` script downloads and installs Sync Gateway 1.3. Th
 ### Try it out 
 
 1. Log on the terminal console of VM2.
-2. Run the Sync Gateway install script passing the IP of VM1 where Couchbase Server is running.
+1. `cd deploy`
+1. Run the Sync Gateway install script passing the IP of VM1 where Couchbase Server is running.
 
     ```bash
     sudo install_sync_gateway.sh VM1
     ```
 
-3. Monitor the log file.
+1. Monitor the log file.
 
     ```bash
     tail -f /home/sync_gateway/logs/sync_gateway_error.log
     ```
 
-4. Send a `/{db}/_all_docs` request with the **user1/password** credentials http://VM2_IP:4984/todo. The Sync Gateway logs will print this operation.
+1. Send a `/{db}/_all_docs` request with the **user1/password** credentials http://VM2_IP:4984/todo. The Sync Gateway logs will print this operation.
 
     ```bash
     curl -X GET 'http://user1:pass@**VM2**:4984/todo/_all_docs'
@@ -104,7 +106,7 @@ The `install_sync_gateway.sh` script downloads and installs Sync Gateway 1.3. Th
 
     ![](https://cl.ly/1j1q3p333D47/image75.gif)
 
-5. Repeat the same steps on VM3.
+1. Repeat the same steps on VM3.
 
 ## Using a reverse proxy
 
@@ -139,20 +141,21 @@ In this example the NGINX instance will run on VM2 to keep the number of VMs to 
 
 ### Try it out
 
-1. Log on the terminal console of VM2.
-2. Run the NGINX install script passing the IP of VM2 and VM3 where the Sync Gateway instances are running.
+1. Log on the terminal console of VM4.
+1. `cd deploy`
+1. Run the NGINX install script passing the IP of VM2 and VM3 where the Sync Gateway instances are running.
 
     ```bash
     sudo install_nginx.sh VM2 VM3
     ```
 
-3. Monitor the NGINX operations in real-time.
+1. Monitor the NGINX operations in real-time.
 
     ```bash
     sudo tail -f /var/log/nginx/access_log
     ```
 
-4. Send a `/{db}/_all_docs` request with the **user1/password** credentials to http://VM2_IP:8000/todo. The Sync Gateway logs will print this operation.
+1. Send a `/{db}/_all_docs` request with the **user1/password** credentials to http://VM2_IP:8000/todo. The Sync Gateway logs will print this operation.
 
     ![](https://cl.ly/392N2E2K0J0T/image76.gif)
 
