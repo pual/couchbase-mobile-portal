@@ -95,7 +95,7 @@ In this section you will perform the same sequence of operations to upgrade Sync
     sudo ./upgrade_sync_gateway.sh
     ```
 
-5. Log on VM4 (sync-gateway).
+5. Log on VM4 (nginx).
 6. Run the NGINX script again this time passing the IP of VM2 and VM3.
 
     ```bash
