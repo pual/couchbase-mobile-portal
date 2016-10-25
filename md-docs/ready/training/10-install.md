@@ -45,19 +45,17 @@ To deploy Couchbase Mobile to production you must first get familiar with Couchb
 
 ### Try it out
 
-1. Log on VM1.
+1. Log on VM1 (couchbase-server).
 1. `cd deploy`
 1. Run the **install\_couchbase\_server.sh** script.
 
     ```bash
-    sudo install_couchbase_server.sh
+    sudo ./install_couchbase_server.sh
     ```
 
 1. Log on the Couchbase Server Admin Console on [http://VM1_IP:8091](http://VM1_IP:8091) with the user credentials that were created above (**Administrator/password**).
 
     <img src="https://cl.ly/2v400A2s0I2v/image68.gif" class="center-image" />
-
-    > **Note:** To uninstall Couchbase Server you can run the following: `dpkg -r couchbase-server-community`.
 
 ## Install Sync Gateway
 
@@ -84,21 +82,21 @@ The `install_sync_gateway.sh` script downloads and installs Sync Gateway 1.3. Th
 
 ### Try it out 
 
-1. Log on the terminal console of VM2.
+1. Log on VM2 (sync-gateway).
 1. `cd deploy`
 1. Run the Sync Gateway install script passing the IP of VM1 where Couchbase Server is running.
 
     ```bash
-    sudo install_sync_gateway.sh VM1
+    sudo ./install_sync_gateway.sh VM1
     ```
 
 1. Monitor the log file.
 
     ```bash
-    tail -f /home/sync_gateway/logs/sync_gateway_error.log
+    sudo tail -f /home/sync_gateway/logs/sync_gateway_error.log
     ```
 
-1. Send a `/{db}/_all_docs` request with the **user1/password** credentials http://VM2_IP:4984/todo. The Sync Gateway logs will print this operation.
+1. Send a `/{db}/_all_docs` request with the **user1/password** credentials to http://VM2_IP:4984/todo. The Sync Gateway logs will print this operation.
 
     ```bash
     curl -X GET 'http://user1:pass@**VM2**:4984/todo/_all_docs'
@@ -106,47 +104,20 @@ The `install_sync_gateway.sh` script downloads and installs Sync Gateway 1.3. Th
 
     ![](https://cl.ly/1j1q3p333D47/image75.gif)
 
-1. Repeat the same steps on VM3.
+1. Repeat the same steps on VM3 (sync-gateway).
 
 ## Using a reverse proxy
 
-With two Sync Gateway nodes you can now configure the reverse proxy and update the sync endpoint in the mobile app to start replications pointing to the reverse proxy instead of an individual Sync Gateway instance.
-
-The following NGINX configuration file balances the traffic between VM2 and VM3.
-
-```bash
-upstream sync_gateway {
-# sync_gateway_nodes
-}
-# HTTP server
-#
-server {
-		access_log /var/log/nginx/access_log combined;
-		listen 8000;
-		client_max_body_size 20m;
-		location / {
-				proxy_pass              http://sync_gateway;
-				proxy_pass_header       Accept;
-				proxy_pass_header       Server;
-				proxy_http_version      1.1;
-				keepalive_requests      1000;
-				keepalive_timeout       360s;
-				proxy_read_timeout      360s;
-		}
-}
-```
-
-In this example the NGINX instance will run on VM2 to keep the number of VMs to a minimum. You could consider running NGINX on a separate VM (e.g VM4). The `install_nginx.sh` script will install NGINX and configures it for two Sync Gateway instances.
-
+With two Sync Gateway nodes you can now configure the reverse proxy and update the sync endpoint in the mobile app to start replications pointing to the reverse proxy instead of an individual Sync Gateway instance. In this example the NGINX instance will run on VM4.
 
 ### Try it out
 
-1. Log on the terminal console of VM4.
+1. Log on VM4 (nginx).
 1. `cd deploy`
 1. Run the NGINX install script passing the IP of VM2 and VM3 where the Sync Gateway instances are running.
 
     ```bash
-    sudo install_nginx.sh VM2 VM3
+    sudo ./configure_nginx.sh VM2 VM3
     ```
 
 1. Monitor the NGINX operations in real-time.
@@ -155,7 +126,7 @@ In this example the NGINX instance will run on VM2 to keep the number of VMs to 
     sudo tail -f /var/log/nginx/access_log
     ```
 
-1. Send a `/{db}/_all_docs` request with the **user1/password** credentials to http://VM2_IP:8000/todo. The Sync Gateway logs will print this operation.
+1. Send a `/{db}/_all_docs` request with the **user1/password** credentials to http://VM4_IP:8000/todo. The Sync Gateway logs will print this operation.
 
     ![](https://cl.ly/392N2E2K0J0T/image76.gif)
 
