@@ -254,6 +254,8 @@ function(doc, oldDoc){
       {"error":"forbidden","reason":"type property missing","status":403}
     ]
     ```
+    
+    > **Note:** The curl executable for Windows can be found [on this page](https://curl.haxx.se/download.html)
 
     As expected, the response contains the _type property missing_ error message for the document that doesn't have the `type` property.
 
