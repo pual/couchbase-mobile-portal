@@ -26,7 +26,7 @@ Download the project below.
 
 #### Getting Started
 
-- Clone this repo and open the `dotnet\Training.sln` project
+- Download the project below
 - (optional) Update to the latest version of the Couchbase.Lite / Couchbase.Lite.Storage.SQLCipher nuget package, if not already added
 
 <block class="ios" />
@@ -51,6 +51,14 @@ Open **Todo.xcodeproj** in Xcode. Then build & run the project.
 Throughout this lesson, you will navigate in different files of the Xcode project. We recommend to use the method navigator to scroll to a method.
 
 <img src="https://cl.ly/0G263m3m1a0w/image44.gif" class="center-image" />
+
+<block class="net" />
+
+<div class="buttons-unit downloads">
+  <a href="#" class="button" id="project">
+    <img src="img/download-vs.png">
+  </a>
+</div>
 
 [//]: # "COMMON ACROSS LESSONS"
 
@@ -108,11 +116,18 @@ Here you're creating an unsaved document instance with a pre-defined **document 
 2. Create a new list using the '+' button on the application's 'Task lists' screen.
 3. A new list document is saved to the database.
 
+**iOS**
+<img src="img/image40.png" class="portrait" />
+**Android**
+<img src="img/image40a.png" class="portrait" />
+
 <block class="wpf" />
 
 1. Build and run
 2. Create a new list using the 'Action -> Add List...' command.
 3. A new list document is saved to the database.
+
+<img src="img/image40w.png" />
 
 <block class="all" />
 
@@ -173,10 +188,17 @@ Your callback code can modify this object's properties as it sees fit; after it 
 1. Build and run
 2. On iOS, swipe to the left, and on Android long press on a row to reveal the **Edit** button and update the List name in the pop-up.
 
+**iOS**
+<img src="img/image04.png" class="portrait" />
+**Android**
+<img src="img/image04a.png" class="portrait" />
+
 <block class="wpf" />
 
 1. Build and run
 2. Right click on a row to reveal the **Edit** context action.  Click it and update the List name in the pop-up.
+
+<img src="img/image04w.png" />
 
 <block class="all" />
 
@@ -224,10 +246,17 @@ try {
 1. Build and run.
 2. On iOS, swipe to the left, and on Android long press on a row to reveal the **Delete** button.
 
+**iOS**
+<img src="img/image46.gif" class="portrait" />
+**Android**
+<img src="img/image46a.gif" class="portrait" />
+
 <block class="wpf" />
 
 1. Build and run.
 2. Right click on a row to reveal the **Delete** context action.
+
+<img src="img/image46w.gif" class="portrait" />
 
 <block class="all"/>
 
@@ -448,7 +477,21 @@ override func observeValue(forKeyPath keyPath: String?, of object: Any?, change:
 
 1. Build and run.
 2. You will see the uncompleted task count for each list.
-    <img src="./img/image08.png" class="portrait" />
+
+<block class="ios" />
+
+<img src="./img/image08.png" class="portrait" />
+
+<block class="xam" />
+
+**iOS**
+<img src="./img/image08.png" class="portrait" />
+**Android**
+<img src="./img/image08a.png" class="portrait" />
+
+<block class="wpf" />
+
+<img src="./img/image08w.png" />
 
 ## Conclusion
 

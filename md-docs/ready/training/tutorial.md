@@ -14,7 +14,20 @@ Sync Gateway is the web tier that exposes a database API for Couchbase Lite data
 
 In this developer tutorial series, you will build a ToDo List application with Couchbase Mobile and learn how to use the database, add synchronization, and add security.
 
+<block class="ios" />
+
 <img src="./img/image11.png" class="portrait" />
+
+<block clas="wpf" />
+
+<img src="./img/image11w.png" />
+
+<block class="xam" />
+
+**iOS**
+<img src="./img/image11.png" class="portrait" />
+**Android**
+<img src="./img/image11a.png" class="portrait" />
 
 ## Course Outline
 

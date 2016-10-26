@@ -80,6 +80,8 @@ if (!oldDoc) {
 
     {"error":"Forbidden","reason":"task is not provided."}
     ```
+    
+    > **Note:** The curl executable for Windows can be found [on this page](https://curl.haxx.se/download.html)
 
     The operation is rejected in all 3 requests with a **403 Forbidden** error because the schema is not valid. The test has passed.
 

@@ -75,6 +75,8 @@ $ curl -H 'Content-Type: application/json' -vX GET 'http://localhost:4985/todo/_
 }
 ```
 
+    > **Note:** The curl executable for Windows can be found [on this page](https://curl.haxx.se/download.html)
+
 The **since** parameter in the querystring is used to specify which sequence to start from. In this case the response contains changes starting at `seq: 3` because the `since=3` parameter was sent in the querystring.
 
 Deleting a document creates a new revision with the `deleted: true` property and no user properties. This is required in order to propagate the deletion to other devices. In the example above the change with sequence 4 (`seq: 4`) is a deletion.

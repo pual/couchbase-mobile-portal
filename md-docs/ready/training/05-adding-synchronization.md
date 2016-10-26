@@ -26,7 +26,7 @@ Download the project below.
 
 #### Getting Started
 
-- Clone this repo and open the `dotnet\Training.sln` project
+- Download the project below
 - (optional) Update to the latest version of the Couchbase.Lite / Couchbase.Lite.Storage.SQLCipher nuget package, if not already added
 
 <block class="ios" />
@@ -51,6 +51,14 @@ Open **Todo.xcodeproj** in Xcode. Then build & run the project.
 Throughout this lesson, you will navigate in different files of the Xcode project. We recommend to use the method navigator to scroll to a method.
 
 <img src="https://cl.ly/0G263m3m1a0w/image44.gif" class="center-image" />
+
+<block class="net" />
+
+<div class="buttons-unit downloads">
+  <a href="#" class="button" id="project">
+    <img src="img/download-vs.png">
+  </a>
+</div>
 
 [//]: # "COMMON ACROSS LESSONS"
 
@@ -189,6 +197,8 @@ _puller = puller;
 3. Build and run.
 4. Open [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo) in the browser and notice that all the documents are pushed to Sync Gateway! You may have more or less rows depending on how many documents are present in the Couchbase Lite database.
 
+![](./img/image19.png)
+
 <block class="net" />
 
 1. In **CoreApp.cs** set `SyncGatewayUrl` to the URL of the Sync Gateway database (http://localhost:4984/todo/).  If the application is running on a phone, you must replace **localhost** with the internal IP of the machine running Sync Gateway and ensure that the phone and laptop are connected to the same network.
@@ -215,9 +225,18 @@ _puller = puller;
 3. Build and run.
 4. Open [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo) in the browser and notice that all the documents are pushed to Sync Gateway! You may have more or less rows depending on how many documents are present in the Couchbase Lite database.
 
-<block class="all" />
+<block class="wpf" />
 
+![](./img/image19w.png)
+
+<block class="xam" />
+
+**iOS**
 ![](./img/image19.png)
+**Android**
+![](./img/image19a.png)
+
+<block class="all" />
 
 ## Resolve Conflicts
 
@@ -285,11 +304,24 @@ Even if the conflict isn’t resolved, Couchbase Lite has to return something. I
 
 Shown below is a list document created with two conflicting revisions. After deleting the row, the text **Update 2** appears which is the name of the second conflicting revision. The action of deleting a document only detetes the current revision and if there are conflicting revisions it will be promoted as the new current revision.
 
-<img src="https://cl.ly/023t2k3w3k3c/image47.gif" class="portrait" />
+
 
 <block class="ios" />
 
+<img src="https://cl.ly/023t2k3w3k3c/image47.gif" class="portrait" />
+
 > **Note:** During development, the method `saveAllowingConflicts` is used to intentionally create a conflict. You can shake the device (**^⌘Z** on the simulator) to create a list conflict. The code is located in the `motionEnded(_:with:)` method of **ListsViewController.swift**.
+
+<block class="wpf" />
+
+<img src="./img/image47w.gif" class="portrait" />
+
+<block class="xam" />
+
+**iOS**
+<img src="./img/image47.gif" />
+**Android**
+<img src="./img/image47a.gif" />
 
 <block class="all" />
 
@@ -393,6 +425,17 @@ Database.RunInTransaction(() =>
    
 2. Perform the same actions and this time deleting the list conflict doesn’t reveal the subsequent conflicting revision anymore.
 
+<block class="wpf" />
+
+<img class="portrait" src="./img/image48w.gif"  />
+
+<block class="xam" />
+
+**iOS**
+<img class="portrait" src="./img/image48.gif"  />
+**Android**
+<img class="portrait" src="./img/image48a.gif"  />
+
 <block class="all" />
 
 ### N-way conflict resolution
@@ -489,7 +532,7 @@ Notice that for 'task' documents, the `nWayMergeConflicts()` method is called to
 3. Create a task conflict using the shake gesture (or **^⌘Z**) and this time the row contains the updated text **and** is marked as completed.
     ![](img/image03.png)
     
-<block class="net" />
+<block class="wpf" />
 
 1. Enable conflict resolution
 
@@ -507,7 +550,34 @@ Notice that for 'task' documents, the `nWayMergeConflicts()` method is called to
    ```
    
 2. Build and run
-3. **TODO**
+3. Create a conflict by pressing 'Ctrl+C' and this time the row contains the updated text **and** is marked as completed.
+
+![](img/image03w.png)
+
+<block class="xam" />
+
+1. Enable conflict resolution
+
+   ```c#
+   var retVal = new CoreAppStartHint {
+       LoginEnabled = false,
+       EncryptionEnabled = false,
+       SyncEnabled = false,
+       UsePrebuiltDB = false,
+       ConflictResolution = true, // The line to change
+       Username = "todo"
+   };
+
+   return retVal;
+   ```
+   
+2. Build and run
+3. Create a task conflict using the shake gesture and this time the row contains the updated text **and** is marked as completed.
+
+**iOS**
+![](img/image03.png)
+**Android**
+![](img/image03a.png)
 
 <block class="all" />
 

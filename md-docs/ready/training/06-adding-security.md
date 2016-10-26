@@ -269,6 +269,8 @@ As shown above, you can define inner functions to encapsulate logic used through
       {"error":"forbidden","reason":"type property missing","status":403}
     ]
     ```
+    
+    > **Note:** The curl executable for Windows can be found [on this page](https://curl.haxx.se/download.html)
 
     The document without a type is rejected with an error message: "type property missing".
 
