@@ -28,26 +28,25 @@ There will be 3 Sync Gateway nodes but the reverse proxy is forwarding the load 
 ### Try it out
 
 1. Log on VM5 (sync-gateway).
-2. Run the Sync Gateway install script passing the IP of VM1 where Couchbase Server is running.
+1. `cd deploy`
+1. Run the Sync Gateway install latest script passing the IP of VM1 where Couchbase Server is running.
 
     ```bash
-    sudo ./install_sync_gateway.sh VM1
+    sudo ./install_latest_sync_gateway.sh VM1
     ```
 
-3. Log on VM4 (nginx).
-4. Run the NGINX install script passing the IP of VM2, VM3 and VM4 where the Sync Gateway instances are running.
+1. Log on VM4 (nginx).
+1. Run the NGINX install script passing the IP of VM2, VM3 and VM4 where the Sync Gateway instances are running.
 
     ```bash
     sudo ./configure_nginx.sh VM2 VM3 VM5
     ```
 
-5. Monitor the NGINX operations in real-time.
+1. Send a curl request to http://localhost:8000. This will return information about the running sync_gateway behind the reverse proxy.
 
     ```bash
-    tail -f /var/log/nginx/access_log
+    curl localhost:8000
     ```
-
-6. Send a `/{db}/_all_docs` request with the **user1/password** credentials to http://VM4_IP:8000. The Sync Gateway logs will print this operation.
 
     ![](https://cl.ly/392N2E2K0J0T/image76.gif)
 
