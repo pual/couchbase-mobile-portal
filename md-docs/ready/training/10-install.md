@@ -120,12 +120,6 @@ With two Sync Gateway nodes you can now configure the reverse proxy and update t
     sudo ./configure_nginx.sh VM2 VM3
     ```
 
-1. Monitor the NGINX operations in real-time.
-
-    ```bash
-    sudo tail -f /var/log/nginx/access_log
-    ```
-
 1. Send a `/{db}/_all_docs` request with the **user1/password** credentials to http://VM4_IP:8000/todo. The Sync Gateway logs will print this operation.
 
     ![](https://cl.ly/392N2E2K0J0T/image76.gif)

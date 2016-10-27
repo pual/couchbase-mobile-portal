@@ -12,7 +12,7 @@ In this lesson you'll learn how to install upgrades for Sync Gateway with zero d
 
 Three instances with the following:
 
-- Ubuntu >= 12.04, =< 14.04
+- CentOS 7
 - RAM >= 2GB
 
 #### Getting Started
@@ -45,31 +45,33 @@ First you will need to redirect the traffic to only one Sync Gateway node (VM3).
 
 1. Log on VM4 (nginx).
 1. `cd deploy`
-2. Run the NGINX script passing only the IP of VM3.
+1. Run the NGINX script passing only the IP of VM3.
 
     ```bash
     sudo ./configure_nginx.sh VM3
     ```
 
-3. Run the Sync Gateway upgrade script on VM2.
+1. Log into VM2 (sync_gateway)
+1. Run the Sync Gateway upgrade script on VM2.
 
     ```bash
     sudo ./upgrade_sync_gateway.sh
     ```
-
-4. Run the NGINX script again this time passing the IP of VM2 and VM3.
+    
+1. Change back to VM4
+1. Run the NGINX script again this time passing the IP of VM2 and VM3.
 
     ```bash
     sudo ./configure_nginx.sh VM2 VM3
     ```
 
-5. Monitor the NGINX operations in real-time.
+1. Monitor the NGINX operations in real-time.
 
     ```bash
     sudo tail -f /var/log/nginx/access_log
     ```
 
-6. Send a `/{db}/` request with the **user1/password** credentials to http://VM4_IP:8000/. The response contains the Sync Gateway version. Notice that it switch between 1.3.0 and 1.3.1 because only one node was upgrade.
+1. Send a `/{db}/` request with the **user1/password** credentials to http://VM4_IP:8000/. The response contains the Sync Gateway version. Notice that it switch between 1.3.0 and 1.3.1 because only one node was upgrade.
 
     ![](https://cl.ly/3m0g1R0J0w37/image77.gif)
 
