@@ -120,7 +120,11 @@ With two Sync Gateway nodes you can now configure the reverse proxy and update t
     sudo ./configure_nginx.sh VM2 VM3
     ```
 
-1. Send a `/{db}/_all_docs` request with the **user1/password** credentials to http://VM4_IP:8000/todo. The Sync Gateway logs will print this operation.
+1. Send an `/{db}/_all_docs` request with a user's credentials to the NGINX port. A user (**user1/pass**) is already defined in the Sync Gateway configuration file.
+
+    ```bash
+    curl -X GET 'http://user1:pass@localhost:8000/todo/_all_docs'
+    ```
 
     ![](https://cl.ly/392N2E2K0J0T/image76.gif)
 
