@@ -96,7 +96,7 @@ The `install_sync_gateway.sh` script downloads and installs Sync Gateway 1.3. Th
     sudo tail -f /home/sync_gateway/logs/sync_gateway_error.log
     ```
 
-1. Send a `/{db}/_all_docs` request with the **user1/password** credentials to http://localhost:4984/todo. The Sync Gateway logs will print this operation.
+1. Send an `/{db}/_all_docs` request with a user's credentials. A user (**user1/pass**) is already defined in the Sync Gateway configuration file.
 
     ```bash
     curl -X GET 'http://user1:pass@localhost:4984/todo/_all_docs'
