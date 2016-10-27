@@ -77,7 +77,7 @@ In production, the configuration file should look similar to the one used in dev
 }
 ```
 
-The `install_sync_gateway.sh` script downloads and installs Sync Gateway 1.3. Then it restarts the `sync_gateway` service with the configuration file of the todo application.
+The `install_sync_gateway.sh` script downloads and installs Sync Gateway 1.3. Then it restarts the `sync_gateway` service with the configuration file (`deploy/sync-gateway-config.json`) of the todo application.
 
 
 ### Try it out 
@@ -96,10 +96,10 @@ The `install_sync_gateway.sh` script downloads and installs Sync Gateway 1.3. Th
     sudo tail -f /home/sync_gateway/logs/sync_gateway_error.log
     ```
 
-1. Send a `/{db}/_all_docs` request with the **user1/password** credentials to http://VM2_IP:4984/todo. The Sync Gateway logs will print this operation.
+1. Send a `/{db}/_all_docs` request with the **user1/password** credentials to http://localhost:4984/todo. The Sync Gateway logs will print this operation.
 
     ```bash
-    curl -X GET 'http://user1:pass@**VM2**:4984/todo/_all_docs'
+    curl -X GET 'http://user1:pass@localhost:4984/todo/_all_docs'
     ```
 
     ![](https://cl.ly/1j1q3p333D47/image75.gif)
