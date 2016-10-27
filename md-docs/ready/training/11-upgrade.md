@@ -51,7 +51,7 @@ First you will need to redirect the traffic to only one Sync Gateway node (VM3).
     sudo ./configure_nginx.sh VM3
     ```
 
-1. Log into VM2 (sync_gateway)
+1. Log into VM2 (sync-gateway)
 1. Run the Sync Gateway upgrade script on VM2.
 
     ```bash

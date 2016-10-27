@@ -10,7 +10,7 @@ In this lesson you'll learn how to scale Sync Gateway and Couchbase Server in re
 
 Four instances with the following:
 
-- Ubuntu >= 12.04, =< 14.04
+- Centos 7
 - RAM >= 2GB
 
 ## Architecture
