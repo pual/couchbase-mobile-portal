@@ -46,7 +46,7 @@ The Manager creates a directory in the filesystem and stores databases inside it
 
 - Android: The directory is the location returned by the Android Context object's `getFilesDir()`.
 - iOS: `Application Support/CouchbaseLite/`
-- macOS: ``~/Library/Application Support/com.example.YourAppBundleID/CouchbaseLite/`
+- macOS: `~/Library/Application Support/com.example.YourAppBundleID/CouchbaseLite/`
 
 > **Note:** One notable case where the location can be important is on iOS: Apple's app review process tries to make sure that the only application data that will be backed up to iCloud is data created by the user. So it's a red flag when, on first launch, an app creates data in backed-up locations (including the Documents and Application Support directories) without user action. Unfortunately, that will happen if your app starts a pull replication on launch, or installs a pre-populated database. Some apps using Couchbase Lite have had their App Store approval held up for this reason!
 
