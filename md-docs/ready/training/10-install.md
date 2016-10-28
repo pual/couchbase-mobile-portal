@@ -128,6 +128,8 @@ With two Sync Gateway nodes you can now configure the reverse proxy and update t
 
     ![](https://cl.ly/392N2E2K0J0T/image76.gif)
 
+<block class="dockercloud" />
+
 ## Conclusion
 
 Well done! You've completed this lesson on installing Sync Gateway and Couchbase Server. In the next lesson you'll learn how to perform an upgrade on Sync Gateway. Feel free to share your feedback, findings or ask any questions on the forums.

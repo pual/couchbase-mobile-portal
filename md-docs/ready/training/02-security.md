@@ -8,23 +8,17 @@ In this lesson you’ll learn how to secure your data model using Couchbase Mobi
 
 Security rules are used to determine who has read and write access to the database. They live on the server in Sync Gateway and are enforced at all times.
 
-Documents can either be created to store data or to grant other users access to data. Most documents fall somewhere in the middle where some properties are used to persist data and others to control access.
+The access control requirements for the application are the following.
 
-![](img/image83.png)
-
-In this lesson you will learn how to extend the existing data model to add security to your application.
-
-![](https://cl.ly/3b231e0D3U2h/image85.gif)
+1. A user can create a list and tasks.
+2. The owner of a list can invite other users to access the list.
+3. Users invited to a list can create tasks.
+4. A moderator has access to all lists.
+5. A moderator can create new tasks and invte users.
 
 ## Routing
 
-Sync Gateway provides an ability to assign documents to something we call channels. Channels act as an organization mechanism. The graphic below may help to understand how channels work. It shows conceptually the idea of Sync Gateway feeding documents to channels during a replication.
-
-![](img/image81.png)
-
-You control assigning documents to channels through the Sync Function. Each blue pipe in the diagram represents a channel. The green arrows illustrate the idea that the sync function can assign any individual document to any number of channels.
-
-The diagram below adds a note to specify a dynamic channel name for task and list documents to be in the same channel.
+Sync Gateway provides an ability to assign documents to something we call channels. You control assigning documents to channels through the Sync Function. The image below specifies that the List and Task documents are assigned to the same channel ("list.user1.dk39-4kd9-lw9d").
 
 ![](img/02-list-channel.png)
 
@@ -32,29 +26,52 @@ The diagram below adds a note to specify a dynamic channel name for task and lis
 
 ### Single user
 
-Sync Gateway provides different methods of authenticating users. Regardless of the provider you choose, all of your users are stored in Sync Gateway. The following diagram adds a note to specify that the owner should have read access to the list.
+Once the document is mapped to the channel you can give the user access to it. In doing so, that user will have read access to all the documents in the channel. The following image specifies the `access` call to grant read access to the list channel.
 
 ![](img/03-read-access.png)
 
+**Tip:** As shown above, you can route documents of different types to the same channel. The `access` method can then be invoked once since the list and its tasks are in the same channel.
+
 ### Multiple users
 
-In the application, any list can be shared with other users. In the **list** document, that's represented by the `users` array. Instead of keeping the list of users on the **list** document itself, you'll create a new document of type `list.user` whose purpose will be to grant a user access to a list. The diagram below adds a note to specify that the document ID of the `list.user` document is responsible for granting user2 access to user1's list.
+Now let's consider the action of sharing a list with another user. Currently, List and Task models do not have an option to specify other user names.
+
+In the application, there is no limit to how many users can access a list. There could be thousands! So instead of embedding other user's details on the List model we'll introduce a 3rd document that joins a list and user. The image below adds the List User model. When processing a document of type "list-user", the Sync Function must grant the user (`doc.name`) access to the list (`doc.list`).
 
 ![](img/04-multiple-users.png)
 
 ## Write Access
 
-You must add write access security rules to ensure the system is secure. Generally that means checking that a user is allowed to perform the intended operation. The diagram below adds notes to ensure document can't be created by any user.
+Write access security rules are necessary to protect the system. Generally that means checking that the user is allowed to perform the operation before persisting the document to disc.
 
-![](img/05-write-access.png)
+### By user
 
-As you can see, only owners of a list can invite other users to access it.
+The image below adds a rule to ensure that only the List owner can persist those documents.
+
+![](img/05-write-by-user.png)
+
+The List model is the straightforward case, it checks that the user synchronizing the document is indeed the owner of the list (`doc.owner`).
+
+For List User and Task documents the same security can be enforced because the owner is prefixed on the List document ID ("user1.dk39-4kd9-lw9d").
+
+### By Access
+
+The image below adds a rule to allow invited users to create tasks. If the user sending the task has access to the list channel ("user1.dk39-4kd9-lw9d") then it must have been invited and therefore can persist the task.
+
+![](img/06-write-by-access.png)
 
 ## Roles
 
-Another design requirements of the application is that moderators can invite other users to a list they have access to. In out current design this isn't possible because all users have equal privileges. However we can use Sync Gateway roles to assign roles to users to limit or extend write permission privileges. The diagram below adds a `moderator` document whose purpose is to grant a user with the "moderator" role.
+Another design requirement of the application is that certain users can be moderators. In that case they can perform more operations than other non-moderating users. A user can be elected to be a moderator by users with the admin role only.
+
+The image below adds a new Moderator model for this purpose.
 
 ![](img/06-role.png)
+
+The following security changes to routing, read and write permissions were added.
+
+- List, List User and Task documents are routed to the "moderators" channel.
+- Moderators have access to all the lists and can create new tasks or invite users.
 
 ## Conclusion
 

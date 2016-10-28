@@ -121,6 +121,8 @@ In this section you will perform the same sequence of operations to upgrade Sync
     }
     ```
 
+<block class="dockercloud" />
+
 ## Conclusion
 
 Well done! You've completed this lesson on upgrading the Sync Gateway version. In the next lesson you will learn how to scale Sync Gatway by adding additional nodes. Feel free to share your feedback, findings or ask any questions on the forums.

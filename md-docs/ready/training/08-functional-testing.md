@@ -22,23 +22,6 @@ When a document is processed in the Sync Function, there are usually 4 steps to 
 
 In the project folder you will find the sync function. The table below translates each line from the Sync Function into what it means from an access control standpoint.
 
-|Scenario|Document Type|Type of Test|
-|:-------|:------------|:---------------|
-|The type property must be defined and immutable|all|Validation|
-|Only users with **admin** role can write|moderator|Write|
-|The _id property must be follow "moderator.{username}"|moderator|Validation|
-|The username property is immutable|moderator|Validation|
-|Document is added to user channel|moderator|Routing|
-|User has access to moderators channels|moderator|Read|
-|Only owner can create lists for themselves|task-list|Write|
-|Moderators can create lists for other users|task-list|Write|
-|Name and owner properties are required|task-list|Validation|
-|The _id must be "{username}.uuid"|task-list|Validation|
-|Owner field is immutable|task-list|Validation|
-|Add doc to "task-list.{doc._id}" channel|task-list|Validation|
-|`taskList.id`, `taskList.owner` and `task` are required|task|Validation|
-|The doc.username user is granted read access to the "task-list.{doc.taskList.id}" channel|task-list:user|Routing|
-
 ### Try it out
 
 1. Download Sync Gateway

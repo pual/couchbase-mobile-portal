@@ -50,6 +50,8 @@ There will be 3 Sync Gateway nodes but the reverse proxy is forwarding the load 
 
     ![](https://cl.ly/392N2E2K0J0T/image76.gif)
 
+<block class="dockercloud" />
+
 ## Conclusion
 
 Well done! You've completed this lesson on scaling. Feel free to share your feedback, findings or ask any questions on the forums.
