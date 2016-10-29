@@ -250,6 +250,6 @@ When subscribing to the changes feed as a particular user, only the documents th
 
 4. Query the changes feed as user2 again and notice that now the list and task documents are in the response. User2 has now access to the shared list. The test has passed.
 
-## Conclustion
+## Conclusion
 
 Well done! You've completed this lesson on functional testing. In the next lesson you'll learn how to run performance tests. Feel free to share your feedback, findings or ask any questions on the forums.
