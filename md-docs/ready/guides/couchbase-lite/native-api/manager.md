@@ -370,7 +370,7 @@ func application(application: UIApplication, didFinishLaunchingWithOptions launc
 func runBackground {
   let manager = CBLManager.sharedInstance()
   var error: NSError?
-  let db = [bgMgr.databaseNamed("db", error: &error)]
+  let db = [manager.databaseNamed("db", error: &error)]
   // ... now use the database 
 }
 ```
