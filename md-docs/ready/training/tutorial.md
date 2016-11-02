@@ -18,9 +18,9 @@ In this developer tutorial series, you will build a ToDo List application with C
 
 <img src="./img/image11.png" class="portrait" />
 
-<block clas="wpf" />
+<block class="wpf" />
 
-<img src="./img/image11w.png" />
+<img src="./img/image11w.png" class="center-image" />
 
 <block class="xam" />
 

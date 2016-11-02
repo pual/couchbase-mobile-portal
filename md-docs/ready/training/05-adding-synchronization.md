@@ -18,19 +18,6 @@ In this lesson you’ll be introduced to Sync Gateway, our secure web gateway. Y
 
 Download the project below.
 
-<block class="net" />
-
-#### Requirements
-
-- Visual Studio 2015+ (Windows) or Xamarin Studio 6+ (OS X)
-
-#### Getting Started
-
-- Download the project below
-- (optional) Update to the latest version of the Couchbase.Lite / Couchbase.Lite.Storage.SQLCipher nuget package, if not already added
-
-<block class="ios" />
-
 <div class="buttons-unit downloads">
   <a href="https://cl.ly/2A2D3q3R2d1g/xcode-project.zip" class="button" id="project">
     <img src="img/download-xcode.png">
@@ -54,9 +41,33 @@ Throughout this lesson, you will navigate in different files of the Xcode projec
 
 <block class="net" />
 
+#### Requirements
+
+- Visual Studio 2015+ (Windows) or Xamarin Studio 6+ (OS X)
+
+#### Getting Started
+
+Download the project below.
+
 <div class="buttons-unit downloads">
   <a href="#" class="button" id="project">
     <img src="img/download-vs.png">
+  </a>
+</div>
+
+<block class="android" />
+
+#### Requirements
+
+- Android Studio
+
+#### Getting Started
+
+Download the project below.
+
+<div class="buttons-unit downloads">
+  <a href="https://cl.ly/2A2D3q3R2d1g/xcode-project.zip" class="button" id="project">
+    <img src="img/download-android.png">
   </a>
 </div>
 

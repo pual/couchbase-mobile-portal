@@ -166,6 +166,7 @@ sectionid: docs
         <div id="platform-tabs" class="hide">
           <span>Platform:</span>
           <a href="javascript:void(0);" class="button-ios" onclick="display('platform', 'ios')">iOS</a>
+          <a href="javascript:void(0);" class="button-android" onclick="display('platform', 'android')">Android</a>
           <a href="javascript:void(0);" class="button-wpf" onclick="display('platform', 'wpf')">WPF</a>
         </div>
       </div>
@@ -240,7 +241,7 @@ sectionid: docs
         var foundHash = false;
         if (window.location.hash !== '' && window.location.hash !== 'content') { // content is default
           var platform = window.location.hash.slice(1);
-          if (['ios', 'wpf'].indexOf(platform) > -1) {
+          if (['ios', 'android', 'wpf'].indexOf(platform) > -1) {
             display('platform', platform);
             foundHash = true;
           }
