@@ -108,6 +108,28 @@ do {
 }
 ```
 
+<block class="net" />
+
+```c#
+// This code can be found in TaskListsModel.cs
+// in the CreateTaskList(string) method
+var properties = new Dictionary<string, object> {
+    ["type"] = TaskListType,
+    ["name"] = name,
+    ["owner"] = Username
+};
+
+var docId = $"{Username}.{Guid.NewGuid()}";
+var doc = default(Document);
+try {
+    doc = _db.GetDocument(docId);
+    return doc.PutProperties(properties);
+} catch(Exception e) {
+    var newException = new ApplicationException("Couldn't save task list", e);
+    throw newException;
+}
+```
+
 <block class="all" />
 
 Here you're creating an unsaved document instance with a pre-defined **document ID** (i.e. the **_id** property in the document’s JSON body) using the `documentWithID` method. The ID follows the form `{username}.{uuid}` where username is the name of the user logged in. Alternatively, you could also use the `createDocument` method to let the database generate a random **ID** for you.
@@ -138,7 +160,7 @@ Here you're creating an unsaved document instance with a pre-defined **document 
 2. Create a new list using the 'Action -> Add List...' command.
 3. A new list document is saved to the database.
 
-<img src="img/image40w.png" />
+<img src="img/image40w.png" class="center-image" />
 
 <block class="all" />
 
@@ -209,7 +231,7 @@ Your callback code can modify this object's properties as it sees fit; after it 
 1. Build and run
 2. Right click on a row to reveal the **Edit** context action.  Click it and update the List name in the pop-up.
 
-<img src="img/image04w.png" />
+<img src="img/image04w.png" class="center-image" />
 
 <block class="all" />
 
@@ -267,7 +289,7 @@ try {
 1. Build and run.
 2. Right click on a row to reveal the **Delete** context action.
 
-<img src="img/image46w.gif" class="portrait" />
+<img src="img/image46w.gif" class="center-image" />
 
 <block class="all"/>
 
@@ -502,7 +524,7 @@ override func observeValue(forKeyPath keyPath: String?, of object: Any?, change:
 
 <block class="wpf" />
 
-<img src="./img/image08w.png" />
+<img src="./img/image08w.png" class="center-image" />
 
 ## Conclusion
 

@@ -325,14 +325,14 @@ Shown below is a list document created with two conflicting revisions. After del
 
 <block class="wpf" />
 
-<img src="./img/image47w.gif" class="portrait" />
+<img src="./img/image47w.gif" class="center-image" />
 
 <block class="xam" />
 
 **iOS**
-<img src="./img/image47.gif" />
+<img src="./img/image47.gif" class="portrait" />
 **Android**
-<img src="./img/image47a.gif" />
+<img src="./img/image47a.gif" class="portrait" />
 
 <block class="all" />
 
@@ -453,7 +453,13 @@ Database.RunInTransaction(() =>
 
 For task documents, you will follow the same steps as previously except this time the conflict resolution will merge the differences between the conflicting revisions into a new revision before removing them. This time, one revision changes the title of the task while the other revision marks it as completed. Here the winning revision is the one that set the **completed** property to true.
 
+<block class="ios" />
+
 <img src="https://cl.ly/0P0w2k0s1a2z/image67.gif" class="portrait" />
+
+<block class="wpf" />
+
+<img src="./img/image67w.gif" class="center-image" />
 
 <block class="ios" />
 
