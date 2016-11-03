@@ -277,7 +277,7 @@ The prebuilt database is installed using the database replacement API only if th
 
 4. A Groceries list will now be visible on the Lists screen. Click on it to see the tasks.
 
-    <img src="img/image45w.gif" />
+    <img src="https://cl.ly/023H36113s2r/image45w.gif" class="center-image" />
 
 <block class="xam" />
 **iOS**

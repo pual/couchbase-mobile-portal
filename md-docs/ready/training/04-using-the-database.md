@@ -289,7 +289,7 @@ try {
 1. Build and run.
 2. Right click on a row to reveal the **Delete** context action.
 
-<img src="img/image46w.gif" class="center-image" />
+<img src="https://cl.ly/2Z1s2z2e0Q0N/image46w.gif" class="center-image" />
 
 <block class="all"/>
 

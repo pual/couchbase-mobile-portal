@@ -315,8 +315,6 @@ Even if the conflict isn’t resolved, Couchbase Lite has to return something. I
 
 Shown below is a list document created with two conflicting revisions. After deleting the row, the text **Update 2** appears which is the name of the second conflicting revision. The action of deleting a document only detetes the current revision and if there are conflicting revisions it will be promoted as the new current revision.
 
-
-
 <block class="ios" />
 
 <img src="https://cl.ly/023t2k3w3k3c/image47.gif" class="portrait" />
@@ -325,7 +323,7 @@ Shown below is a list document created with two conflicting revisions. After del
 
 <block class="wpf" />
 
-<img src="./img/image47w.gif" class="center-image" />
+<img src="https://cl.ly/0V2I0h1T1j24/image47.gif" class="center-image" />
 
 <block class="xam" />
 
@@ -438,7 +436,7 @@ Database.RunInTransaction(() =>
 
 <block class="wpf" />
 
-<img class="portrait" src="./img/image48w.gif"  />
+<img class="portrait" src="https://cl.ly/0o1z380g2w2w/image48w.gif"  />
 
 <block class="xam" />
 
