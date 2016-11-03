@@ -130,6 +130,22 @@ try {
 }
 ```
 
+<block class="android" />
+
+```java
+// This code can be found in ListsActivity.java
+// in the createTaskList(String) method
+Map<String, Object> properties = new HashMap<String, Object>();
+properties.put("type", "task-list");
+properties.put("name", title);
+properties.put("owner", mUsername);
+
+String docId = mUsername + "." + UUID.randomUUID();
+
+Document document = mDatabase.getDocument(docId);
+document.putProperties(properties);
+```
+
 <block class="all" />
 
 Here you're creating an unsaved document instance with a pre-defined **document ID** (i.e. the **_id** property in the document’s JSON body) using the `documentWithID` method. The ID follows the form `{username}.{uuid}` where username is the name of the user logged in. Alternatively, you could also use the `createDocument` method to let the database generate a random **ID** for you.
@@ -152,7 +168,7 @@ Here you're creating an unsaved document instance with a pre-defined **document 
 **iOS**
 <img src="img/image40.png" class="portrait" />
 **Android**
-<img src="img/image40a.png" class="portrait" />
+<img src="img/image40xa.png" class="portrait" />
 
 <block class="wpf" />
 
@@ -161,6 +177,13 @@ Here you're creating an unsaved document instance with a pre-defined **document 
 3. A new list document is saved to the database.
 
 <img src="img/image40w.png" class="center-image" />
+
+<block class="android" />
+
+1. Build and run.
+2. Create a new list using the '+' button on the application's 'Task lists' screen.
+3. A new list document is saved to the database.
+    <img src="img/image40a.png" class="portrait" />
 
 <block class="all" />
 
@@ -204,6 +227,22 @@ try {
 }
 ```
 
+<block class="android" />
+
+```java
+// This code can be in ListsActivity.java
+// in the updateList(Document) method
+Map<String, Object> updatedProperties = new HashMap<String, Object>();
+updatedProperties.putAll(list.getProperties());
+updatedProperties.put("name", input.getText().toString());
+
+try {
+    list.putProperties(updatedProperties);
+} catch (CouchbaseLiteException e) {
+    e.printStackTrace();
+}
+```
+
 <block class="all" />
 
 Your callback code can modify this object's properties as it sees fit; after it returns, the modified revision is saved and becomes the current one.
@@ -224,7 +263,7 @@ Your callback code can modify this object's properties as it sees fit; after it 
 **iOS**
 <img src="img/image04.png" class="portrait" />
 **Android**
-<img src="img/image04a.png" class="portrait" />
+<img src="img/image04xa.png" class="portrait" />
 
 <block class="wpf" />
 
@@ -232,6 +271,13 @@ Your callback code can modify this object's properties as it sees fit; after it 
 2. Right click on a row to reveal the **Edit** context action.  Click it and update the List name in the pop-up.
 
 <img src="img/image04w.png" class="center-image" />
+
+<block class="android" />
+
+1. Build and run.
+2. Long press on a row to reveal the action items. Click the update menu to change title of a list.
+
+<img src="img/image04a.png" class="portrait" />
 
 <block class="all" />
 
@@ -264,6 +310,18 @@ try {
 }
 ```
 
+<block class="android" />
+
+```java
+// This code can be found in ListsActivity.java
+// in the deleteList(Document) method
+try {
+    list.delete();
+} catch (CouchbaseLiteException e) {
+    e.printStackTrace();
+}
+```
+
 <block class="all" />
 
 ### Try it out
@@ -290,6 +348,12 @@ try {
 2. Right click on a row to reveal the **Delete** context action.
 
 <img src="https://cl.ly/2Z1s2z2e0Q0N/image46w.gif" class="center-image" />
+
+<block class="android" />
+
+1. Build and run.
+2. Click the **Delete** action to delete a list.
+    <img class="portrait" src="https://cl.ly/262v3o381j2a/image46a.gif" />
 
 <block class="all"/>
 
@@ -345,6 +409,27 @@ _byNameQuery = view.CreateQuery().ToLiveQuery();
 _byNameQuery.Start();
 ```
 
+<block class="android" />
+
+```java
+// This code can be found in ListsActivity.java
+// in the setupViewAndQuery() method
+com.couchbase.lite.View listsView = mDatabase.getView("list/listsByName");
+if (listsView.getMap() == null) {
+    listsView.setMap(new Mapper() {
+        @Override
+        public void map(Map<String, Object> document, Emitter emitter) {
+            String type = (String) document.get("type");
+            if ("task-list".equals(type)) {
+                emitter.emit(document.get("name"), null);
+            }
+        }
+    }, "1.0");
+}
+
+listsLiveQuery = listsView.createQuery().toLiveQuery();
+```
+
 <block class="all" />
 
 The `viewNamed` method returns a [View](http://developer.couchbase.com/documentation/mobile/current/develop/guides/couchbase-lite/native-api/view/index.html) object on which the map function can be set. The map function is indexing documents where the type property is equal to "task-list". Each cell on the screen will contain a list name and nothing else. For that reason, you can emit the name property as the key and nil is the value. If you also wanted to display the owner of the list in the row you could emit the `owner` property as the value.
@@ -378,13 +463,46 @@ _byNameQuery.Changed += (sender, args) =>
 };
 ```
 
+<block class="android" />
+
+On Android you are using a utility class named **LiveQueryAdapter** which takes care of reloading the list when changes are received.
+
+```java
+// This code can be found in LiveQueryAdapter.java
+// in the public constructor
+query.addChangeListener(new LiveQuery.ChangeListener() {
+    @Override
+    public void changed(final LiveQuery.ChangeEvent event) {
+        ((Activity) LiveQueryAdapter.this.context).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                enumerator = event.getRows();
+                notifyDataSetChanged();
+            }
+        });
+    }
+});
+query.start();
+```
+
 <block class="all" />
 
 ### Try it out
 
 1. Build and run.
 2. Save a new list to the database and the live query will pick it up instantly and reload the table view.
-    <img src="https://cl.ly/3z3i0k1C2W1p/image66.gif" class="portrait" />
+
+<block class="ios" />
+
+<img src="https://cl.ly/3z3i0k1C2W1p/image66.gif" class="portrait" />
+
+<block class="wpf" />
+
+<img src="https://cl.ly/2L2j2t423Z3k/image66w.gif" class="portrait" />
+
+<block class="android" />
+
+<img src="https://cl.ly/44433I102l3q/image66a.gif" class="portrait" />
 
 ## Aggregating Data
 
@@ -467,6 +585,38 @@ _incompleteQuery.GroupLevel = 1;
  _incompleteQuery.Start();
 ```
 
+<block class="android" />
+
+```java
+// This code can be found in ListsActivity.java
+// in the setupViewAndQuery method
+com.couchbase.lite.View incompTasksCountView = mDatabase.getView("list/incompleteTasksCount");
+if (incompTasksCountView.getMap() == null) {
+    incompTasksCountView.setMapReduce(new Mapper() {
+        @Override
+        public void map(Map<String, Object> document, Emitter emitter) {
+            String type = (String) document.get("type");
+            if ("task".equals(type)) {
+                Boolean complete = (Boolean) document.get("complete");
+                if (!complete) {
+                    Map<String, Object> taskList = (Map<String, Object>) document.get("taskList");
+                    String listId = (String) taskList.get("id");
+                    emitter.emit(listId, null);
+                }
+            }
+        }
+    }, new Reducer() {
+        @Override
+        public Object reduce(List<Object> keys, List<Object> values, boolean rereduce) {
+            return values.size();
+        }
+    }, "1.0");
+}
+
+final LiveQuery incompTasksCountLiveQuery = incompTasksCountView.createQuery().toLiveQuery();
+incompTasksCountLiveQuery.setGroupLevel(1);
+```
+
 <block class="all" />
 
 This time, you call emit only if the document `type` is "task" and `complete` is `false`. The document ID of the list it belongs to (**doc.taskList._id**) serves as the key and the value is nil. The reduce function simply counts the number of rows with the same key. Notice that the **groupLevel** is a property on the live query object.
@@ -504,6 +654,31 @@ override func observeValue(forKeyPath keyPath: String?, of object: Any?, change:
 };
 ```
 
+<block class="android" />
+
+```java
+incompTasksCountLiveQuery.addChangeListener(new LiveQuery.ChangeListener() {
+    @Override
+    public void changed(LiveQuery.ChangeEvent event) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, Object> counts = new HashMap<String, Object>();
+                QueryEnumerator rows = incompTasksCountLiveQuery.getRows();
+                for (QueryRow row : rows) {
+                    String listId = (String) row.getKey();
+                    int count = (int) row.getValue();
+                    counts.put(listId, count);
+                }
+                incompCounts = counts;
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+});
+incompTasksCountLiveQuery.start();
+```
+
 <block class="all" />
 
 ### Try it out
@@ -520,11 +695,15 @@ override func observeValue(forKeyPath keyPath: String?, of object: Any?, change:
 **iOS**
 <img src="./img/image08.png" class="portrait" />
 **Android**
-<img src="./img/image08a.png" class="portrait" />
+<img src="./img/image08xa.png" class="portrait" />
 
 <block class="wpf" />
 
 <img src="./img/image08w.png" class="center-image" />
+
+<block class="android" />
+
+<img src="img/image08a.png" class="portrait" />
 
 ## Conclusion
 

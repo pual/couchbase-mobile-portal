@@ -164,6 +164,32 @@ _pusher = pusher;
 _puller = puller;
 ```
 
+<block class="android" />
+
+```java
+URL url = null;
+try {
+    url = new URL(mSyncGatewayUrl);
+} catch (MalformedURLException e) {
+    e.printStackTrace();
+}
+
+pusher = database.createPushReplication(url);
+pusher.setContinuous(true);
+
+puller = database.createPullReplication(url);
+puller.setContinuous(true);
+
+if (mLoginFlowEnabled) {
+    Authenticator authenticator = AuthenticatorFactory.createBasicAuthenticator(username, password);
+    pusher.setAuthenticator(authenticator);
+    puller.setAuthenticator(authenticator);
+}
+
+pusher.start();
+puller.start();
+```
+
 <block class="all" />
 
 The `CBLAuthenticator` class has static methods for each authentication method supported by Couchbase Lite. Here, you're passing the name/password to the `basicAuthenticatorWithName` method. The object returned by this method can be set on the replication's `authenticator` property.
@@ -204,9 +230,23 @@ The `CBLAuthenticator` class has static methods for each authentication method s
     return retVal;
     ```
     
-2. Build and run
+2. Build and run.
 
 3. Now login with the credentials saved in the config file previously (**user1/pass**) and create a new list. Open the Sync Gateway Admin UI at [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo), the list document is successfully replicated to Sync Gateway as an authenticated user.
+
+<block class="android" />
+
+1. Set `mLoginFlowEnabled` to `true` in **Application.java**.
+
+    ```java
+    private Boolean mLoginFlowEnabled = true;
+    ```
+
+2. Build and run.
+
+3. Now login with the credentials saved in the config file previously (**user1/pass**) and create a new list. Open the Sync Gateway Admin UI at [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo), the list document is successfully replicated to Sync Gateway as an authenticated user.
+
+<image src="" />
 
 <block class="wpf" />
 

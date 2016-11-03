@@ -27,7 +27,13 @@ In this developer tutorial series, you will build a ToDo List application with C
 **iOS**
 <img src="./img/image11.png" class="portrait" />
 **Android**
-<img src="./img/image11a.png" class="portrait" />
+<img src="./img/image11xa.png" class="portrait" />
+
+<block class="android" />
+
+<img src="img/image11a.png" class="portrait" />
+
+<block class="all" />
 
 ## Course Outline
 

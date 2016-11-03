@@ -187,6 +187,34 @@ _pusher = pusher;
 _puller = puller;
 ```
 
+<block class="android" />
+
+```java
+// This code can be found in Application.java
+// in the startReplication() method
+URL url = null;
+try {
+    url = new URL(mSyncGatewayUrl);
+} catch (MalformedURLException e) {
+    e.printStackTrace();
+}
+
+pusher = database.createPushReplication(url);
+pusher.setContinuous(true);
+
+puller = database.createPullReplication(url);
+puller.setContinuous(true);
+
+if (mLoginFlowEnabled) {
+    Authenticator authenticator = AuthenticatorFactory.createBasicAuthenticator(username, password);
+    pusher.setAuthenticator(authenticator);
+    puller.setAuthenticator(authenticator);
+}
+
+pusher.start();
+puller.start();
+```
+
 <block class="all" />
 
 ### Try it out
@@ -235,6 +263,25 @@ _puller = puller;
     
 3. Build and run.
 4. Open [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo) in the browser and notice that all the documents are pushed to Sync Gateway! You may have more or less rows depending on how many documents are present in the Couchbase Lite database.
+
+<block class="android" />
+
+1. In **Application.java**, set `mSyncGatewayUrl` to the URL of the Sync Gateway database (http://localhost:4984/todo/). If the application is running on a phone, you must replace **localhost** with the internal IP of the machine running Sync Gateway and ensure that the phone and laptop are connected to the same network.
+
+    ```swift
+    private String mSyncGatewayUrl = "http://localhost:4984/todo/";
+    ```
+
+2. Set `mSyncEnabled` to `true` in **Application.java**.
+
+    ```swift
+    private Boolean mSyncEnabled = true;
+    ```
+    
+3. Build and run.
+4. Open [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo) in the browser and notice that all the documents are pushed to Sync Gateway! You may have more or less rows depending on how many documents are present in the Couchbase Lite database.
+
+![](./img/image19.png)
 
 <block class="wpf" />
 
@@ -305,6 +352,14 @@ _conflictsLiveQuery.Changed += ResolveConflicts;
 _conflictsLiveQuery.Start();
 ```
 
+<block class="android" />
+
+```java
+// Android coming soon
+```
+
+<block class="all" />
+
 The query results are then posted to the application code using the change callback (`ResolveConflicts`)
 
 <block class="all" />
@@ -325,12 +380,20 @@ Shown below is a list document created with two conflicting revisions. After del
 
 <img src="https://cl.ly/0V2I0h1T1j24/image47.gif" class="center-image" />
 
+> **Note:** During development, the method `Save(bool)` is used to intentionally create a conflict. You can press Ctrl+C to create a list conflict. The code is located in the `TestConflict()` method of **TaskListsModel.cs**.
+
 <block class="xam" />
 
 **iOS**
 <img src="./img/image47.gif" class="portrait" />
 **Android**
 <img src="./img/image47a.gif" class="portrait" />
+
+<block class="android" />
+
+```java
+// Android coming soon
+```
 
 <block class="all" />
 
@@ -400,6 +463,12 @@ Database.RunInTransaction(() =>
 });
 ```
 
+<block class="android" />
+
+```java
+// Android coming soon
+```
+
 <block class="all" />
 
 #### Try it out
@@ -445,6 +514,12 @@ Database.RunInTransaction(() =>
 **Android**
 <img class="portrait" src="./img/image48a.gif"  />
 
+<block class="android" />
+
+```java
+// Android coming soon
+```
+
 <block class="all" />
 
 ### N-way conflict resolution
@@ -462,6 +537,11 @@ For task documents, you will follow the same steps as previously except this tim
 <block class="ios" />
 
 > **Note:** To see the same result, open any list and shake the device (**^⌘Z** on the simulator) to create a task conflict. The code is located in the `motionEnded(_:with:)` method of **TasksViewController.swift**.
+
+<block class="wpf" />
+
+> **Note:** To see the same result, open any list and press Ctrl+C to create a task conflict.  The code is located in the
+`TestConflict()` method of **TasksModel.cs**
 
 <block class="all" />
 
@@ -529,6 +609,12 @@ foreach(var row in rows) {
 }
 ```
 
+<block class="android" />
+
+```java
+// Android coming soon
+```
+
 <block class="all" />
 
 Notice that for 'task' documents, the `nWayMergeConflicts()` method is called to merge the differences of conflicting revisions. The method body is too long to copy here but you can find it in **AppDelegate.swift**.
@@ -593,6 +679,12 @@ Notice that for 'task' documents, the `nWayMergeConflicts()` method is called to
 ![](img/image03.png)
 **Android**
 ![](img/image03a.png)
+
+<block class="android" />
+
+```java
+// Android coming soon
+```
 
 <block class="all" />
 

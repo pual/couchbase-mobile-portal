@@ -198,7 +198,10 @@ Notice that the `get_db_changes` method is used with `since: <seq>` and `feed: l
 
 2. Make further changes in the application and notice that the number of changes are printed to the console.
 
+<block class="ios" />
     ![](https://cl.ly/1X0M0J2Q450U/image55.gif)
+<block class="wpf" />
+![](./img/image55w.gif)
 
 ## Bulk operations
 
@@ -269,7 +272,10 @@ This code checks that the change is not a deletion and that the document type is
 
 3. Add a task called "Apple", "Coffee" or "Potatoes" and an image should appear after a few seconds. That's the attachment that was added to Sync Gateway by the bot and in turn replicated to Couchbase Lite.
 
+<block class="ios" />
     ![](https://cl.ly/060e3a0p3717/image56.gif)
+<block class="wpf" />
+![](./img/image56w.gif)
 
 ## Conclusion
 

@@ -267,7 +267,7 @@ The prebuilt database is installed using the database replacement API only if th
 <block class="wpf" />
 
 1. Open **CoreApp.cs** and navigate to the `CoreAppStart.CreateHint()` method.
-2. Change the `usePrebuiltDB` on the return value of the function to `true`
+2. Change the `usePrebuiltDB` on the return value of the function to `true`.
 
     ```c#
     retVal.usePrebuiltDB = true;
@@ -283,13 +283,15 @@ The prebuilt database is installed using the database replacement API only if th
 **iOS**
 <img src="./img/image45.gif" class="portrait" />
 **Android**
-<img src="./img/image45a.gif" class="portrait" />
+<img src="./img/image45xa.gif" class="portrait" />
 
 <block class="android" />
 
 1. Open **Application.java** and set the `mUsePrebuiltDb` constant to true.
 2. Build and run (don't forget to delete the app first).
 3. A Groceries list will now be visible on the Lists screen. Click on it to see the tasks.
+
+    <img src="https://cl.ly/2z4715010K2Z/image45a.gif" class="portrait" />
 
 <block class="all" />
 
