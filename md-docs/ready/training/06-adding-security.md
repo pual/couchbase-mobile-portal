@@ -234,6 +234,10 @@ The `CBLAuthenticator` class has static methods for each authentication method s
 
 3. Now login with the credentials saved in the config file previously (**user1/pass**) and create a new list. Open the Sync Gateway Admin UI at [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo), the list document is successfully replicated to Sync Gateway as an authenticated user.
 
+<block class="wpf" />
+
+![](img/image35w.png)
+
 <block class="android" />
 
 1. Set `mLoginFlowEnabled` to `true` in **Application.java**.

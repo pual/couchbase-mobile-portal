@@ -203,6 +203,8 @@ Notice that the `get_db_changes` method is used with `since: <seq>` and `feed: l
 <block class="wpf" />
 ![](./img/image55w.gif)
 
+<block class="all" />
+
 ## Bulk operations
 
 In this section you will learn how to persist an image as an attachment using the Admin REST API. You will extend the changes feed handling code from the previous section to attach the image to a **task** document only if the text value is "apple", "coffee" or "potatoes".
@@ -276,6 +278,8 @@ This code checks that the change is not a deletion and that the document type is
     ![](https://cl.ly/060e3a0p3717/image56.gif)
 <block class="wpf" />
 ![](./img/image56w.gif)
+
+<block class="all" />
 
 ## Conclusion
 

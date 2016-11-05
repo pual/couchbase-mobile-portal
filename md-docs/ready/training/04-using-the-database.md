@@ -498,7 +498,7 @@ query.start();
 
 <block class="wpf" />
 
-<img src="https://cl.ly/2L2j2t423Z3k/image66w.gif" class="portrait" />
+<img src="https://cl.ly/2L2j2t423Z3k/image66w.gif" class="center-image" />
 
 <block class="android" />
 
