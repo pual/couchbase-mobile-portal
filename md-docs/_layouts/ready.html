@@ -352,4 +352,33 @@ sectionid: docs
       j--;
     }
   </script>
+  <script>
+    /**
+     * Hack to not open some list titles
+     */
+    (function() {
+      var els = document.getElementsByClassName('static');
+      for (var i = 0; i < els.length; i++) {
+        (function() {
+          var el = els[i];
+          el.onclick = function () {
+            var icon = el.previousSibling;
+            var iconClasses = icon.className;
+            if (iconClasses == 'icon') {
+              icon.className = 'icon close';
+            } else {
+              icon.className = 'icon';
+            }
+            var list = el.nextSibling;
+            var displayProp = list.style.display;
+            if (displayProp == 'block') {
+              list.style.display = 'none';
+            } else {
+              list.style.display = 'block';
+            }
+          }
+        })()
+      }
+    })()
+  </script>
 </section>

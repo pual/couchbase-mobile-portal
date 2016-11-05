@@ -31,13 +31,7 @@ $ cd xcode-project
 $ pod install
 ```
 
-Open **Todo.xcodeproj** in Xcode. Then build & run the project.
-
-<img src="img/image42.png" class="center-image" />
-
-Throughout this lesson, you will navigate in different files of the Xcode project. We recommend to use the method navigator to scroll to a method.
-
-<img src="https://cl.ly/0G263m3m1a0w/image44.gif" class="center-image" />
+Open **Todo.xcworkspace** in Xcode. Then build & run the project.
 
 <block class="net" />
 
@@ -110,14 +104,16 @@ Sync Gateway is always listening on two ports:
 ### Try it out
 
 1. [Download Sync Gateway](http://www.couchbase.com/nosql-databases/downloads#couchbase-mobile)
-2. Unzip the file and locate the executable at **~/Downloads/couchbase-sync-gateway/bin/sync_gateway**
+2. Unzip the file and locate the executable at **bin/sync_gateway** (macOS) or run the installer (Windows).
 3. Start Sync Gateway from the command-line in your project directory.
 
     ```bash
-    $ sync_gateway sync-gateway-config.json
+    sync_gateway sync-gateway-config.json
     ```
 
-> **Note:** You can find the same instructions for the other supported platforms on the [installation guide](/documentation/mobile/current/installation/net/index.html).
+    ```powershell
+    C:\Program Files (x86)\Couchbase\sync_gateway
+    ```
 
 ## Add synchronization
 
@@ -126,14 +122,14 @@ Typically, an application needs to send data to the server and receive it. In Co
 - **Push:** The data is pushed from Couchbase Lite to Sync Gateway.
 - **Pull:** The data is pulled from Sync Gateway to Couchbase Lite.
 
-There are a few terminologies that designate the role of each database involved in a replication:
+There are a few terminologies that designate the role of each database involved in a replications:
 
 - **Source:** The database where the data is read.
 - **Target:** The database where the data is written.
 - **Local:** The database that resides where the replication is running.
 - **Remote:** The database to which the replication is sending data.
 
-The following code starts a pull and push replication with progress notification.
+The following code starts a pull and push replication with progress notifications.
 
 <block class="ios" />
 
@@ -141,12 +137,12 @@ The following code starts a pull and push replication with progress notification
 // This code can be found in AppDelegate.swift
 // in the startReplication(withUsername:andPassword:)
 pusher = database.createPushReplication(kSyncGatewayUrl)
-pusher.continuous = true
+pusher.continuous = true // Runs forever in the background
 NotificationCenter.default.addObserver(self, selector: #selector(replicationProgress(notification:)),
                                         name: NSNotification.Name.cblReplicationChange, object: pusher)
 
 puller = database.createPullReplication(kSyncGatewayUrl)
-puller.continuous = true
+puller.continuous = true // Runs forever in the background
 NotificationCenter.default.addObserver(self, selector: #selector(replicationProgress(notification:)),
                                         name: NSNotification.Name.cblReplicationChange, object: puller)
 
@@ -172,12 +168,12 @@ if(username != null && password != null) {
 
 var db = AppWideManager.GetDatabase(username);
 var pusher = db.CreatePushReplication(SyncGatewayUrl);
-pusher.Continuous = true;
+pusher.Continuous = true; // Runs forever in the background
 pusher.Authenticator = authenticator;
 
 
 var puller = db.CreatePullReplication(SyncGatewayUrl);
-puller.Continuous = true;
+puller.Continuous = true; // Runs forever in the background
 puller.Authenticator = authenticator;
 
 pusher.Start();
@@ -190,8 +186,6 @@ _puller = puller;
 <block class="android" />
 
 ```java
-// This code can be found in Application.java
-// in the startReplication() method
 URL url = null;
 try {
     url = new URL(mSyncGatewayUrl);
@@ -200,10 +194,10 @@ try {
 }
 
 pusher = database.createPushReplication(url);
-pusher.setContinuous(true);
+pusher.setContinuous(true); // Runs forever in the background
 
 puller = database.createPullReplication(url);
-puller.setContinuous(true);
+puller.setContinuous(true); // Runs forever in the background
 
 if (mLoginFlowEnabled) {
     Authenticator authenticator = AuthenticatorFactory.createBasicAuthenticator(username, password);
@@ -221,7 +215,7 @@ puller.start();
 
 <block class="ios" />
 
-1. In **AppDelegate.swift**, set `kSyncGatewayUrl` to the URL of the Sync Gateway database (http://localhost:4984/todo/). If the application is running on a phone, you must replace **localhost** with the internal IP of the machine running Sync Gateway and ensure that the phone and laptop are connected to the same network.
+1. In **AppDelegate.swift**, set `kSyncGatewayUrl` to the URL of the Sync Gateway database (http://localhost:4984/todo/).
 
     ```swift
     let kSyncGatewayUrl = URL(string: "http://localhost:4984/todo/")!
@@ -240,7 +234,7 @@ puller.start();
 
 <block class="net" />
 
-1. In **CoreApp.cs** set `SyncGatewayUrl` to the URL of the Sync Gateway database (http://localhost:4984/todo/).  If the application is running on a phone, you must replace **localhost** with the internal IP of the machine running Sync Gateway and ensure that the phone and laptop are connected to the same network.
+1. In **CoreApp.cs** set `SyncGatewayUrl` to the URL of the Sync Gateway database (http://localhost:4984/todo/).
 
     ```c#
     private static readonly Uri SyncGatewayUrl = new Uri("http://localhost:4984/todo/");
@@ -266,33 +260,41 @@ puller.start();
 
 <block class="android" />
 
-1. In **Application.java**, set `mSyncGatewayUrl` to the URL of the Sync Gateway database (http://localhost:4984/todo/). If the application is running on a phone, you must replace **localhost** with the internal IP of the machine running Sync Gateway and ensure that the phone and laptop are connected to the same network.
+1. In **Application.java**, set `mSyncGatewayUrl` to the URL of the Sync Gateway database (http://localhost:4984/todo/).
 
-    ```swift
-    private String mSyncGatewayUrl = "http://localhost:4984/todo/";
+    ```java
+    private String mSyncGatewayUrl = "http://10.0.2.2:4984/todo/";
     ```
+
+    For Android stock emulators, the hostname is `10.0.2.2`.
 
 2. Set `mSyncEnabled` to `true` in **Application.java**.
 
-    ```swift
+    ```java
     private Boolean mSyncEnabled = true;
     ```
     
 3. Build and run.
 4. Open [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo) in the browser and notice that all the documents are pushed to Sync Gateway! You may have more or less rows depending on how many documents are present in the Couchbase Lite database.
 
-![](./img/image19.png)
+<block class="ios" />
+
+    ![](./img/image19.png)
 
 <block class="wpf" />
 
-![](./img/image19w.png)
+    ![](./img/image19w.png)
 
 <block class="xam" />
 
 **iOS**
-![](./img/image19.png)
+    ![](./img/image19.png)
 **Android**
-![](./img/image19a.png)
+    ![](./img/image19xa.png)
+
+<block class="android" />
+
+    ![](./img/image19a.png)
 
 <block class="all" />
 
@@ -301,7 +303,7 @@ puller.start();
 Due to the unpredictability of mobile connections it's inevitable that more than one device will update the same document simultaneously. Couchbase Lite provides features to resolve these conflicts. The resolution rules are written by the developer to keep full control over which revision should be picked. The most common resolution methods are:
 
 - **Deletes always win:** if one side deletes a document it will always stay deleted, even if the other side has made changes to it later on.
-- **N-way merge:** if both sides have updated different properties, the document will end up with the updates from both side.
+- **N-way merge:** if both sides have updated different properties, the document will end up with the updates from both sides.
 - **Last update wins:** if both sides have updated the same property, the value will end up as the last one that was updated.
 
 Revisions form a tree data structure and a conflict occurs when there are multiple branches in the revision tree. On the diagram below the conflict is resolved by deleting one branch of the tree (the branch starting at **3-42cc**). The other one is the active branch (i.e the winner) where further child revisions can be persisted (**4-45cb** and **5-42bb**).
@@ -310,7 +312,7 @@ Revisions form a tree data structure and a conflict occurs when there are multip
 
 ### Detecting conflicts
 
-To resolve conflicts you must first learn how to detect them. The code below uses an **allDocs** query which is an index of all the documents in the local database. The **OnlyConflicts** option is passed to report only the documents with conflicts and a **LiveQuery** is used to continuously monitor the database for changes.
+To resolve conflicts you must first learn how to detect them. The code below uses an All Docs query which is an index of all the documents in the local database. The **OnlyConflicts** option is passed to report only the documents with conflicts and a **LiveQuery** is used to continuously monitor the database for changes.
 
 <block class="ios" />
 
@@ -355,20 +357,28 @@ _conflictsLiveQuery.Start();
 <block class="android" />
 
 ```java
-// Android coming soon
+// This code can be found in Application.java
+// in the startConflictLiveQuery() method
+LiveQuery conflictsLiveQuery = database.createAllDocumentsQuery().toLiveQuery();
+conflictsLiveQuery.setAllDocsMode(Query.AllDocsMode.ONLY_CONFLICTS);
+conflictsLiveQuery.addChangeListener(new LiveQuery.ChangeListener() {
+    @Override
+    public void changed(LiveQuery.ChangeEvent event) {
+        resolveConflicts(event.getRows());
+    }
+});
+conflictsLiveQuery.start();
 ```
 
 <block class="all" />
 
-The query results are then posted to the application code using the change callback (`ResolveConflicts`)
-
-<block class="all" />
+The query results are then posted to the application code using the change callback or change listener.
 
 ### Automatic conflict resolution
 
 Even if the conflict isn’t resolved, Couchbase Lite has to return something. It chooses one of the two conflicting revisions as the "winner". The choice is deterministic, which means that every device that is faced with the same conflict will pick the same winner, without having to communicate.
 
-Shown below is a list document created with two conflicting revisions. After deleting the row, the text **Update 2** appears which is the name of the second conflicting revision. The action of deleting a document only detetes the current revision and if there are conflicting revisions it will be promoted as the new current revision.
+Shown below is a list document created with two conflicting revisions. After deleting the row, the text **Text Changed** appears which is the name of the second conflicting revision. The action of deleting a document only deletes the current revision and if there are conflicting revisions it will be promoted as the new current revision.
 
 <block class="ios" />
 
@@ -387,17 +397,17 @@ Shown below is a list document created with two conflicting revisions. After del
 **iOS**
 <img src="./img/image47.gif" class="portrait" />
 **Android**
-<img src="./img/image47a.gif" class="portrait" />
+<img src="./img/image47xa.gif" class="portrait" />
 
 <block class="android" />
 
-```java
-// Android coming soon
-```
+<img src="https://cl.ly/3A0T1g1v0r03/image47a.gif" class="portrait" />
+
+> **Note:** During development, the method `save(boolean)` is used to intentionally create a conflict. You can long press the floating action button to create a list conflict. The code is located in the `createListConflict()` method of **ListsActivity.java**.
 
 <block class="all" />
 
-This can be surprising at first but it’s the strength of using a distributed database that defers the conflict resolution logic to the application. It’s your responsibility as the developer to ensure conflicts are resolved! Even if you decide to let Couchbase Lite pick the winner you must remove extraneous conflicting revisions to prevent the behaviour observed above. The code below removes all revisions expect the current one.
+This can be surprising at first but it’s the strength of using a distributed database that defers the conflict resolution logic to the application. It’s your responsibility as the developer to ensure conflicts are resolved! Even if you decide to let Couchbase Lite pick the winner you must remove extraneous conflicting revisions to prevent the behaviour observed above. The code below removes all revisions except the current/winning one.
 
 <block class="ios" />
 
@@ -466,7 +476,40 @@ Database.RunInTransaction(() =>
 <block class="android" />
 
 ```java
-// Android coming soon
+// This code can be found in Application.java
+// in the resolveConflicts(List<SavedRevision>, Map<String, Object>, Attachment)
+private void resolveConflicts(final List<SavedRevision> revs, final Map<String, Object> desiredProps, final Attachment desiredImage) {
+    database.runInTransaction(new TransactionalTask() {
+        @Override
+        public boolean run() {
+            int i = 0;
+            for (SavedRevision rev : revs) {
+                UnsavedRevision newRev = rev.createRevision(); // Create new revision
+                if (i == 0) { // That's the current/winning revision
+                    newRev.setUserProperties(desiredProps);
+                    if (desiredImage != null) {
+                        try {
+                            newRev.setAttachment("image", "image/jpg", desiredImage.getContent());
+                        } catch (CouchbaseLiteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else { // That's a conflicting revision, delete it
+                    newRev.setIsDeletion(true);
+                }
+
+                try {
+                    newRev.save(true); // Persist the new revision
+                } catch (CouchbaseLiteException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+                i++;
+            }
+            return true;
+        }
+    });
+}
 ```
 
 <block class="all" />
@@ -516,36 +559,44 @@ Database.RunInTransaction(() =>
 
 <block class="android" />
 
-```java
-// Android coming soon
-```
+1. To enable conflict resolution, set the `mConflictResolution` constant in **Application.java** to `true`.
+
+    ```java
+    private Boolean mConflictResolution = true;
+    ```
+
+2. Perform the same actions and this time deleting the list conflict doesn't reveal the subsequent conflicting revision anymore.
+
+    <img class="portrait" src="https://cl.ly/2u2w3N2e0Q3g/image48a.gif"  />
 
 <block class="all" />
 
 ### N-way conflict resolution
 
-For task documents, you will follow the same steps as previously except this time the conflict resolution will merge the differences between the conflicting revisions into a new revision before removing them. This time, one revision changes the title of the task while the other revision marks it as completed. Here the winning revision is the one that set the **completed** property to true.
+For task documents, you will follow the same steps as previously except this time the conflict resolution will merge the differences between the conflicting revisions into a new revision before removing them. This time, one revision changes the title of the task while the other revision marks it as completed.
 
 <block class="ios" />
 
 <img src="https://cl.ly/0P0w2k0s1a2z/image67.gif" class="portrait" />
 
+> **Note:** To see the same result, open any list and shake the device (**^⌘Z** on the simulator) to create a task conflict. The code is located in the `motionEnded(_:with:)` method of **TasksViewController.swift**. Be sure to disable conflict resolution to see the same result as the animation above.
+
 <block class="wpf" />
 
 <img src="./img/image67w.gif" class="center-image" />
 
-<block class="ios" />
-
-> **Note:** To see the same result, open any list and shake the device (**^⌘Z** on the simulator) to create a task conflict. The code is located in the `motionEnded(_:with:)` method of **TasksViewController.swift**.
-
-<block class="wpf" />
-
 > **Note:** To see the same result, open any list and press Ctrl+C to create a task conflict.  The code is located in the
-`TestConflict()` method of **TasksModel.cs**
+`TestConflict()` method of **TasksModel.cs**.  Be sure to disable conflict resolution to see the same result as the animation above.
+
+<block class="android" />
+
+<img src="https://cl.ly/2l180C0v3D10/image67a.gif" class="portrait" />
+
+> **Note:** To see the same result, open any list and long press the floating action button to create a task conflict. The code is located in the `createTaskConflict()` method of **TasksFragment.java**. Be sure to disable conflict resolution to see the same result as the animation above.
 
 <block class="all" />
 
-Similarly to the previous section, you will learn how to resolve conflicts, this time for "task-list" documents. In this case, the resolution code will **merge the updates** (i.e n-way merge) of the conflicting revisions before promoting it as the current revisions.
+Similarly to the previous section, you will learn how to resolve conflicts, this time for "task" documents. In this case, the resolution code will **merge the changes** (i.e n-way merge) of the conflicting revisions before promoting it as the current revisions.
 
 <block class="ios" />
 
@@ -612,12 +663,34 @@ foreach(var row in rows) {
 <block class="android" />
 
 ```java
-// Android coming soon
+// This code can be found in Application.java
+// in the resolveConflicts(QueryEnumerator) method
+for (QueryRow row : rows) {
+    List<SavedRevision> revs = row.getConflictingRevisions();
+    if (revs.size() > 1) {
+        SavedRevision defaultWinning = revs.get(0);
+        String type = (String) defaultWinning.getProperty("type");
+        switch (type) {
+            // TRAINING: Automatic conflict resolution
+            case "task-list":
+            case "task-list.user":
+                Map<String, Object> props = defaultWinning.getUserProperties();
+                Attachment image = defaultWinning.getAttachment("image");
+                resolveConflicts(revs, props, image);
+                break;
+            // TRAINING: N-way merge conflict resolution
+            case "task":
+                List<Object> mergedPropsAndImage = nWayMergeConflicts(revs);
+                resolveConflicts(revs, (Map<String, Object>) mergedPropsAndImage.get(0), (Attachment) mergedPropsAndImage.get(1));
+                break;
+        }
+    }
+}
 ```
 
 <block class="all" />
 
-Notice that for 'task' documents, the `nWayMergeConflicts()` method is called to merge the differences of conflicting revisions. The method body is too long to copy here but you can find it in **AppDelegate.swift**.
+Notice that for 'task' documents, the `nWayMergeConflicts()` method is called to merge the differences of conflicting revisions. The body of this method is too long to copy here but you can find it in the same file.
 
 #### Try it out
 
@@ -631,7 +704,7 @@ Notice that for 'task' documents, the `nWayMergeConflicts()` method is called to
 
 2. Build and run. 
 3. Create a task conflict using the shake gesture (or **^⌘Z**) and this time the row contains the updated text **and** is marked as completed.
-    ![](img/image03.png)
+    <img src="img/image03.png" class="portrait" />
     
 <block class="wpf" />
 
@@ -653,7 +726,7 @@ Notice that for 'task' documents, the `nWayMergeConflicts()` method is called to
 2. Build and run
 3. Create a conflict by pressing 'Ctrl+C' and this time the row contains the updated text **and** is marked as completed.
 
-![](img/image03w.png)
+    ![](img/image03w.png)
 
 <block class="xam" />
 
@@ -682,9 +755,16 @@ Notice that for 'task' documents, the `nWayMergeConflicts()` method is called to
 
 <block class="android" />
 
-```java
-// Android coming soon
-```
+1. Enable conflict resolution in **Application.java**.
+
+    ```java
+    private Boolean mConflictResolution = true;
+    ```
+
+2. Build and run.
+3. Create a task conflict using the shake gesture and this time the row contains the updated text **and** is marked as completed.
+
+    ![](img/image03a.png)
 
 <block class="all" />
 

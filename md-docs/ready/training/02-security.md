@@ -66,7 +66,7 @@ Another design requirement of the application is that certain users can be moder
 
 The image below adds a new Moderator model for this purpose.
 
-![](img/06-role.png)
+![](img/07-role.png)
 
 The following security changes to routing, read and write permissions were added.
 

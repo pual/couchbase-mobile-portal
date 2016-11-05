@@ -31,13 +31,7 @@ $ cd xcode-project
 $ pod install
 ```
 
-Open **Todo.xcodeproj** in Xcode. Then build & run the project.
-
-<img src="img/image42.png" class="center-image" />
-
-Throughout this lesson, you will navigate in different files of the Xcode project. We recommend to use the method navigator to scroll to a method.
-
-<img src="https://cl.ly/0G263m3m1a0w/image44.gif" class="center-image" />
+Open **Todo.xcworkspace** in Xcode. Then build & run the project.
 
 <block class="net" />
 
@@ -187,6 +181,8 @@ Here you're creating an unsaved document instance with a pre-defined **document 
 
 <block class="all" />
 
+> **Challenge:** Update the code to persist your name as the value for the `name` field. Then create a new list and notice that your name is displayed instead of the text input value.
+
 ## Update a Document
 
 To update a document, you must retrieve it from the database, modify the desired properties and write them back to the database. The `update` method does this operation for you in the form of a callback. The code below updates a list's name property.
@@ -232,15 +228,15 @@ try {
 ```java
 // This code can be in ListsActivity.java
 // in the updateList(Document) method
-Map<String, Object> updatedProperties = new HashMap<String, Object>();
-updatedProperties.putAll(list.getProperties());
-updatedProperties.put("name", input.getText().toString());
-
-try {
-    list.putProperties(updatedProperties);
-} catch (CouchbaseLiteException e) {
-    e.printStackTrace();
-}
+list.update(new Document.DocumentUpdater() {
+    @Override
+    public boolean update(UnsavedRevision newRevision) {
+        Map<String, Object> props = newRevision.getUserProperties();
+        props.put("name", input.getText().toString());
+        newRevision.setUserProperties(props);
+        return true;
+    }
+});
 ```
 
 <block class="all" />
@@ -279,11 +275,13 @@ Your callback code can modify this object's properties as it sees fit; after it 
 
 <img src="img/image04a.png" class="portrait" />
 
+> **Challenge:** Modify the code to uppercase the text inserted before persisting the document to the database.
+
 <block class="all" />
 
 ## Delete a Document
 
-A document can be deleted using the `delete` method. This operation actually creates a new revision in order to propagate the deletion to other clients. The code below deletes a list.
+A document can be deleted using the `delete` method. This operation actually creates a new revision in order to propagate the deletion to other clients. The concept of revisions will be covered in more detail in the next lesson. The code below deletes a list.
 
 <block class="ios" />
 
@@ -323,6 +321,8 @@ try {
 ```
 
 <block class="all" />
+
+> **Challenge:** Add a document change listener to detect when the document gets deleted. The [document change notification](/1.3/develop/guides/couchbase-lite/native-api/document/index.html#document-change-notifications) documentation will be helpful for this challenge.
 
 ### Try it out
 
@@ -487,6 +487,8 @@ query.start();
 
 <block class="all" />
 
+> **Challenge:** Update the map function to emit the document ID as the key. Don't forget to bump the view version whenever you change the map function. The list view should now display the document ID on each row.
+
 ### Try it out
 
 1. Build and run.
@@ -608,6 +610,8 @@ if (incompTasksCountView.getMap() == null) {
     }, new Reducer() {
         @Override
         public Object reduce(List<Object> keys, List<Object> values, boolean rereduce) {
+            // keys: [0, 0]
+            // values: [null, null]
             return values.size();
         }
     }, "1.0");
@@ -704,6 +708,8 @@ incompTasksCountLiveQuery.start();
 <block class="android" />
 
 <img src="img/image08a.png" class="portrait" />
+
+<block class="all" />
 
 ## Conclusion
 

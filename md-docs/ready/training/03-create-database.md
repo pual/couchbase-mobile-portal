@@ -31,13 +31,7 @@ $ cd xcode-project
 $ pod install
 ```
 
-Open **Todo.xcodeproj** in Xcode. Then build & run the project.
-
-<img src="img/image42.png" class="center-image" />
-
-Throughout this lesson, you will navigate in different files of the Xcode project. We recommend to use the method navigator to scroll to a method.
-
-<img src="https://cl.ly/0G263m3m1a0w/image44.gif" class="center-image" />
+Open **Todo.xcworkspace** in Xcode. Then build & run the project.
 
 <block class="net" />
 

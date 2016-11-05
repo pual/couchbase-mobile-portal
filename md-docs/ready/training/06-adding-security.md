@@ -31,13 +31,7 @@ $ cd xcode-project
 $ pod install
 ```
 
-Open **Todo.xcodeproj** in Xcode. Then build & run the project.
-
-<img src="img/image42.png" class="center-image" />
-
-Throughout this lesson, you will navigate in different files of the Xcode project. We recommend to use the method navigator to scroll to a method.
-
-<img src="https://cl.ly/0G263m3m1a0w/image44.gif" class="center-image" />
+Open **Todo.xcworkspace** in Xcode. Then build & run the project.
 
 <block class="net" />
 
@@ -88,8 +82,14 @@ Users are created with a name/password on Sync Gateway which can then be used on
     "todo": {
       "server": "walrus:",
       "users": {
-        "user1": {"password": "pass"},
-        "user2": {"password": "pass"}
+        "user1": {"password": "pass", "admin_channels": ["user1"]},
+        "user2": {"password": "pass", "admin_channels": ["user2"]},
+        "mod": {"password": "pass", "admin_roles": ["moderator"]},
+        "admin": {"password": "pass", "admin_roles": ["admin"]}
+      },
+      "roles": {
+        "moderator": {},
+        "admin": {}
       }
     }
   }
@@ -250,7 +250,7 @@ The `CBLAuthenticator` class has static methods for each authentication method s
 
 3. Now login with the credentials saved in the config file previously (**user1/pass**) and create a new list. Open the Sync Gateway Admin UI at [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo), the list document is successfully replicated to Sync Gateway as an authenticated user.
 
-<image src="" />
+    ![](img/image35a.png)
 
 <block class="wpf" />
 
@@ -266,13 +266,11 @@ The `CBLAuthenticator` class has static methods for each authentication method s
 
 In order to give different users access to different documents, you must write a sync function. The sync function lives in the configuration file of Sync Gateway. It’s a JavaScript function and every time a new document, revision or deletion is added to a database, the sync function is called and given a chance to examine the document.
 
-In the sync function, you can use different API methods to route documents to channels, grant users access to channels and even assign roles to users. Access rules generally follow the order shown on the image below: write permissions, validation, routing, read permissions.
+You can use different API methods to route documents to channels, grant users access to channels and even assign roles to users. Access rules generally follow the order shown on the image below: write permissions, validation, routing, read permissions.
 
 ![](img/image15.png)
 
 > **Tip:** Open the [Access Control](/documentation/mobile/current/training/design/security/index.html) lesson in a new tab, it will be useful throughout this section.
-
-
 
 ### Document Types
 
@@ -281,7 +279,7 @@ The Sync Function takes two arguments:
 - **doc:** The current revision being processed.
 - **oldDoc:** The parent revisions if it's an update operation and `null` if it's a create operation.
 
-Each model type will have different access control rules associated with it. So the first operation is to ensure the document has a type property. Additionally, once a document is created, its type cannot change. The code below implements those 2 validation rules.
+Each document type will have different access control rules associated with it. So the first operation is to ensure the document has a type property. Additionally, once a document is created, its type cannot change. The code below implements those 2 validation rules.
 
 ```javascript
 function(doc, oldDoc){
@@ -302,6 +300,12 @@ function(doc, oldDoc){
     return (!isCreate(oldDoc) && !isDelete(doc));
   }
 
+  function validateNotEmpty(key, value) {
+    if (!value) {
+      throw({forbidden: key + " is not provided."});
+    }
+  }
+
   function validateReadOnly(name, value, oldValue) {
     if (value != oldValue) {
       throw({forbidden: name + " is read-only."});
@@ -316,17 +320,18 @@ As shown above, you can define inner functions to encapsulate logic used through
 
 1. Open the Sync menu on the Admin UI [http://localhost:4985/_admin/db/todo/sync](http://localhost:4985/_admin/db/todo/sync).
 2. Copy the code snippet above in the Sync Function text area.
-3. Click the **Deploy To Server** button. It will restart Sync Gateway with the updated sync function.
-
-    > **Note:** It won't update the config file on your filesystem, make sure to copy/paste from the Admin UI to the config once you are happy with your changes.
-
-3. Add two documents through the REST API. One with the `type` property and the second document without it. Notice that the user credentials (**user1/pass**) are passed in the URL.
+3. Click the **Deploy To Server** button. It will update Sync Gateway with the new config but it doesn't persist the changes to the filesystem. So if you restart Sync Gateway you will have to start again from the beginning.
+4. Add two documents through the REST API. One with the `type` property and the second document without it. Notice that the user credentials (**user1/pass**) are passed in the URL.
 
     ```bash
     curl -vX POST 'http://user1:pass@localhost:4984/todo/_bulk_docs' \
           -H 'Content-Type: application/json' \
           -d '{"docs": [{"type": "task-list", "name": "Groceries"}, {"names": "Today"}]}'
+    ```
 
+    The output should be the following:
+
+    ```bash
     [
       {"id":"e498cad0380e30a86ed5572140c94831","rev":"1-e4ac377fc9bd3345ddf5892b509c4d79"},
       {"error":"forbidden","reason":"type property missing","status":403}
@@ -345,7 +350,12 @@ The following code ensures the user creating the list document matches with the 
 
 ```javascript
 function (doc, oldDoc) {
-  ...
+  
+  // } else if (isUpdate()) {
+  //  validateReadOnly("type", doc.type, oldDoc.type);
+  // }
+  // ^^^^^ Existing code
+  
   if (getType() == "task-list") {
     /* Control Write Access */
     var owner = doc._deleted ? oldDoc.owner : doc.owner;
@@ -365,11 +375,16 @@ function (doc, oldDoc) {
   function isDelete() {
     return (doc._deleted == true);
   }
-  ...
+
+  // function isCreate() {
+  //  return ((oldDoc == null || oldDoc._deleted) && doc._deleted != true);
+  // }
+  // ^^^^^ Existing code
+
 }
 ```
 
-When a document is deleted the user properties are removed and the `_deleted: true` property is added as metadata. In this case, the sync function must retrieve the deletion revision type from oldDoc. In the code above, the `getType` inner function encapsulates this logic.
+When a document is deleted the user properties are removed and the `_deleted: true` property is added as metadata. In this case, the sync function must retrieve the type from oldDoc. In the code above, the `getType` inner function encapsulates this logic.
 
 Similarly, the owner field is taken from oldDoc if doc is a deletion revision. The **requireUser** and **requireRole** functions are functionalities built in Sync Gateway.
 
@@ -378,20 +393,24 @@ Similarly, the owner field is taken from oldDoc if doc is a deletion revision. T
 1. Open the Sync menu on the Admin UI [http://localhost:4985/_admin/db/todo/sync](http://localhost:4985/_admin/db/todo/sync).
 1. Copy the changes above in the Sync Function text area.
 2. Click the **Deploy To Server** button. It will restart Sync Gateway with the updated sync function.
-3. Add two documents through the REST API. The request is sent as a moderator user (**user1/pass**). One document is a list for user1 and another is a list for user2.
+3. Add two documents through the REST API. The request is sent as a moderator user (**mod/pass**). One document is a list for user1 and another is a list for user2.
 
     ```bash
-    curl -vX POST 'http://user1:pass@localhost:4984/todo/_bulk_docs' \
+    curl -vX POST 'http://mod:pass@localhost:4984/todo/_bulk_docs' \
           -H 'Content-Type: application/json' \
           -d '{"docs": [{"type": "task-list", "owner": "user1"}, {"type": "task-list", "owner": "user2"}]}'
-          
+    ```
+
+    The response should be the following:
+
+    ```bash
     [
-      {"id":"49c9d5cbbc1cfa05d253f4847d02b8a0","rev":"1-477f7c4f36a31ce9e86a5f465b168b8a"},
-      {"error":"forbidden","reason":"missing role","status":403}
+      {"id":"9fb56dacc4f7f971c3a62ab849a9ae3a","rev":"1-39539a8ec6ddd252d6aafe1f7e3efd9a"},
+      {"id":"e111e2232706b0e385e2168239edede2","rev":"1-23cb8ee7690e682054aef6dfa45afda0"}
     ]
     ```
 
-  Both documents are successfully persisted because the user sending the request has the moderator role.
+    Both documents are successfully persisted because the user sending the request has the moderator role.
 
 ### Validating Changes
 
@@ -418,18 +437,6 @@ function (doc, oldDoc) {
     }
     ...
   }
-
-  function validateNotEmpty(key, value) {
-    if (!value) {
-      throw({forbidden: key + " is not provided."});
-    }
-  }
-
-  function validateReadOnly(name, value, oldValue) {
-    if (value != oldValue) {
-      throw({forbidden: name + " is read-only."});
-    }
-  }
   ...
 }
 ```
@@ -441,7 +448,8 @@ function (doc, oldDoc) {
 1. Open the Sync menu on the Admin UI [http://localhost:4985/_admin/db/todo/sync](http://localhost:4985/_admin/db/todo/sync).
 2. Copy the changes above in the Sync Function text area.
 3. Click the **Deploy To Server** button. It will restart Sync Gateway with the updated sync function.
-4. Send documents with incorrect schemas to make sure the validation works as expected.
+
+> **Challenge:** Persist documents using curl until it gets persisted and Sync Gateway returns a **201 Created** status code.
 
 ### Routing
 
@@ -467,12 +475,9 @@ function (doc, oldDoc) {
 1. Open the Sync menu on the Admin UI [http://localhost:4985/_admin/db/todo/sync](http://localhost:4985/_admin/db/todo/sync).
 2. Copy the changes above in the Sync Function text area.
 3. Click the **Deploy To Server** button. It will restart Sync Gateway with the upated sync function.
-4. 
+4. Both documents are saved and mapped to the corresponding channels in the Admin UI. The video below shows you how to navigate through the different channels.
 
-Both documents are saved and mapped to the corresponding channels in the Admin UI. The video below shows you how to navigate through the different channels.
-
-[//]: # "TODO: Link to video."
-<video src="https://cl.ly/3i2w062z1w1F/movie2.mp4" controls="true"></video>
+    <video src="https://cl.ly/3i2w062z1w1F/movie2.mp4" controls="true"></video>
 
 ### Read Access
 
