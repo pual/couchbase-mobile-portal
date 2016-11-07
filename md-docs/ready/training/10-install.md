@@ -350,8 +350,7 @@ You should see the following JSON response:
 
 Congratulations!  You have just setup a Couchbase Server + Sync Gateway cluster on Docker Cloud.
 
-</block>
-
+<block class="all" />
 
 ## Conclusion
 

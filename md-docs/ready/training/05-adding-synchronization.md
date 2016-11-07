@@ -19,7 +19,7 @@ In this lesson you’ll be introduced to Sync Gateway, our secure web gateway. Y
 Download the project below.
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/2A2D3q3R2d1g/xcode-project.zip" class="button" id="project">
+  <a href="https://cl.ly/293t073Z3735/project.zip" class="button" id="project">
     <img src="img/download-xcode.png">
   </a>
 </div>
@@ -44,7 +44,7 @@ Open **Todo.xcworkspace** in Xcode. Then build & run the project.
 Download the project below.
 
 <div class="buttons-unit downloads">
-  <a href="#" class="button" id="project">
+  <a href="https://cl.ly/293t073Z3735/project.zip" class="button" id="project">
     <img src="img/download-vs.png">
   </a>
 </div>
@@ -60,7 +60,7 @@ Download the project below.
 Download the project below.
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/2A2D3q3R2d1g/xcode-project.zip" class="button" id="project">
+  <a href="https://cl.ly/293t073Z3735/project.zip" class="button" id="project">
     <img src="img/download-android.png">
   </a>
 </div>
@@ -69,7 +69,7 @@ Download the project below.
 
 <block class="all" />
 
-> **Tip:** To make things a bit more exciting, you may want to use the pre-built database containing a list of Groceries. Refer to the [Create a Database](/documentation/mobile/current/develop/training/using-the-database/index.html) lesson to learn how to use it.
+> **Tip:** To make things a bit more exciting, you may want to use the pre-built database containing a list of Groceries. Refer to the [Create a Database](/documentation/mobile/current/training/develop/using-the-database/index.html) lesson to learn how to use it.
 
 ## Install Sync Gateway
 
@@ -83,7 +83,7 @@ Now that your application runs smoothly on the device you are ready to introduce
     "todo": {
       "server": "walrus:",
       "users": {
-  		  "GUEST": {"disabled": false, "admin_channels": ["*"] }
+        "GUEST": {"disabled": false, "admin_channels": ["*"] }
       }
     }
   }
@@ -94,7 +94,7 @@ During development, you can set the **server** property to **walrus:** (also kno
 
 By default, Sync Gateway doesn't allow unauthenticated requests to be processed for security reasons. So you're enabling the **GUEST** user which represents all the unauthenticated clients that will be synchronizing with your Sync Gateway instance.
 
-> **Note:** User authentication is covered in more detail in the [Adding Security](/documentation/mobile/current/develop/training/adding-security/index.html) lesson.
+> **Note:** User authentication is covered in more detail in the [Adding Security](/documentation/mobile/current/training/develop/adding-security/index.html) lesson.
 
 Sync Gateway is always listening on two ports:
 
@@ -116,7 +116,6 @@ Sync Gateway is always listening on two ports:
 	```
 
 > **Note:** The Sync Gateway service might be running on Windows which will prevent this command from succeeding with the message 'FATAL: Failed to start HTTP server on 127.0.0.1:4985: listen tcp 127.0.0.1:4985: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.'  To get around this, stop the 'Couchbase Sync Gateway' service in 'services.msc'.
-
 
 ## Add synchronization
 
@@ -189,6 +188,8 @@ _puller = puller;
 <block class="android" />
 
 ```java
+// This code can be found in Application.java
+// in the startReplication(String, String) method
 URL url = null;
 try {
     url = new URL(mSyncGatewayUrl);
@@ -233,7 +234,7 @@ puller.start();
 3. Build and run.
 4. Open [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo) in the browser and notice that all the documents are pushed to Sync Gateway! You may have more or less rows depending on how many documents are present in the Couchbase Lite database.
 
-![](./img/image19.png)
+    <img src="./img/image19.png" />
 
 <block class="net" />
 
@@ -261,6 +262,8 @@ puller.start();
 3. Build and run.
 4. Open [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo) in the browser and notice that all the documents are pushed to Sync Gateway! You may have more or less rows depending on how many documents are present in the Couchbase Lite database.
 
+    <img src="./img/image19w.png" />
+
 <block class="android" />
 
 1. In **Application.java**, set `mSyncGatewayUrl` to the URL of the Sync Gateway database (http://localhost:4984/todo/).
@@ -280,24 +283,7 @@ puller.start();
 3. Build and run.
 4. Open [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo) in the browser and notice that all the documents are pushed to Sync Gateway! You may have more or less rows depending on how many documents are present in the Couchbase Lite database.
 
-<block class="ios" />
-
-    ![](./img/image19.png)
-
-<block class="wpf" />
-
-    ![](./img/image19w.png)
-
-<block class="xam" />
-
-**iOS**
-    ![](./img/image19.png)
-**Android**
-    ![](./img/image19xa.png)
-
-<block class="android" />
-
-    ![](./img/image19a.png)
+    <img src="./img/image19a.png" />
 
 <block class="all" />
 
@@ -385,7 +371,7 @@ Shown below is a list document created with two conflicting revisions. After del
 
 <block class="ios" />
 
-<img src="https://cl.ly/023t2k3w3k3c/image47.gif" class="portrait" />
+<img src="https://cl.ly/0h3T1c0e1V2G/image47.gif" class="portrait" />
 
 > **Note:** During development, the method `saveAllowingConflicts` is used to intentionally create a conflict. You can shake the device (**^⌘Z** on the simulator) to create a list conflict. The code is located in the `motionEnded(_:with:)` method of **ListsViewController.swift**.
 
@@ -404,7 +390,7 @@ Shown below is a list document created with two conflicting revisions. After del
 
 <block class="android" />
 
-<img src="https://cl.ly/3A0T1g1v0r03/image47a.gif" class="portrait" />
+<img src="https://cl.ly/2h0Z2u2S0M1W/image47a.gif" class="portrait" />
 
 > **Note:** During development, the method `save(boolean)` is used to intentionally create a conflict. You can long press the floating action button to create a list conflict. The code is located in the `createListConflict()` method of **ListsActivity.java**.
 
@@ -528,7 +514,8 @@ private void resolveConflicts(final List<SavedRevision> revs, final Map<String, 
     ```
 
 2. Perform the same actions and this time deleting the list conflict doesn’t reveal the subsequent conflicting revision anymore.
-    <img class="portrait" src="https://cl.ly/1N29282B3A0M/image48.gif"  />
+
+    <img class="portrait" src="https://cl.ly/0b2y1o1U1L2u/image48.gif"  />
 
 <block class="net" />
 
@@ -558,7 +545,7 @@ private void resolveConflicts(final List<SavedRevision> revs, final Map<String, 
 **iOS**
 <img class="portrait" src="./img/image48.gif"  />
 **Android**
-<img class="portrait" src="./img/image48a.gif"  />
+<img class="portrait" src="./img/image48xa.gif"  />
 
 <block class="android" />
 
@@ -570,7 +557,7 @@ private void resolveConflicts(final List<SavedRevision> revs, final Map<String, 
 
 2. Perform the same actions and this time deleting the list conflict doesn't reveal the subsequent conflicting revision anymore.
 
-    <img class="portrait" src="https://cl.ly/2u2w3N2e0Q3g/image48a.gif"  />
+    <img class="portrait" src="https://cl.ly/1A0u402Z1t08/image48a.gif"  />
 
 <block class="all" />
 
@@ -580,20 +567,20 @@ For task documents, you will follow the same steps as previously except this tim
 
 <block class="ios" />
 
-<img src="https://cl.ly/0P0w2k0s1a2z/image67.gif" class="portrait" />
+<img src="https://cl.ly/0q3A3F2E1Z2L/image67.gif" class="portrait" />
 
 > **Note:** To see the same result, open any list and shake the device (**^⌘Z** on the simulator) to create a task conflict. The code is located in the `motionEnded(_:with:)` method of **TasksViewController.swift**. Be sure to disable conflict resolution to see the same result as the animation above.
 
 <block class="wpf" />
 
-<img src="./img/image67w.gif" class="center-image" />
+<img src="https://cl.ly/451n2X1v1r0z/image67w.gif" class="center-image" />
 
 > **Note:** To see the same result, open any list and press Ctrl+C to create a task conflict.  The code is located in the
 `TestConflict()` method of **TasksModel.cs**.  Be sure to disable conflict resolution to see the same result as the animation above.
 
 <block class="android" />
 
-<img src="https://cl.ly/2l180C0v3D10/image67a.gif" class="portrait" />
+<img src="https://cl.ly/1E1O0M1l333r/image67a.gif" class="portrait" />
 
 > **Note:** To see the same result, open any list and long press the floating action button to create a task conflict. The code is located in the `createTaskConflict()` method of **TasksFragment.java**. Be sure to disable conflict resolution to see the same result as the animation above.
 
@@ -754,7 +741,7 @@ Notice that for 'task' documents, the `nWayMergeConflicts()` method is called to
 **iOS**
 ![](img/image03.png)
 **Android**
-![](img/image03a.png)
+![](img/image03xa.png)
 
 <block class="android" />
 
@@ -767,7 +754,7 @@ Notice that for 'task' documents, the `nWayMergeConflicts()` method is called to
 2. Build and run.
 3. Create a task conflict using the shake gesture and this time the row contains the updated text **and** is marked as completed.
 
-    ![](img/image03a.png)
+    <image src="img/image03a.png" class="portrait" />
 
 <block class="all" />
 

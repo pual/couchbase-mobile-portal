@@ -30,7 +30,7 @@ Once the document is mapped to the channel you can give the user access to it. I
 
 ![](img/03-read-access.png)
 
-**Tip:** As shown above, you can route documents of different types to the same channel. The `access` method can then be invoked once since the list and its tasks are in the same channel.
+> **Tip:** As shown above, you can route documents of different types to the same channel. The `access` method can then be invoked once since the list and its tasks are in the same channel.
 
 ### Multiple users
 

@@ -19,7 +19,7 @@ In this lesson you’ll learn how to integrate Couchbase Mobile with external sy
 Download the project below.
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/2A2D3q3R2d1g/xcode-project.zip" class="button" id="project">
+  <a href="https://cl.ly/293t073Z3735/project.zip" class="button" id="project">
     <img src="img/download-xcode.png">
   </a>
 </div>
@@ -44,7 +44,7 @@ Open **Todo.xcworkspace** in Xcode. Then build & run the project.
 Download the project below.
 
 <div class="buttons-unit downloads">
-  <a href="#" class="button" id="project">
+  <a href="https://cl.ly/293t073Z3735/project.zip" class="button" id="project">
     <img src="img/download-vs.png">
   </a>
 </div>
@@ -60,7 +60,7 @@ Download the project below.
 Download the project below.
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/2A2D3q3R2d1g/xcode-project.zip" class="button" id="project">
+  <a href="https://cl.ly/293t073Z3735/project.zip" class="button" id="project">
     <img src="img/download-android.png">
   </a>
 </div>
@@ -78,23 +78,18 @@ The changes stream returns a sorted list of changes made to documents in the dat
 Documents written to Sync Gateway are assigned a sequence value at write time. This sequence is used to order the changes feed. You can query the changes feed using a simple HTTP GET request to `/{db}/_changes` as shown below.
 
 ```bash
-$ curl -H 'Content-Type: application/json' -vX GET 'http://localhost:4985/todo/_changes?since=3' -d '{}'
-
-{
-  "results":[
-    {"seq":3,"id":"-K56UC6KOhFz1CcReSIq7RA","changes":[{"rev":"2-2b105e01ea899c6a7875b50806f1377a"}]},
-    {"seq":4,"id":"user1.CD59C6F0-D2FE-4C05-8712-52BDF86AA694","deleted":true,"changes":[{"rev":"2-3c169e667f727ab4b51e56f5878df7c7"}]},{"seq":5,"id":"user1.76FE447B-0A1A-4EE9-9501-7F7B36164B4B","changes":[{"rev":"1-5ad8375dc53dde5a2fd555b4b4a82184"}
-  ]
-}
+$ curl -H 'Content-Type: application/json' -vX GET 'http://localhost:4985/todo/_changes?since=3'
 ```
 
-    > **Note:** The curl executable for Windows can be found [on this page](https://curl.haxx.se/download.html)
+> **Note:** The curl executable for Windows can be found [on this page](https://curl.haxx.se/download.html)
 
 The **since** parameter in the querystring is used to specify which sequence to start from. In this case the response contains changes starting at `seq: 3` because the `since=3` parameter was sent in the querystring.
 
 Deleting a document creates a new revision with the `deleted: true` property and no user properties. This is required in order to propagate the deletion to other devices. In the example above the change with sequence 4 (`seq: 4`) is a deletion.
 
 #### Try it out
+
+<block class="ios" />
 
 1. Download Sync Gateway and start it with the configuration file in the root directory of the accompanying project.
 
@@ -118,31 +113,68 @@ Deleting a document creates a new revision with the `deleted: true` property and
     let kLoginFlowEnabled = true
     let kSyncEnabled = true
     ```
-    
-<block class="net" />
-
-2. Open **CoreApp.cs** and change the `CreateHint()` method as follows:
-
-   ```c#
-   var retVal = new CoreAppStartHint {
-      LoginEnabled = true, // This line needs to be changed
-      EncryptionEnabled = false,
-      SyncEnabled = true, // This line needs to be changed
-      UsePrebuiltDB = false,
-      ConflictResolution = false,
-      Username = "todo"
-  };
-
-  return retVal;
-  ```
-
-<block class="all" />
 
 3. Run the application, login with the **user1/pass** credentials and add a new list. It should appear as a new document on the Admin UI of Sync Gateway on [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo).
 
 4. To access the changes stream (also called the changes feed). Open a browser tab at [http://localhost:4985/todo/_changes](http://localhost:4985/todo/_changes).
 
     ![](img/image54.png)
+    
+<block class="net" />
+
+1. Download Sync Gateway and start it with the configuration file in the root directory of the accompanying project.
+
+    ```bash
+    ~/Downloads/couchbase-sync-gateway/bin/sync_gateway sync-gateway-config.json
+    ```
+
+    ```powershell
+    PS> & 'C:\Program Files (x86)\Couchbase\sync_gateway.exe' sync-gateway-config.json
+    ```
+
+    > **Note:** The Sync Gateway service might be running on Windows which will prevent this command from succeeding with the message 'FATAL: Failed to start HTTP server on 127.0.0.1:4985: listen tcp 127.0.0.1:4985: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.'  To get around this, stop the 'Couchbase Sync Gateway' service in 'services.msc'.
+
+2. Open **CoreApp.cs** and change the `CreateHint()` method as follows:
+
+    ```c#
+    var retVal = new CoreAppStartHint {
+      LoginEnabled = true, // This line needs to be changed
+      EncryptionEnabled = false,
+      SyncEnabled = true, // This line needs to be changed
+      UsePrebuiltDB = false,
+      ConflictResolution = false,
+      Username = "todo"
+    };
+
+    return retVal;
+    ```
+
+3. Run the application, login with the **user1/pass** credentials and add a new list. It should appear as a new document on the Admin UI of Sync Gateway on [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo).
+
+4. To access the changes stream (also called the changes feed). Open a browser tab at [http://localhost:4985/todo/_changes](http://localhost:4985/todo/_changes).
+
+    ![](img/image54.png)
+
+<block class="android" />
+
+1. Download Sync Gateway and start it with the configuration file in the root directory of the accompanying project.
+
+    ```bash
+    ~/Downloads/couchbase-sync-gateway/bin/sync_gateway sync-gateway-config.json
+    ```
+
+2. Open **Application.java** and set the following constants to `true`.
+
+    ```swift
+    let mLoginFlowEnabled = true
+    let mSyncEnabled = true
+    ```
+
+3. Run the application, login with the **user1/pass** credentials and add a new list. It should appear as a new document on the Admin UI of Sync Gateway on [http://localhost:4985/_admin/db/todo](http://localhost:4985/_admin/db/todo).
+
+4. To access the changes stream (also called the changes feed). Open a browser tab at [http://localhost:4985/todo/_changes](http://localhost:4985/todo/_changes).
+
+<block class="all" />
 
 ### Subscribing to changes
 
@@ -156,16 +188,20 @@ To be notified of a change as it happens, an HTTP socket must remain open betwee
 To subscribe to the changes feed you can use any HTTP library to send the `GET /_changes` request with query options. In this lesson however you will use the generated libraries based on the Swagger specs. The code below sends a request to the changes stream every time a response has been received and processed. The `getChanges(seq)` method is called recursively passing the `last_seq` property received in the response as the `since` value in the subsequent request.
 
 ```javascript
-// This code can be found in bot/app.js
+var Swagger = require('swagger-client')
+  , fs = require('fs')
+  , spec = require('./spec');
+
+// Use the SwaggerJS module to dynamically load the Swagger spec
 new Swagger({
-  url: 'http://developer.couchbase.com/mobile/swagger/sync-gateway-admin/spec.json',
+  spec: spec,
   usePromise: true
 })
   .then(function (res) {
     client = res;
     
-    // Start getting changes at seq: 2
-    getChanges(2);
+    // Start getting changes at seq: 0
+    getChanges(0);
     
     function getChanges(seq) {
       // Use the Swagger client to connect to the changes feed
@@ -181,8 +217,6 @@ new Swagger({
           console.log(err);
         });
     }
-    
-    ...
 
   });
 ```
@@ -201,9 +235,12 @@ Notice that the `get_db_changes` method is used with `since: <seq>` and `feed: l
 2. Make further changes in the application and notice that the number of changes are printed to the console.
 
 <block class="ios" />
-    ![](https://cl.ly/1X0M0J2Q450U/image55.gif)
+
+  ![](https://cl.ly/1X0M0J2Q450U/image55.gif)
+
 <block class="wpf" />
-![](./img/image55w.gif)
+
+  ![](https://cl.ly/0R1q0U1G2i0K/image55w.gif)
 
 <block class="all" />
 
@@ -214,53 +251,41 @@ In this section you will learn how to persist an image as an attachment using th
 Similarly to the previous section, you will use the API methods available on the library provided by Swagger.
 
 ```javascript
-// This code can be found in bot/app.js
-new Swagger({
-  url: 'http://developer.couchbase.com/mobile/swagger/sync-gateway-admin/spec.json',
-  usePromise: true
-})
-  .then(function (res) {
-    client = res;
-    
-    ...
-    
-    function processChanges(results) {
-      for (var i = 0; i < results.length; i++) {
-        var doc = results[i].doc;
-        var img;
-        if (!doc._deleted && doc.type == 'task' && !doc._attachments) {
-          switch (doc.task.toLowerCase()) {
-            case 'apple':
-              img = fs.readFileSync('apple.png');
-              break;
-            case 'coffee':
-              img = fs.readFileSync('coffee.png');
-              break;
-            case 'potatoes':
-              img = fs.readFileSync('potatoes.png');
-              break;
+function processChanges(results) {
+  for (var i = 0; i < results.length; i++) {
+    var doc = results[i].doc;
+    var img;
+    if (doc && !doc._deleted && doc.type == 'task' && !doc._attachments) {
+      switch (doc.task.toLowerCase()) {
+        case 'apple':
+          img = fs.readFileSync('apple.png');
+          break;
+        case 'coffee':
+          img = fs.readFileSync('coffee.png');
+          break;
+        case 'potatoes':
+          img = fs.readFileSync('potatoes.png');
+          break;
+      }
+      if (img) {
+        var base64 = img.toString('base64');
+        doc._attachments = {
+          image: {
+            content_type: 'image\/png',
+            data: base64
           }
-          if (img) {
-            var base64 = img.toString('base64');
-            doc._attachments = {
-              image: {
-                content_type: 'image\/png',
-                data: base64
-              }
-            };
-            client.database.post_db_bulk_docs({db: 'todo', BulkDocsBody: {docs: [doc]}})
-              .then(function (res) {
-                getChanges(results[i].seq);
-              })
-              .catch(function (err) {
-                console.log(err);
-              });
-          }
-        }
+        };
+        client.database.post_db_bulk_docs({db: 'todo', BulkDocsBody: {docs: [doc]}})
+          .then(function (res) { 
+            console.log('1 change posted');
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
       }
     }
-
-  });
+  }
+}
 ```
 
 This code checks that the change is not a deletion and that the document type is "task". If the `doc.task` property is either "apple", "coffee" or "potatoes" then it reads the corresponding image as a Base64 string and sets it on the document's `_attachments` dictionary. Finally it persists the document with the attachment back to Sync Gateway using the `post_db_bulk_docs` method.
@@ -277,9 +302,12 @@ This code checks that the change is not a deletion and that the document type is
 3. Add a task called "Apple", "Coffee" or "Potatoes" and an image should appear after a few seconds. That's the attachment that was added to Sync Gateway by the bot and in turn replicated to Couchbase Lite.
 
 <block class="ios" />
-    ![](https://cl.ly/060e3a0p3717/image56.gif)
+
+  <img src="https://cl.ly/060e3a0p3717/image56.gif" />
+
 <block class="wpf" />
-![](./img/image56w.gif)
+
+  <img src="https://cl.ly/3z3Q2v1n0n0d/image56w.gif" />
 
 <block class="all" />
 

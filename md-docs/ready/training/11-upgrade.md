@@ -121,7 +121,7 @@ In this section you will perform the same sequence of operations to upgrade Sync
     }
     ```
 
-<block class="dockercloud" />
+<block class="all" />
 
 ## Conclusion
 

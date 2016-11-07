@@ -50,7 +50,7 @@ There will be 3 Sync Gateway nodes but the reverse proxy is forwarding the load 
 
     ![](https://cl.ly/392N2E2K0J0T/image76.gif)
 
-<block class="dockercloud" />
+<block class="all" />
 
 ## Conclusion
 

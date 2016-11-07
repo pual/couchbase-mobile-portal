@@ -40,7 +40,7 @@ The document ID is the primary identifier of a document in the database. It can 
 
 ![](img/05-ids.png)
 
-> **Note:** You may notice that the document ID on the List model is prefixed with the owner. This design choice will be discussed in detail in the [Access Control](https://google.com) lesson.
+> **Note:** You may notice that the document ID on the List model is prefixed with the owner. This design choice will be discussed in detail in the [Access Control](/documentation/mobile/1.3/training/design/security/index.html) lesson.
 
 ## Entity relationship
 

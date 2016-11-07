@@ -19,7 +19,7 @@ In this lesson you’ll be introduced to Couchbase Lite, our embedded NoSQL data
 Download the project below.
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/2A2D3q3R2d1g/xcode-project.zip" class="button" id="project">
+  <a href="https://cl.ly/293t073Z3735/project.zip" class="button" id="project">
     <img src="img/download-xcode.png">
   </a>
 </div>
@@ -44,7 +44,7 @@ Open **Todo.xcworkspace** in Xcode. Then build & run the project.
 Download the project below.
 
 <div class="buttons-unit downloads">
-  <a href="#" class="button" id="project">
+  <a href="https://cl.ly/293t073Z3735/project.zip" class="button" id="project">
     <img src="img/download-vs.png">
   </a>
 </div>
@@ -60,7 +60,7 @@ Download the project below.
 Download the project below.
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/2A2D3q3R2d1g/xcode-project.zip" class="button" id="project">
+  <a href="https://cl.ly/293t073Z3735/project.zip" class="button" id="project">
     <img src="img/download-android.png">
   </a>
 </div>
@@ -142,7 +142,7 @@ try {
 
 Here you're using the `openDatabaseNamed` method where the database is the user currently logged in and `options.create` is set to `true`.
 
-> **Note:** You can ignore the `kEncryptionEnabled` constant. Database encryption will be covered in the [Adding Security](/documentation/mobile/current/develop/training/adding-security/index.html) lesson.
+> **Note:** You can ignore the `kEncryptionEnabled` constant. Database encryption will be covered in the [Adding Security](/documentation/mobile/1.3/training/design/security/index.html) lesson.
 
 <block class="all" />
 

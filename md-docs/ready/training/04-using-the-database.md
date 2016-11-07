@@ -19,7 +19,7 @@ In this lesson you’ll be introduced to Couchbase Lite, our embedded NoSQL data
 Download the project below.
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/2A2D3q3R2d1g/xcode-project.zip" class="button" id="project">
+  <a href="https://cl.ly/293t073Z3735/project.zip" class="button" id="project">
     <img src="img/download-xcode.png">
   </a>
 </div>
@@ -44,7 +44,7 @@ Open **Todo.xcworkspace** in Xcode. Then build & run the project.
 Download the project below.
 
 <div class="buttons-unit downloads">
-  <a href="#" class="button" id="project">
+  <a href="https://cl.ly/293t073Z3735/project.zip" class="button" id="project">
     <img src="img/download-vs.png">
   </a>
 </div>
@@ -60,7 +60,7 @@ Download the project below.
 Download the project below.
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/2A2D3q3R2d1g/xcode-project.zip" class="button" id="project">
+  <a href="https://cl.ly/293t073Z3735/project.zip" class="button" id="project">
     <img src="img/download-android.png">
   </a>
 </div>
@@ -69,7 +69,7 @@ Download the project below.
 
 <block class="all" />
 
-> **Tip:** To make things a bit more exciting, you may want to use the pre-built database containing a list of Groceries. Refer to the [Create a Database](/documentation/mobile/current/develop/training/using-the-database/index.html) lesson to learn how to use it.
+> **Tip:** To make things a bit more exciting, you may want to use the pre-built database containing a list of Groceries. Refer to the [Create a Database](/documentation/mobile/1.3/training/develop/create-database/index.html) lesson to learn how to use it.
 
 ## Create a Document
 
@@ -322,7 +322,7 @@ try {
 
 <block class="all" />
 
-> **Challenge:** Add a document change listener to detect when the document gets deleted. The [document change notification](/1.3/develop/guides/couchbase-lite/native-api/document/index.html#document-change-notifications) documentation will be helpful for this challenge.
+> **Challenge:** Add a document change listener to detect when the document gets deleted. The [document change notification](/documentation/mobile/1.3/develop/guides/couchbase-lite/native-api/document/index.html#document-change-notifications) documentation will be helpful for this challenge.
 
 ### Try it out
 
@@ -434,7 +434,7 @@ listsLiveQuery = listsView.createQuery().toLiveQuery();
 
 The `viewNamed` method returns a [View](http://developer.couchbase.com/documentation/mobile/current/develop/guides/couchbase-lite/native-api/view/index.html) object on which the map function can be set. The map function is indexing documents where the type property is equal to "task-list". Each cell on the screen will contain a list name and nothing else. For that reason, you can emit the name property as the key and nil is the value. If you also wanted to display the owner of the list in the row you could emit the `owner` property as the value.
 
-The `listsView.createQuery()` method returns a [Query](/documentation/mobile/current/develop/guides/couchbase-lite/native-api/query/index.html) object which has a **run** method to return the results as a [QueryEnumerator](/documentation/mobile/current/develop/references/couchbase-lite/couchbase-lite/query/query-enumerator/index.html) object. However, in this case, you are hooking into a [Live Query](/documentation/mobile/current/develop/guides/couchbase-lite/native-api/query/index.html) to keep monitoring the database for new results. Any time the result of that query changes through user interaction or synchronization, it will notify your application via the change event. A live query provides an easy way to build reactive UIs, which will be especially useful when you enable sync in the [Adding Synchronization](/documentation/mobile/current/develop/training/adding-synchronization/index.html) lesson. The change event is triggered as a result of user interaction locally as well as during synchronization with Sync Gateway.
+The `listsView.createQuery()` method returns a [Query](/documentation/mobile/current/develop/guides/couchbase-lite/native-api/query/index.html) object which has a **run** method to return the results as a [QueryEnumerator](/documentation/mobile/current/develop/references/couchbase-lite/couchbase-lite/query/query-enumerator/index.html) object. However, in this case, you are hooking into a [Live Query](/documentation/mobile/current/develop/guides/couchbase-lite/native-api/query/index.html) to keep monitoring the database for new results. Any time the result of that query changes through user interaction or synchronization, it will notify your application via the change event. A live query provides an easy way to build reactive UIs, which will be especially useful when you enable sync in the [Adding Synchronization](/documentation/mobile/current/training/develop/adding-synchronization/index.html) lesson. The change event is triggered as a result of user interaction locally as well as during synchronization with Sync Gateway.
 
 <block class="ios" />
 
@@ -487,8 +487,6 @@ query.start();
 
 <block class="all" />
 
-> **Challenge:** Update the map function to emit the document ID as the key. Don't forget to bump the view version whenever you change the map function. The list view should now display the document ID on each row.
-
 ### Try it out
 
 1. Build and run.
@@ -505,6 +503,10 @@ query.start();
 <block class="android" />
 
 <img src="https://cl.ly/44433I102l3q/image66a.gif" class="portrait" />
+
+<block class="all" />
+
+> **Challenge:** Update the map function to emit the document ID as the key. Don't forget to bump the view version whenever you change the map function. The list view should now display the document ID on each row.
 
 ## Aggregating Data
 
