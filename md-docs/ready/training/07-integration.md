@@ -102,6 +102,14 @@ Deleting a document creates a new revision with the `deleted: true` property and
     ~/Downloads/couchbase-sync-gateway/bin/sync_gateway sync-gateway-config.json
     ```
 
+	
+	```powershell
+	PS> & 'C:\Program Files (x86)\Couchbase\sync_gateway.exe' sync-gateway-config.json
+	```
+
+> **Note:** The Sync Gateway service might be running on Windows which will prevent this command from succeeding with the message 'FATAL: Failed to start HTTP server on 127.0.0.1:4985: listen tcp 127.0.0.1:4985: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.'  To get around this, stop the 'Couchbase Sync Gateway' service in 'services.msc'.
+
+
 <block class="ios" />
 
 2. Open **AppDelegate.swift** and set the following constants to `true`.

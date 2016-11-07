@@ -34,6 +34,13 @@ In the project folder you will find the sync function. The table below translate
     ```bash
     ~/path/to/sync_gateway sync-gateway-config.json
     ```
+	
+	```powershell
+	PS> & 'C:\Program Files (x86)\Couchbase\sync_gateway.exe' sync-gateway-config.json
+	```
+
+> **Note:** The Sync Gateway service might be running on Windows which will prevent this command from succeeding with the message 'FATAL: Failed to start HTTP server on 127.0.0.1:4985: listen tcp 127.0.0.1:4985: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.'  To get around this, stop the 'Couchbase Sync Gateway' service in 'services.msc'.
+
 
 ## Testing Validation Rules
 

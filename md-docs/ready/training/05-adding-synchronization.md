@@ -110,10 +110,13 @@ Sync Gateway is always listening on two ports:
     ```bash
     sync_gateway sync-gateway-config.json
     ```
+    
+	```powershell
+	PS> & 'C:\Program Files (x86)\Couchbase\sync_gateway.exe' sync-gateway-config.json
+	```
 
-    ```powershell
-    C:\Program Files (x86)\Couchbase\sync_gateway
-    ```
+> **Note:** The Sync Gateway service might be running on Windows which will prevent this command from succeeding with the message 'FATAL: Failed to start HTTP server on 127.0.0.1:4985: listen tcp 127.0.0.1:4985: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.'  To get around this, stop the 'Couchbase Sync Gateway' service in 'services.msc'.
+
 
 ## Add synchronization
 
