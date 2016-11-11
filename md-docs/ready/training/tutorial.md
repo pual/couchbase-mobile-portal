@@ -8,15 +8,34 @@ Couchbase Mobile brings the power of NoSQL to mobile. It is comprised of three d
 
 Couchbase Mobile simplifies "offline first" development. As shown on the diagram below, Couchbase Lite runs locally on the device and persists data as JSON and binary format. You can perform CRUD operations directly to the local database.
 
-![](./img/diagrams.001.png)
+![](img/image57.png)
 
 Sync Gateway is the web tier that exposes a database API for Couchbase Lite databases to replicate to and from  Couchbase Server (data is not persisted in Sync Gateway). Couchbase Server is used as a storage engine by Sync Gateway.
 
 In this developer tutorial series, you will build a ToDo List application with Couchbase Mobile and learn how to use the database, add synchronization, and add security.
 
-## Course Outline
+<block class="ios" />
 
 <img src="./img/image11.png" class="portrait" />
+
+<block class="wpf" />
+
+<img src="./img/image11w.png" class="center-image" />
+
+<block class="xam" />
+
+**iOS**
+<img src="./img/image11.png" class="portrait" />
+**Android**
+<img src="./img/image11xa.png" class="portrait" />
+
+<block class="android" />
+
+<img src="img/image11a.png" class="portrait" />
+
+<block class="all" />
+
+## Course Outline
 
 ### Data Modeling
 

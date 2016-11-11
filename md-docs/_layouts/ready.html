@@ -8,7 +8,7 @@ sectionid: docs
   <!--<link href="">-->
   <style>
     /* HACK: To override the AuthX styles (navs, lists) */
-    .inner-content ul {
+    .documentationContent ul, .inner-content ul {
       list-style-type: disc !important;
     }
 
@@ -52,7 +52,7 @@ sectionid: docs
     
     /* Styling images (sizing images in-lined with writing) */
     .center-image {
-      width: 60%;
+      width: 70%;
       margin: 0 auto;
       display: block;
     }
@@ -79,7 +79,6 @@ sectionid: docs
 
     .button {
       font-size: 24px !important;
-      background: #2099f6 !important;
       color: #fafafa !important;
       border: none !important;
       text-transform: none !important;
@@ -87,8 +86,10 @@ sectionid: docs
     }
     
     .red {
-      background: #e4212a !important;
-      color: #fafafa !important;
+      color: #e4212a !important;
+      border: 1px solid #e4212a !important;
+      font-family: "Avenir Next" !important;
+      font-weight: 400 !important;
     }
 
     .buttons-unit .button:active {
@@ -118,13 +119,21 @@ sectionid: docs
     .hash-link > svg {
       transform: rotate(-30deg) !important;
     }
+    
+    .show {
+      display: block;
+    }
+    
+    .hide {
+      display: none;
+    }
   </style>
   <a class="edit-page-link" href="https://github.com/couchbaselabs/couchbase-mobile-portal/tree/master/md-docs/{{ page.path }}" target="_blank">Edit on GitHub</a>
   <div class="content wrap documentationContent">
     <div class="inner-content">
       <!-- Platform tabs -->
       <!-- TODO: Make visible when ready to show multi-platform training -->
-      <div class="toggler" style="display: none;">
+      <div class="toggler">
         <style>
           .toggler a {
             display: inline-block;
@@ -137,7 +146,8 @@ sectionid: docs
           .display-platform-ios .toggler .button-ios,
           .display-platform-android .toggler .button-android,
           .display-platform-rn .toggler .button-rn,
-          .display-platform-net .toggler .button-net {
+          .display-platform-wpf .toggler .button-wpf,
+          .display-platform-xam .toggler .button-xam {
             background-color: #05A5D1;
             color: white;
           }
@@ -147,14 +157,18 @@ sectionid: docs
           .display-platform-ios .ios,
           .display-platform-android .android,
           .display-platform-rn .rn,
-          .display-platform-net .net {
+          .display-platform-net .net,
+          .display-platform-wpf .wpf,
+          .display-platform-xam .xam,
+          .display-platform-all .all {
             display: block;
           }</style>
-        <span>Platform:</span>
-        <a href="javascript:void(0);" class="button-ios" onclick="display('platform', 'ios')">iOS</a>
-        <a href="javascript:void(0);" class="button-rn" onclick="display('platform', 'rn')">React Native</a>
-        <a href="javascript:void(0);" class="button-android" onclick="display('platform', 'android')">Android</a>
-        <a href="javascript:void(0);" class="button-net" onclick="display('platform', 'net')">.NET</a>
+        <div id="platform-tabs" class="hide">
+          <span>Platform:</span>
+          <a href="javascript:void(0);" class="button-ios" onclick="display('platform', 'ios')">iOS</a>
+          <a href="javascript:void(0);" class="button-android" onclick="display('platform', 'android')">Android</a>
+          <a href="javascript:void(0);" class="button-wpf" onclick="display('platform', 'wpf')">WPF</a>
+        </div>
       </div>
       <!-- SDK buttons -->
       <div id="swagger-libs" style="display: none;">
@@ -188,6 +202,12 @@ sectionid: docs
       </script>
       <!-- Logic for platform tabs -->
       <script>
+        // Only show on Develop pages
+        var blocks = document.getElementsByClassName('ios');
+        if (blocks.length > 0) {
+          var platformTabs = document.getElementById('platform-tabs');
+          platformTabs.className = "show";
+        }
         // Convert <div>...<span><block /></span>...</div>
         // Into <div>...<block />...</div>
         var blocks = document.getElementsByTagName('block');
@@ -209,8 +229,11 @@ sectionid: docs
         }
         function display(type, value) {
           var container = document.getElementsByTagName('block')[0].parentNode;
-          container.className = 'display-' + type + '-' + value + ' ' +
-                  container.className.replace(RegExp('display-' + type + '-[a-z]+ ?'), '');
+          container.className = 'display-' + type + '-' + value;
+          if (value == 'wpf' || value == 'xam') {
+            container.className += ' display-platform-net';
+          }
+          container.className += ' display-platform-all';
         }
 
         // If we are coming to the page with a hash in it (i.e. from a search, for example), try to get
@@ -218,7 +241,7 @@ sectionid: docs
         var foundHash = false;
         if (window.location.hash !== '' && window.location.hash !== 'content') { // content is default
           var platform = window.location.hash.slice(1);
-          if (['ios-training', 'rn-training'].indexOf(platform) > -1) {
+          if (['ios', 'android', 'wpf'].indexOf(platform) > -1) {
             display('platform', platform);
             foundHash = true;
           }
@@ -328,5 +351,34 @@ sectionid: docs
       wrapper.appendChild(table);
       j--;
     }
+  </script>
+  <script>
+    /**
+     * Hack to not open some list titles
+     */
+    (function() {
+      var els = document.getElementsByClassName('static');
+      for (var i = 0; i < els.length; i++) {
+        (function() {
+          var el = els[i];
+          el.onclick = function () {
+            var icon = el.previousSibling;
+            var iconClasses = icon.className;
+            if (iconClasses == 'icon') {
+              icon.className = 'icon close';
+            } else {
+              icon.className = 'icon';
+            }
+            var list = el.nextSibling;
+            var displayProp = list.style.display;
+            if (displayProp == 'block') {
+              list.style.display = 'none';
+            } else {
+              list.style.display = 'block';
+            }
+          }
+        })()
+      }
+    })()
   </script>
 </section>

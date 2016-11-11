@@ -37,6 +37,7 @@ if [[ ${1} = "build" ]]; then
 	cp -rf ${OPENID} "${SOURCE_FOLDER}"
 	cp -rf ${INSTALLATION} "${SOURCE_FOLDER}"
 	cp -rf ${DEVELOP} "${SOURCE_FOLDER}/develop"
+	cp -rf ${TRAINING} "${SOURCE_FOLDER}"
 	
 	rm -rf ../../tmp/ready/training/using-the-database/img/
 	rm -rf ../../tmp/ready/training/adding-synchronization/img/
