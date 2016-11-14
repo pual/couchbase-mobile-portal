@@ -6,12 +6,29 @@ permalink: ready/training/deploy/scale/index.html
 
 In this lesson you'll learn how to scale Sync Gateway and Couchbase Server in real-time with zero downtime.
 
+[//]: # "COMMON ACROSS LESSONS"
+
 #### Requirements
 
-Four instances with the following:
+Three instances with the following:
 
 - Centos 7
 - RAM >= 2GB
+
+#### Getting Started
+
+This lesson contains some scripts to automatically deploy and configure Sync Gateway with Couchbase Server. Download those scripts on each VM using wget.
+
+```bash
+ssh vagrant@192.168.34.11
+wget https://cl.ly/1q300A3v3R1D/deploy.zip
+sudo yum install -y unzip
+unzip deploy.zip
+```
+
+Throughout this lesson, you will use different scripts located in the **deploy** folder.
+
+[//]: # "COMMON ACROSS LESSONS"
 
 ## Architecture
 

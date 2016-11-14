@@ -12,7 +12,7 @@ In this lesson you'll learn how to install upgrades for Sync Gateway with zero d
 
 Three instances with the following:
 
-- CentOS 7
+- Centos 7
 - RAM >= 2GB
 
 #### Getting Started
@@ -20,8 +20,9 @@ Three instances with the following:
 This lesson contains some scripts to automatically deploy and configure Sync Gateway with Couchbase Server. Download those scripts on each VM using wget.
 
 ```bash
-wget https://cl.ly/3Z0D2D0l3R0O/deploy.zip
-sudo apt-get install unzip
+ssh vagrant@192.168.34.11
+wget https://cl.ly/1q300A3v3R1D/deploy.zip
+sudo yum install -y unzip
 unzip deploy.zip
 ```
 
