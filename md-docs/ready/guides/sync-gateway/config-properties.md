@@ -77,7 +77,6 @@ Following are configuration properties for configuration of the Sync Gateway ser
 |`maxFileDescriptors`|`integer`|Maximum number of open file descriptors (RLIMIT_NOFILE). _Not available on Windows_. The default is `5000`.|
 |`maxHeartbeat`|`integer`|Maximum heartbeat value for `_changes` feed requests (in seconds). The default is no maximum.|
 |`maxIncomingConnections`|`integer`|Maximum number of incoming HTTP connections to accept. The default is no maximum.|
-|`persona`|Mozilla Persona configuration property|Configuration for Mozilla Persona authentication. See Mozilla Persona configuration. There is no default.|
 |`pretty`|`Boolean`|Whether to pretty-print JSON responses. The default is `false`.|
 |`profileInterface`|`string`|TCP network address (IP address and the port) that the Go profile API listens on. You can obtain go profiling information from the interface. You can omit the IP address. There is no default.|
 |`serverReadTimeout`|`integer`|Maximum duration in seconds before timing out the read of an HTTP(S) request. The default is no timeout.|
@@ -159,17 +158,6 @@ Following is the property that you can define for the server configuration prope
 |`register`|`Boolean`|Whether the Facebook Login server will register new user accounts (`true` or `false`). The default is `false`.|
 
 For more information about Facebook authentication, see Facebook authentication.
-
-## Mozilla Persona configuration
-
-Following are the properties that you can define for the server configuration property `persona`:
-
-|Property|Type|Description and default|
-|:-------|:---|:----------------------|
-|`origin`|`string`|URL of Mozilla Persona Identity Provider (IdP) server for Persona authentication. There is no default.|
-|`register`|`Boolean`|Whether the Mozilla Persona IdP server will register new user accounts (true or false). The default is `false`.|
-
-For more information about Mozilla Persona authentication, see Mozilla Persona authentication.
 
 ## CORS configuration
 

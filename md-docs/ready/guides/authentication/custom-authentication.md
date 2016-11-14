@@ -126,7 +126,7 @@ Subsequent client requests to the gateway will now include the session in a cook
 
 ## Session Expiration
 
-By default, a session created on Sync Gateway lasts 24 hours. If you create sessions by sending a POST request to `/db/_session`, you can set a custom value that overrides the system default. However, if you are using Persona for authentication, the only way to customize the session length is by modifying the `kDefaultSessionTTL` constant in the `rest_session.go` file.
+By default, a session created on Sync Gateway lasts 24 hours. If you create sessions by sending a POST request to `/db/_session`, you can set a custom value that overrides the system default. 
 
 ## Authentication for Web Apps
 

@@ -130,7 +130,6 @@ Develop
   - Authentication
     - `<introduction>`
     - Facebook `<topic>`
-    - Persona `<topic>`
     - Custom `<topic>`
       - LDAP `<section>`
       - Active-Directory `<section>`

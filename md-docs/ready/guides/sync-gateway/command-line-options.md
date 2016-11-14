@@ -30,7 +30,6 @@ Following are the command-line options that you can specify when starting Sync G
 |`-help`|N/A|Lists the available options and exits.|
 |`-interface`|`:4984`|Port or TCP network address (IP address and the port) that the Public REST API listens on.|
 |`-log`|`HTTP`|Comma-separated list of log keywords to enable. The log keyword `HTTP` is enabled by default, which means that HTTP requests and error responses are always logged. Omitting `HTTP` from your list does not disable HTTP logging. HTTP logging can be disabled through the Admin API.|
-|`-personaOrigin`|None|URL that clients use to communicate with a Mozilla Persona IdP server.|
 |`-pool`|`default`|Name of the Couchbase Server pool in which to find buckets.|
 |`-pretty`|`false`|Pretty-print JSON responses to improve readability. This is useful for debugging, but reduces performance.|
 |`-url`|`walrus:`|URL of the database server. An HTTP URL implies Couchbase Server. A `walrus:` URL implies the built-in Walrus database. A combination of a Walrus URL and a file-style URI (for example, `walrus:///tmp/walrus`) implies the built-in Walrus database and persisting the database to a file.|
