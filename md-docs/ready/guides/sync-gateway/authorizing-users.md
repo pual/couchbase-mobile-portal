@@ -42,7 +42,7 @@ The URL for a user account is `/databasename/_user/name`, where databasename is 
 - `admin_roles`: The roles that the user is explicitly granted access to through the Admin REST API. It contains an array of role name strings.
 - `all_channels`: Like the `admin_channels` property, but also includes channels the user is given access to by other documents via a sync function. This is a derived property and changes to it are ignored.
 - `disabled`: This property is usually not included. if the value is set to true, access for the account is disabled.
-- `email`: The user's email address. This property is optional, but Persona login needs it.
+- `email`: The user's email address. This property is optional.
 - `name`: The user name (the same name used in the URL path). The valid characters for a user name are alphanumeric ASCII characters and the underscore character. The name property is required in a POST request. You don't need to include it in a PUT request because the user name is specified in the URL.
 - `password`: In a PUT or POST request, you can set the user's password with this property. It is not returned by a GET 
 request.
