@@ -16,7 +16,7 @@ Bucket shadowing is actually a different style of sync that operates between you
 
 ## Availability
 
-Bucket shadowing was added on Jan 9 2014 (commit 70f92fd). It is _not_ available in beta 2. Until a newer release is available you'll need to check out and build the Gateway yourself.
+Bucket shadowing was added on Jan 9 2014 (commit 70f92fd). It is _not_ available in beta 2.
 
 ## Configuration
 
