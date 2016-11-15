@@ -32,8 +32,8 @@ manager = new Manager(context, Manager.DEFAULT_OPTIONS);
 ```
 
 ```android+
-AndroidContext context = new AndroidContext(getApplicationContext());
-manager = new Manager(new AndroidContext(context), Manager.DEFAULT_OPTIONS);
+AndroidContext androidContext = new AndroidContext(getApplicationContext());
+manager = new Manager(androidContext, Manager.DEFAULT_OPTIONS);
 ```
 
 ```c+
