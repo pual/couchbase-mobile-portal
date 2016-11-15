@@ -33,13 +33,18 @@ Configure the Sync Gateway as per the existing documentation. Then in your JSON 
 
 You can optionally add a `"doc_id_regex"` property, whose value must be a regular expression: only document IDs / keys matching this regex will be transferred (in either direction).
 
-NOTE: If you're running a cluster of multiple sync gateways serving the same database, make sure that you only add the `shadow` property to _one_ gateway's configuration. Otherwise you'll have multiple tasks simultaneously trying to copy the same documents to and from the app bucket, which will result in collisions.
+> **Note:** If you're running a cluster of multiple sync gateways serving the same database, make sure that you only add the `shadow` property to _one_ gateway's configuration. Otherwise you'll have multiple tasks simultaneously trying to copy the same documents to and from the app bucket, which will result in collisions.
 
 You may also want to add the key `"Shadow"` to the top-level configuration's `"log"` property, to get logging output from the shadowing task.
 
 When you start the gateway, it will run through the app bucket's history (its tap feed) copying any new or changed documents into the gateway database. Depending on how large the bucket is, this may take a while. (Unfortunately there's no way to bypass this on subsequent launches of the gateway, due to limitations of the tap feed implementation.)
 
 If you shut down the gateway (or it crashes), and changes are subsequently made to the app bucket, the gateway will find and apply those changes when it next starts up. However, the reverse situation doesn't work yet: if the app bucket becomes unavailable while the gateway is running, changes made to the gateway's database won't get propagated to the app bucket when it comes back. (Hopefully we can fix this before GA.)
+
+## Limitations
+
+- Bucket shadowing isn't highly available, and can't be scaled out – only one node should be configured for shadowing.
+- When there are frequent updates to a document, bucket shadowing requires a higher `revs_limit` than non-bucket shadowing to ensure the revision hasn't been pruned by the time the shadowing echo arrives.
 
 ## FAQ
 
