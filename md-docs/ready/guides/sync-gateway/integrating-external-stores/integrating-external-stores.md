@@ -12,8 +12,6 @@ In this guide, you will learn how to run the following operations on the Admin R
 - Exporting via the changes feed.
 - Importing attachments.
 
-> **Note:** When you're starting out with Couchbase, use the Sync Gateway REST API, not bucket shadowing. Bucket shadowing should not be used except when there's a pre-existing Couchbase bucket being managed by client APIs, that now needs to be synced to mobile clients.
-
 ## External Store
 
 In this guide, you will use a simple movies API as the external data store. [Download the stub data and API server](https://cl.ly/140P313l0p23/external-store.zip) and unzip the content into a new directory. To start the server of the external store run the following commands:

@@ -31,5 +31,6 @@
         <xi:include href="rest-api-client.xml"/>
         <xi:include href="sgcollect-info.xml"/>
         <xi:include href="ssl.xml"/>
+        <xi:include href="bucket-shadowing.xml"/>
     </items>
 </set>
