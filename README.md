@@ -21,7 +21,7 @@ Then click the **Propose file change** button which will open a PR with the chan
 
 ## Style Guide
 
-[https://github.com/couchbaselabs/docs-style-guide](https://github.com/couchbaselabs/docs-style-guide)
+[Markdown Style Guide](https://github.com/couchbaselabs/docs-style-guide/blob/master/md-style-guide.md)
 
 ## Other Notes (optional)
 
