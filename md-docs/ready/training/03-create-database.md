@@ -142,7 +142,7 @@ try {
 
 Here you're using the `openDatabaseNamed` method where the database is the user currently logged in and `options.create` is set to `true`.
 
-> **Note:** You can ignore the `kEncryptionEnabled` constant. Database encryption will be covered in the [Adding Security](/documentation/mobile/1.3/training/design/security/index.html) lesson.
+> **Note:** You can ignore the encryption flag. Database encryption will be covered in the [Adding Security](/documentation/mobile/1.3/training/design/security/index.html) lesson.
 
 <block class="all" />
 
@@ -254,7 +254,7 @@ The prebuilt database is installed using the database replacement API only if th
     let kUsePrebuiltDb = true
     ```
 
-2. Build and run (don't forget to delete the app first).
+2. Build and run (⚠️ don't forget to delete the app first).
 3. A Groceries list will now be visible on the Lists screen. Click on it to see the tasks.
   <img src="https://cl.ly/3e1J2I0G1U1U/image45.gif" class="portrait" />
 
@@ -267,7 +267,7 @@ The prebuilt database is installed using the database replacement API only if th
     retVal.usePrebuiltDB = true;
     ```
 
-3. Build and run (don't forget to delete the app first).
+3. Build and run (⚠️ don't forget to delete the app first).
 
 4. A Groceries list will now be visible on the Lists screen. Click on it to see the tasks.
 
@@ -282,7 +282,7 @@ The prebuilt database is installed using the database replacement API only if th
 <block class="android" />
 
 1. Open **Application.java** and set the `mUsePrebuiltDb` constant to true.
-2. Build and run (don't forget to delete the app first).
+2. Build and run (⚠️ don't forget to delete the app first).
 3. A Groceries list will now be visible on the Lists screen. Click on it to see the tasks.
 
     <img src="https://cl.ly/2z4715010K2Z/image45a.gif" class="portrait" />
