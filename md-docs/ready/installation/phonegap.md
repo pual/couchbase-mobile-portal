@@ -4,8 +4,6 @@ title: PhoneGap
 permalink: ready/installation/phonegap/index.html
 ---
 
-## PhoneGap Plugin
-
 You will install Couchbase Lite using the PhoneGap CLI module.
 
 ```bash
