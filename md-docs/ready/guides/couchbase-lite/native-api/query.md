@@ -26,6 +26,19 @@ Some more advanced properties that aren't used as often:
 - `startKeyDocID`: If multiple index rows match the startKey, this property specifies that the result should start from the one(s) emitted by the document with this ID, if any. (Useful if the view contains multiple identical keys, making .startKey ambiguous.)
 - `endKeyDocID`: If multiple index rows match the endKey, this property specifies that the result should end with from the one(s) emitted by the document with this ID, if any. (Useful if the view contains multiple identical keys, making .startKey ambiguous.)
 - `indexUpdateMode`: Changes the behavior of index updating. By default the index will be updated if necessary before the query runs. You can choose to skip this (and get possibly-stale results), with the option of also starting an asynchronous background update of the index.
+- `prefixMatchLevel`: If nonzero, enables prefix matching of string or array keys.
+    - A value of 1 treats the endKey itself as a prefix: if it's a string, keys in the index that
+      come after the endKey, but begin with the same prefix, will be matched. (For example, if the
+      endKey is `"foo"` then the key `"foolish"` in the index will be matched, but not `"fong"`.) Or if
+      the endKey is an array, any array beginning with those elements will be matched. (For
+      example, if the endKey is `[1]`, then `[1, "x"]` will match, but not `[2]`.) If the key is any
+      other type, there is no effect.
+    - A value of 2 assumes the endKey is an array and treats its final item as a prefix, using the
+      rules above. (For example, an endKey of `[1, "x"]` will match `[1, "xtc"]` but not `[1, "y"]`.)
+    - A value of 3 assumes the key is an array of arrays, etc.
+    
+        Note that if the `.descending` property is also set, the search order is reversed and the above
+    discussion applies to the `startKey`, **not** the `endKey`.
 
 There are other advanced properties that only apply to reducing and grouping:
 
