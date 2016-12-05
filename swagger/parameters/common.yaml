@@ -222,7 +222,7 @@ user:
         description: Name of the user that will be created
       password:
         type: string
-        description: Password of the user that will be created. Required, unless the allow_empty_password Sync Gateway per-database configuration value is set to true, in which case the password can be omitted.
+        description: Password of the user that will be created. Required, unless the allow_empty_password Sync Gateway per-database configuration value is set to true, in which case the password can be omitted. When specified, active sessions for the user are invalidated.
       admin_channels:
         type: array
         description: Array of channel names to give the user access to
