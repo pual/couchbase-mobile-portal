@@ -263,7 +263,7 @@ To use such a filter function in a pull replication, set the Replication object'
 
 (The same example from the previous section applies here too; the difference is on the remote server, where the byOwner filter would be defined as a JavaScript function stored in a design document.)
 
-### Observing and monitoring replications
+## Observing and monitoring replications
 
 Since a replication runs asynchronously, if you want to know when it completes or when it gets an error, you'll need to register as an observer to get notifications from it. The details of this are platform-specific.
 
