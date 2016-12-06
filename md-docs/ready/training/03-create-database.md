@@ -53,7 +53,10 @@ Download the project below.
 
 #### Requirements
 
-- Android Studio
+- Android Studio 2.2
+- Android SDK 24
+- Android Build Tools 24.0.3
+- JDK 8
 
 #### Getting Started
 
