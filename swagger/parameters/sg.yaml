@@ -116,3 +116,34 @@ show_exp:
   type: boolean
   default: false
   required: false
+user:
+  in: body
+  name: body
+  description: Request body
+  schema:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name of the user that will be created
+      password:
+        type: string
+        description: Password of the user that will be created. Required, unless the `allow_empty_password` Sync Gateway per-database configuration value is set to true, in which case the password can be omitted. All active sessions for the user are invalidated when the password is changed.
+      admin_channels:
+        type: array
+        description: Array of channel names to give the user access to
+        items:
+          type: string
+          description: Channel name
+      admin_roles:
+        type: array
+        description: Array of role names to assign to this user
+        items:
+          type: string
+          description: Role name
+      email:
+        type: string
+        description: Email of the user that will be created.
+      disabled:
+        type: boolean
+        description: Boolean property to disable this user. The user will not be able to login if this property is set to true.
