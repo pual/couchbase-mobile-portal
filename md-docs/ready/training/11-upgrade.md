@@ -72,7 +72,7 @@ First you will need to redirect the traffic to only one Sync Gateway node (VM3).
     sudo tail -f /var/log/nginx/access_log
     ```
 
-1. Change back to VM2.
+1. Change back to VM4.
 1. Send a server request to the NGINX port. The response contains the Sync Gateway version. Notice it switches between 1.3.0 and 1.3.1 because only one node was upgraded.
 
     ```bash
