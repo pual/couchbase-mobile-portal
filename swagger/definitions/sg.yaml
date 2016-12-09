@@ -36,6 +36,9 @@ Database:
     instance_start_time:
       type: string
       description: Date and time the database was opened (in microseconds since 1 January 1970)
+    state:
+      type: string
+      description: The state of the specified database. Possible values are 'Online' and 'Offline'. A database can be taken offline and brought back online using the /{db}/_offline and /{db}/_online endpoints on the Admin REST API.
     update_seq:
       type: string
       description: Number of updates to the database
