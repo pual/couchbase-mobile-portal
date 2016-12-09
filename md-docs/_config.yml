@@ -23,6 +23,11 @@ defaults:
     type: page
   values:
     layout: ready
+- scope:
+    path: 'ready/swagger'
+    type: page
+  values:
+    layout: swagger
 
 # Build settings
 #markdown: kramdown
