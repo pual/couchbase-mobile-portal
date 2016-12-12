@@ -19,7 +19,7 @@ In this lesson you’ll learn how to integrate Couchbase Mobile with external sy
 Download the project below.
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/120p0o0k1O1f/project.zip" class="button" id="project">
+  <a href="https://cl.ly/1Y3W3s2e1D0y/project.zip" class="button" id="project">
     <img src="img/download-xcode.png">
   </a>
 </div>
@@ -44,7 +44,7 @@ Open **Todo.xcodeproj** in Xcode. Then build & run the project.
 Download the project below.
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/120p0o0k1O1f/project.zip" class="button" id="project">
+  <a href="https://cl.ly/1Y3W3s2e1D0y/project.zip" class="button" id="project">
     <img src="img/download-vs.png">
   </a>
 </div>
@@ -63,7 +63,7 @@ Download the project below.
 Download the project below.
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/120p0o0k1O1f/project.zip" class="button" id="project">
+  <a href="https://cl.ly/1Y3W3s2e1D0y/project.zip" class="button" id="project">
     <img src="img/download-android.png">
   </a>
 </div>
