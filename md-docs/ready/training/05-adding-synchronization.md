@@ -19,19 +19,19 @@ In this lesson you’ll be introduced to Sync Gateway, our secure web gateway. Y
 Download the project below.
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/293t073Z3735/project.zip" class="button" id="project">
+  <a href="https://cl.ly/120p0o0k1O1f/project.zip" class="button" id="project">
     <img src="img/download-xcode.png">
   </a>
 </div>
 
-Unzip the file and install the dependencies using Cocoapods.
+Unzip the file and install Couchbase Lite using the install script.
 
 ```bash
 $ cd xcode-project
-$ pod install
+$ ./install.sh
 ```
 
-Open **Todo.xcworkspace** in Xcode. Then build & run the project.
+Open **Todo.xcodeproj** in Xcode. Then build & run the project.
 
 <block class="net" />
 
@@ -44,7 +44,7 @@ Open **Todo.xcworkspace** in Xcode. Then build & run the project.
 Download the project below.
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/293t073Z3735/project.zip" class="button" id="project">
+  <a href="https://cl.ly/120p0o0k1O1f/project.zip" class="button" id="project">
     <img src="img/download-vs.png">
   </a>
 </div>
@@ -63,7 +63,7 @@ Download the project below.
 Download the project below.
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/293t073Z3735/project.zip" class="button" id="project">
+  <a href="https://cl.ly/120p0o0k1O1f/project.zip" class="button" id="project">
     <img src="img/download-android.png">
   </a>
 </div>

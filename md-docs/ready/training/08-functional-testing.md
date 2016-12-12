@@ -9,7 +9,7 @@ In this lesson you'll learn how to perform functional tests on your Couchbase Mo
 <block class="ios" />
 
 <div class="buttons-unit downloads">
-  <a href="https://cl.ly/2A2D3q3R2d1g/xcode-project.zip" class="button" id="project">
+  <a href="https://cl.ly/120p0o0k1O1f/project.zip" class="button" id="project">
     <img src="img/download-xcode.png">
   </a>
 </div>
