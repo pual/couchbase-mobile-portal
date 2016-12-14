@@ -1,13 +1,43 @@
-<footer class="site-footer">
+<!--    _____________________________________
+_______/ Javascript includes below this line \_______________________________-->
 
-  <div class="wrapper">
 
-    <h2 class="footer-heading">{{ site.title }}</h2>
-      <div class="footer-col footer-col-3">
-        <p>{{ site.description }}</p>
-      </div>
-    </div>
+<!-- Require_js bootstrap for app-specific JS module support -->
+<script type="text/javascript"
+        src="http://developer.couchbase.com/webfiles/1478017450376/js/thirdparty/vendor/require.js"></script>
+<script type="text/javascript"
+        src="http://developer.couchbase.com/webfiles/1478017450376/js/thirdparty/vendor/prism.js"></script>
+<!--<script type="text/javascript" src="/webfiles/1478017450376/js/thirdparty/vendor/typed.min.js"></script>-->
 
-  </div>
+<script rel="main"
+        type="text/javascript"
+        src="http://developer.couchbase.com/webfiles/1478017450376/js/main.js"></script>
 
-</footer>
+
+<div about="hst head contributions">
+</div>
+
+<!-- begin - hst:include ref=google-adwords -->
+<!-- end - hst:include ref=google-adwords -->
+
+
+<!-- Marketo -->
+<script type="text/javascript" defer async>
+
+  $(document).ready(function () {
+    var scriptUrl = "//munchkin.marketo.net/munchkin.js";
+
+    $.getScript(scriptUrl, function onMarketoScriptLoaded() {
+      tryInitMunchkin();
+    })
+  });
+
+  function tryInitMunchkin() {
+    if (typeof window['Munchkin'] !== 'undefined') {
+      window['Munchkin'].init('302-GJY-034');
+    } else {
+      setTimeout(tryInitMunchkin, 250);
+    }
+  }
+
+</script>
