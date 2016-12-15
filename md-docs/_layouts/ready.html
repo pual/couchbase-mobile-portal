@@ -8,131 +8,6 @@
 {% include header.html %}
 
 <main id="global-content" class="global-content" role="main">
-  <!-- begin - hst:include ref=main -->
-  <style>
-    /* HACK: To override the AuthX styles (navs, lists) */
-    .documentationContent ul, .inner-content ul {
-      list-style-type: disc !important;
-    }
-
-    /* Override AuthX styles */
-    .body ul ul {
-      list-style-type: circle !important;
-      margin: 0 !important;
-    }
-    .body ul {
-      padding-left: 40px !important;
-      margin: 1em 0 !important;
-    }
-
-    /* Hack for tips and notes styles (applying AuthX styles to blockquotes) */
-    blockquote {
-      overflow: hidden !important;
-      border: 1px solid #0081a5 !important;
-      border-radius: 0.4em !important;
-      border-left: 0.7em solid #0081a5 !important;
-      padding: .5em !important;
-      margin: 1em 0px !important;
-      font-size: 14px !important;
-      line-height: 1.35em !important;
-    }
-
-    blockquote p {
-      margin: 0 !important;
-    }
-
-    /* Edit on GitHub button */
-    .edit-page-link {
-      float: right;
-      font-size: 16px;
-      font-weight: normal;
-      line-height: 20px;
-      margin-top: 17px
-    }
-    .body > h1 {
-      display: inline-block;
-    }
-
-    /* Styling images (sizing images in-lined with writing) */
-    .center-image {
-      width: 70%;
-      margin: 0 auto;
-      display: block;
-    }
-
-    .portrait {
-      width: 300px;
-      display: block;
-      margin: 0 auto;
-    }
-
-    .landscape {
-      width: 100%;
-    }
-
-    /* Training styles */
-    .buttons-unit {
-      margin-top: 60px;
-      text-align: center
-    }
-
-    .buttons-unit a {
-      color: #61dafb
-    }
-
-    .button {
-      font-size: 24px !important;
-      color: #fafafa !important;
-      border: none !important;
-      text-transform: none !important;
-      padding: 10px 30px !important;
-    }
-
-    .red {
-      color: #e4212a !important;
-      border: 1px solid #e4212a !important;
-      font-family: "Avenir Next" !important;
-      font-weight: 400 !important;
-    }
-
-    .buttons-unit .button:active {
-      background: #c5695c
-    }
-
-    .buttons-unit.downloads {
-      margin: 30px 0
-    }
-
-    /* Video styles for training */
-    video {
-      width: 100%;
-    }
-
-    /* Hide header links */
-    h1:hover .hash-link, h2:hover .hash-link, h3:hover .hash-link, h4:hover .hash-link, h5:hover .hash-link, h6:hover .hash-link {
-      visibility: visible !important;
-    }
-    .hash-link {
-      color: #aaa !important;
-      display: inline-block !important;
-      visibility: hidden !important;
-      padding-left: 5px !important;
-      text-decoration: none !important;
-    }
-    .hash-link > svg {
-      transform: rotate(-30deg) !important;
-    }
-
-    .show {
-      display: block;
-    }
-
-    .hide {
-      display: none;
-    }
-  </style>
-  <a class="edit-page-link" href="https://github.com/couchbaselabs/couchbase-mobile-portal/tree/master/md-docs/{{ page.path }}" target="_blank">Edit on GitHub</a>
-
   <!-- LEFT NAV assets -->
   <!-- LOCAL JS Libs -->
   <script src="http://developer.couchbase.com/webfiles/1478017450376/js/collapse.js"></script>
@@ -147,7 +22,129 @@
         <aside class="col one-fifth section-nav left-rail"></aside>
         <div class="col four-fifths article">
           <div class="body">
+            <style>
+              /* HACK: To override the AuthX styles (navs, lists) */
+              .body ul, .inner-content ul {
+                list-style-type: disc !important;
+              }
 
+              /* Override AuthX styles */
+              .body ul ul {
+                list-style-type: circle !important;
+                margin: 0 !important;
+              }
+              .body ul {
+                padding-left: 40px !important;
+                margin: 1em 0 !important;
+              }
+
+              /* Hack for tips and notes styles (applying AuthX styles to blockquotes) */
+              blockquote {
+                overflow: hidden !important;
+                border: 1px solid #0081a5 !important;
+                border-radius: 0.4em !important;
+                border-left: 0.7em solid #0081a5 !important;
+                padding: .5em !important;
+                margin: 1em 0px !important;
+                font-size: 14px !important;
+                line-height: 1.35em !important;
+              }
+
+              blockquote p {
+                margin: 0 !important;
+              }
+
+              /* Edit on GitHub button */
+              .edit-page-link {
+                float: right;
+                font-size: 16px;
+                font-weight: normal;
+                line-height: 20px;
+                margin-top: 17px
+              }
+              .body > h1 {
+                display: inline-block;
+              }
+
+              /* Styling images (sizing images in-lined with writing) */
+              .center-image {
+                width: 70%;
+                margin: 0 auto;
+                display: block;
+              }
+
+              .portrait {
+                width: 300px;
+                display: block;
+                margin: 0 auto;
+              }
+
+              .landscape {
+                width: 100%;
+              }
+
+              /* Training styles */
+              .buttons-unit {
+                margin-top: 60px;
+                text-align: center
+              }
+
+              .buttons-unit a {
+                color: #61dafb
+              }
+
+              .button {
+                font-size: 24px !important;
+                color: #fafafa !important;
+                border: none !important;
+                text-transform: none !important;
+                padding: 10px 30px !important;
+              }
+
+              .red {
+                color: #e4212a !important;
+                border: 1px solid #e4212a !important;
+                font-family: "Avenir Next" !important;
+                font-weight: 400 !important;
+              }
+
+              .buttons-unit .button:active {
+                background: #c5695c
+              }
+
+              .buttons-unit.downloads {
+                margin: 30px 0
+              }
+
+              /* Video styles for training */
+              video {
+                width: 100%;
+              }
+
+              /* Hide header links */
+              h1:hover .hash-link, h2:hover .hash-link, h3:hover .hash-link, h4:hover .hash-link, h5:hover .hash-link, h6:hover .hash-link {
+                visibility: visible !important;
+              }
+              .hash-link {
+                color: #aaa !important;
+                display: inline-block !important;
+                visibility: hidden !important;
+                padding-left: 5px !important;
+                text-decoration: none !important;
+              }
+              .hash-link > svg {
+                transform: rotate(-30deg) !important;
+              }
+
+              .show {
+                display: block;
+              }
+
+              .hide {
+                display: none;
+              }
+            </style>
+            <a class="edit-page-link" href="https://github.com/couchbaselabs/couchbase-mobile-portal/tree/master/md-docs/{{ page.path }}" target="_blank">Edit on GitHub</a>
 
             <div class="inner-content">
               <!-- Platform tabs -->
@@ -339,7 +336,67 @@
               </script>
             </div>
 
-            
+            <script>
+              /**
+               * HACK: To keep the code tabs while using markdown. Insert <div class="tab"></div> in the markdown and this script
+               * finds and replaces all instances with a tab bar.
+               */
+              var tab_bar_html = "</div><a href='javascript:setLanguage(\"swift\")' class=\"tab stripe-active swift\">Swift</a> <a href='javascript:setLanguage(\"objective-c\")' class=\"tab stripe-active objective-c selected\">Objective-C</a> <a href='javascript:setLanguage(\"android\")' class=\"tab stripe-active android\">Android</a> <a href='javascript:setLanguage(\"java\")' class=\"tab stripe-active java\">Java</a> <a href='javascript:setLanguage(\"c\")' class=\"tab stripe-active c\">C#</a>"
+              var tab_bars = document.getElementsByClassName('tabs');
+              var i = tab_bars.length - 1;
+              while (i >= 0) {
+                var parent = tab_bars.item(i).parentNode;
+                var element = document.createElement('div');
+                element.className = 'tab-bar';
+                element.innerHTML = tab_bar_html;
+                parent.replaceChild(element, tab_bars.item(i));
+                i--;
+              }
+
+              /**
+               * HACK: To keep the markdown tables styles after ingestion we need to wrap the ouput in <div class="table"></div>
+               */
+              var tables = document.getElementsByTagName("table");
+              var j = tables.length - 1;
+              while (j >= 0) {
+                var parent = tables.item(j).parentNode;
+                var table = tables.item(j);
+                var wrapper = document.createElement('div');
+                wrapper.className = 'table';
+                parent.insertBefore(wrapper, table);
+                wrapper.appendChild(table);
+                j--;
+              }
+            </script>
+            <script>
+              /**
+               * Hack to not open some list titles
+               */
+              (function() {
+                var els = document.getElementsByClassName('static');
+                for (var i = 0; i < els.length; i++) {
+                  (function() {
+                    var el = els[i];
+                    el.onclick = function () {
+                      var icon = el.previousSibling;
+                      var iconClasses = icon.className;
+                      if (iconClasses == 'icon') {
+                        icon.className = 'icon close';
+                      } else {
+                        icon.className = 'icon';
+                      }
+                      var list = el.nextSibling;
+                      var displayProp = list.style.display;
+                      if (displayProp == 'block') {
+                        list.style.display = 'none';
+                      } else {
+                        list.style.display = 'block';
+                      }
+                    }
+                  })()
+                }
+              })()
+            </script>
           </div>
         </div>
       </div>
@@ -347,68 +404,6 @@
 
   </section>
 </main>
-
-<script>
-  /**
-   * HACK: To keep the code tabs while using markdown. Insert <div class="tab"></div> in the markdown and this script
-   * finds and replaces all instances with a tab bar.
-   */
-  var tab_bar_html = "</div><a href='javascript:setLanguage(\"swift\")' class=\"tab stripe-active swift\">Swift</a> <a href='javascript:setLanguage(\"objective-c\")' class=\"tab stripe-active objective-c selected\">Objective-C</a> <a href='javascript:setLanguage(\"android\")' class=\"tab stripe-active android\">Android</a> <a href='javascript:setLanguage(\"java\")' class=\"tab stripe-active java\">Java</a> <a href='javascript:setLanguage(\"c\")' class=\"tab stripe-active c\">C#</a>"
-  var tab_bars = document.getElementsByClassName('tabs');
-  var i = tab_bars.length - 1;
-  while (i >= 0) {
-    var parent = tab_bars.item(i).parentNode;
-    var element = document.createElement('div');
-    element.className = 'tab-bar';
-    element.innerHTML = tab_bar_html;
-    parent.replaceChild(element, tab_bars.item(i));
-    i--;
-  }
-
-  /**
-   * HACK: To keep the markdown tables styles after ingestion we need to wrap the ouput in <div class="table"></div>
-   */
-  var tables = document.getElementsByTagName("table");
-  var j = tables.length - 1;
-  while (j >= 0) {
-    var parent = tables.item(j).parentNode;
-    var table = tables.item(j);
-    var wrapper = document.createElement('div');
-    wrapper.className = 'table';
-    parent.insertBefore(wrapper, table);
-    wrapper.appendChild(table);
-    j--;
-  }
-</script>
-<script>
-  /**
-   * Hack to not open some list titles
-   */
-  (function() {
-    var els = document.getElementsByClassName('static');
-    for (var i = 0; i < els.length; i++) {
-      (function() {
-        var el = els[i];
-        el.onclick = function () {
-          var icon = el.previousSibling;
-          var iconClasses = icon.className;
-          if (iconClasses == 'icon') {
-            icon.className = 'icon close';
-          } else {
-            icon.className = 'icon';
-          }
-          var list = el.nextSibling;
-          var displayProp = list.style.display;
-          if (displayProp == 'block') {
-            list.style.display = 'none';
-          } else {
-            list.style.display = 'block';
-          }
-        }
-      })()
-    }
-  })()
-</script>
 
 {% include footer.html %}
 
