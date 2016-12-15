@@ -23,4 +23,4 @@ You can also send a request to each endpoint against an instance of Sync Gateway
 
 ### API Explorer
 
-{% include swagger.html name="sync-gateway-public" %}
+{% include swagger.html name="sync-gateway-public" file="swagger-ui" %}
