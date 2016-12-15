@@ -9,7 +9,129 @@
 
 <main id="global-content" class="global-content" role="main">
   <!-- begin - hst:include ref=main -->
-  <!-- Beginning of site.../jsp/base/main.jsp -->
+  <style>
+    /* HACK: To override the AuthX styles (navs, lists) */
+    .documentationContent ul, .inner-content ul {
+      list-style-type: disc !important;
+    }
+
+    /* Override AuthX styles */
+    .body ul ul {
+      list-style-type: circle !important;
+      margin: 0 !important;
+    }
+    .body ul {
+      padding-left: 40px !important;
+      margin: 1em 0 !important;
+    }
+
+    /* Hack for tips and notes styles (applying AuthX styles to blockquotes) */
+    blockquote {
+      overflow: hidden !important;
+      border: 1px solid #0081a5 !important;
+      border-radius: 0.4em !important;
+      border-left: 0.7em solid #0081a5 !important;
+      padding: .5em !important;
+      margin: 1em 0px !important;
+      font-size: 14px !important;
+      line-height: 1.35em !important;
+    }
+
+    blockquote p {
+      margin: 0 !important;
+    }
+
+    /* Edit on GitHub button */
+    .edit-page-link {
+      float: right;
+      font-size: 16px;
+      font-weight: normal;
+      line-height: 20px;
+      margin-top: 17px
+    }
+    .body > h1 {
+      display: inline-block;
+    }
+
+    /* Styling images (sizing images in-lined with writing) */
+    .center-image {
+      width: 70%;
+      margin: 0 auto;
+      display: block;
+    }
+
+    .portrait {
+      width: 300px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .landscape {
+      width: 100%;
+    }
+
+    /* Training styles */
+    .buttons-unit {
+      margin-top: 60px;
+      text-align: center
+    }
+
+    .buttons-unit a {
+      color: #61dafb
+    }
+
+    .button {
+      font-size: 24px !important;
+      color: #fafafa !important;
+      border: none !important;
+      text-transform: none !important;
+      padding: 10px 30px !important;
+    }
+
+    .red {
+      color: #e4212a !important;
+      border: 1px solid #e4212a !important;
+      font-family: "Avenir Next" !important;
+      font-weight: 400 !important;
+    }
+
+    .buttons-unit .button:active {
+      background: #c5695c
+    }
+
+    .buttons-unit.downloads {
+      margin: 30px 0
+    }
+
+    /* Video styles for training */
+    video {
+      width: 100%;
+    }
+
+    /* Hide header links */
+    h1:hover .hash-link, h2:hover .hash-link, h3:hover .hash-link, h4:hover .hash-link, h5:hover .hash-link, h6:hover .hash-link {
+      visibility: visible !important;
+    }
+    .hash-link {
+      color: #aaa !important;
+      display: inline-block !important;
+      visibility: hidden !important;
+      padding-left: 5px !important;
+      text-decoration: none !important;
+    }
+    .hash-link > svg {
+      transform: rotate(-30deg) !important;
+    }
+
+    .show {
+      display: block;
+    }
+
+    .hide {
+      display: none;
+    }
+  </style>
+  <a class="edit-page-link" href="https://github.com/couchbaselabs/couchbase-mobile-portal/tree/master/md-docs/{{ page.path }}" target="_blank">Edit on GitHub</a>
 
   <!-- LEFT NAV assets -->
   <!-- LOCAL JS Libs -->
@@ -25,7 +147,199 @@
         <aside class="col one-fifth section-nav left-rail"></aside>
         <div class="col four-fifths article">
           <div class="body">
-            {{ content }}
+
+
+            <div class="inner-content">
+              <!-- Platform tabs -->
+              <!-- TODO: Make visible when ready to show multi-platform training -->
+              <div class="toggler">
+                <style>
+                  .toggler a {
+                    display: inline-block;
+                    padding: 10px 5px;
+                    margin: 2px;
+                    border: 1px solid #05A5D1;
+                    border-radius: 3px;
+                    text-decoration: none !important;
+                  }
+                  .display-platform-ios .toggler .button-ios,
+                  .display-platform-android .toggler .button-android,
+                  .display-platform-rn .toggler .button-rn,
+                  .display-platform-wpf .toggler .button-wpf,
+                  .display-platform-xam .toggler .button-xam {
+                    background-color: #05A5D1;
+                    color: white;
+                  }
+
+                  block { display: none; }
+
+                  .display-platform-ios .ios,
+                  .display-platform-android .android,
+                  .display-platform-rn .rn,
+                  .display-platform-net .net,
+                  .display-platform-wpf .wpf,
+                  .display-platform-xam .xam,
+                  .display-platform-all .all {
+                    display: block;
+                  }</style>
+                <div id="platform-tabs" class="hide">
+                  <span>Platform:</span>
+                  <a href="javascript:void(0);" class="button-ios" onclick="display('platform', 'ios')">iOS</a>
+                  <a href="javascript:void(0);" class="button-android" onclick="display('platform', 'android')">Android</a>
+                  <a href="javascript:void(0);" class="button-wpf" onclick="display('platform', 'wpf')">WPF</a>
+                </div>
+              </div>
+              <!-- SDK buttons -->
+              <div id="swagger-libs" style="display: none;">
+                <span>Sync Gateway Public REST API:</span>
+                <a href="javascript:void(0);" class="button" onclick="getSDK('java', 'public')">Java</a>
+                <a href="javascript:void(0);" class="button" onclick="getSDK('csharp', 'public')">C#</a>
+                <a href="javascript:void(0);" class="button" onclick="getSDK('go', 'public')">Go</a>
+                <a href="javascript:void(0);" class="button" onclick="getSDK('python', 'public')">Python</a>
+                <br>
+                <span>Sync Gateway Admin REST API:</span>
+                <a href="javascript:void(0);" class="button" onclick="getSDK('go', 'admin')">Go</a>
+                <a href="javascript:void(0);" class="button" onclick="getSDK('python', 'admin')">Python</a>
+                <br>
+                <span>Couchbase Lite REST API:</span>
+                <a href="javascript:void(0);" class="button" onclick="getSDK('java', 'lite')">Java</a>
+                <a href="javascript:void(0);" class="button" onclick="getSDK('csharp', 'lite')">C#</a>
+                <a href="javascript:void(0);" class="button" onclick="getSDK('swift', 'lite')">Swift</a>
+                <a href="javascript:void(0);" class="button" onclick="getSDK('python', 'lite')">Python</a>
+              </div>
+              <!-- Markdown content -->
+              {{ content }}
+              <!-- Logic to make all links open in a new tab -->
+              <script>
+                var links = document.links;
+
+                for (var i = 0, linksLength = links.length; i < linksLength; i++) {
+                  if (links[i].hostname != window.location.hostname) {
+                    links[i].target = '_blank';
+                  }
+                }
+              </script>
+              <!-- Logic for platform tabs -->
+              <script>
+                // Only show on Develop pages
+                var blocks = document.getElementsByClassName('ios');
+                if (blocks.length > 0) {
+                  var platformTabs = document.getElementById('platform-tabs');
+                  platformTabs.className = "show";
+                }
+                // Convert <div>...<span><block /></span>...</div>
+                // Into <div>...<block />...</div>
+                var blocks = document.getElementsByTagName('block');
+                for (var i = 0; i < blocks.length; ++i) {
+                  var block = blocks[i];
+                  var span = blocks[i].parentNode;
+                  var container = span.parentNode;
+                  container.insertBefore(block, span);
+                  container.removeChild(span);
+                }
+                // Convert <div>...<block />content<block />...</div>
+                // Into <div>...<block>content</block><block />...</div>
+                blocks = document.getElementsByTagName('block');
+                for (var i = 0; i < blocks.length; ++i) {
+                  var block = blocks[i];
+                  while (block.nextSibling && block.nextSibling.tagName !== 'BLOCK') {
+                    block.appendChild(block.nextSibling);
+                  }
+                }
+                function display(type, value) {
+                  var container = document.getElementsByTagName('block')[0].parentNode;
+                  container.className = 'display-' + type + '-' + value;
+                  if (value == 'wpf' || value == 'xam') {
+                    container.className += ' display-platform-net';
+                  }
+                  container.className += ' display-platform-all';
+                }
+
+                // If we are coming to the page with a hash in it (i.e. from a search, for example), try to get
+                // us as close as possible to the correct platform and dev os using the hashtag and block walk up.
+                var foundHash = false;
+                if (window.location.hash !== '' && window.location.hash !== 'content') { // content is default
+                  var platform = window.location.hash.slice(1);
+                  if (['ios', 'android', 'wpf'].indexOf(platform) > -1) {
+                    display('platform', platform);
+                    foundHash = true;
+                  }
+                }
+                if (!foundHash) {
+                  display('platform', 'ios');
+                }
+              </script>
+              <!-- Segment.io analytics -->
+              <script type="text/javascript">
+                !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+                  analytics.load("8mPwsJfsKAal6r62qS9ubBQqjWwYly4M");
+                  analytics.page()
+                }}();
+              </script>
+              <script>
+                var starterProject = document.getElementById('project');
+                analytics.trackLink(starterProject, 'Download project', {
+                  category: 'Training',
+                  label: 'Swift'
+                });
+              </script>
+              <!-- SDK buttons (shown only if show_true=true in the SDK) -->
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch.min.js"></script>
+              <script>
+
+                if (getParameterByName("show_swagger_libs") || getParameterByName("swagger")) {
+                  var swagger_libs_el = document.getElementById('swagger-libs');
+                  swagger_libs_el.style.display = 'block';
+                }
+
+                function getSDK(lang, spec) {
+                  var url = null;
+                  switch(spec) {
+                    case 'public':
+                      url = 'http://developer.couchbase.com/mobile/swagger/sync-gateway-public/spec.json';
+                      break;
+                    case 'admin':
+                      url = 'http://developer.couchbase.com/mobile/swagger/sync-gateway-admin/spec.json';
+                      break;
+                    case 'lite':
+                      url = 'http://developer.couchbase.com/mobile/swagger/couchbase-lite/spec.json';
+                      break;
+                  }
+                  fetch(url)
+                          .then(function (res) {
+                            return res.json();
+                          })
+                          .then(function (res) {
+                            var options = {
+                              method: 'POST',
+                              headers: {
+                                'Content-Type': 'application/json'
+                              },
+                              body: JSON.stringify({spec: res})
+                            };
+                            return fetch('http://generator.swagger.io/api/gen/clients/' + lang, options)
+                          })
+                          .then(function (res) {
+                            return res.json();
+                          })
+                          .then(function (res) {
+                            window.location = res.link;
+                          });
+                }
+
+                function getParameterByName(name, url) {
+                  if (!url) url = window.location.href;
+                  name = name.replace(/[\[\]]/g, "\\$&");
+                  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                          results = regex.exec(url);
+                  if (!results) return null;
+                  if (!results[2]) return '';
+                  return decodeURIComponent(results[2].replace(/\+/g, " "));
+                }
+              </script>
+            </div>
+
+            
           </div>
         </div>
       </div>
@@ -33,6 +347,68 @@
 
   </section>
 </main>
+
+<script>
+  /**
+   * HACK: To keep the code tabs while using markdown. Insert <div class="tab"></div> in the markdown and this script
+   * finds and replaces all instances with a tab bar.
+   */
+  var tab_bar_html = "</div><a href='javascript:setLanguage(\"swift\")' class=\"tab stripe-active swift\">Swift</a> <a href='javascript:setLanguage(\"objective-c\")' class=\"tab stripe-active objective-c selected\">Objective-C</a> <a href='javascript:setLanguage(\"android\")' class=\"tab stripe-active android\">Android</a> <a href='javascript:setLanguage(\"java\")' class=\"tab stripe-active java\">Java</a> <a href='javascript:setLanguage(\"c\")' class=\"tab stripe-active c\">C#</a>"
+  var tab_bars = document.getElementsByClassName('tabs');
+  var i = tab_bars.length - 1;
+  while (i >= 0) {
+    var parent = tab_bars.item(i).parentNode;
+    var element = document.createElement('div');
+    element.className = 'tab-bar';
+    element.innerHTML = tab_bar_html;
+    parent.replaceChild(element, tab_bars.item(i));
+    i--;
+  }
+
+  /**
+   * HACK: To keep the markdown tables styles after ingestion we need to wrap the ouput in <div class="table"></div>
+   */
+  var tables = document.getElementsByTagName("table");
+  var j = tables.length - 1;
+  while (j >= 0) {
+    var parent = tables.item(j).parentNode;
+    var table = tables.item(j);
+    var wrapper = document.createElement('div');
+    wrapper.className = 'table';
+    parent.insertBefore(wrapper, table);
+    wrapper.appendChild(table);
+    j--;
+  }
+</script>
+<script>
+  /**
+   * Hack to not open some list titles
+   */
+  (function() {
+    var els = document.getElementsByClassName('static');
+    for (var i = 0; i < els.length; i++) {
+      (function() {
+        var el = els[i];
+        el.onclick = function () {
+          var icon = el.previousSibling;
+          var iconClasses = icon.className;
+          if (iconClasses == 'icon') {
+            icon.className = 'icon close';
+          } else {
+            icon.className = 'icon';
+          }
+          var list = el.nextSibling;
+          var displayProp = list.style.display;
+          if (displayProp == 'block') {
+            list.style.display = 'none';
+          } else {
+            list.style.display = 'block';
+          }
+        }
+      })()
+    }
+  })()
+</script>
 
 {% include footer.html %}
 
