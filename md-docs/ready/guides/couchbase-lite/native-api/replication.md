@@ -177,11 +177,18 @@ push.filterParams = @{@"name": @"Waldo"};
 ```
 
 ```swift+
-db.setFilterNamed("byOwnder", asBlock: { 
+db.setFilterNamed("byOwner", asBlock: { 
     (revision, params) -> Bool in
         let nameParam = params["name"] as? String
         return nameParam != nil && nameParam! == revision["owner"] as? String
 })
+//
+// Set up a filtered push replication using the above filter block,
+// that will push only docs whose "owner" property equals "Waldo":
+guard let url = URL(string: JISyncServiceConfig.url) else { print("can't create url"); return }
+var push = db.createPushReplication(url)
+push.filter = "byOwner"
+push.filterParams = ["name": "Waldo"]
 ```
 
 ```java+android+
